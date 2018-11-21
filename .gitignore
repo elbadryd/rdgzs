@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 node_modules/
 .env 
 .next/
 
 
+=======
+node_modules
+.next
+.env
+>>>>>>> 0386bf547b8e8f39bce073cd0769d26eb218eacf

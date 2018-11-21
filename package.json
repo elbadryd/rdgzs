@@ -21,6 +21,7 @@
   "homepage": "https://github.com/SerenitySoonish/roadTripMgr#readme",
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
+    "axios": "^0.18.0",
     "dotenv": "^6.1.0",
     "dotenv-webpack": "^1.5.7",
     "express": "^4.16.4",

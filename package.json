@@ -1,0 +1,48 @@
+{
+  "name": "roadtripmgr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server/ssr-server.js",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SerenitySoonish/roadTripMgr.git"
+  },
+  "author": "dario",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SerenitySoonish/roadTripMgr/issues"
+  },
+  "homepage": "https://github.com/SerenitySoonish/roadTripMgr#readme",
+  "dependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "dotenv": "^6.1.0",
+    "dotenv-webpack": "^1.5.7",
+    "express": "^4.16.4",
+    "fs": "0.0.1-security",
+    "next": "^7.0.2",
+    "nodemon": "^1.18.6",
+    "pg": "^6.4.2",
+    "pg-hstore": "^2.3.2",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-mapbox-autocomplete": "^0.2.3",
+    "react-places-autocomplete": "^7.2.0",
+    "react-redux": "^5.1.1",
+    "sequelize": "^4.41.2",
+    "sequelize-cli": "^5.3.0"
+  },
+  "devDependencies": {
+    "css-loader": "^1.0.1",
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1"
+  }
+}

@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/SerenitySoonish/roadTripMgr#readme",
   "dependencies": {
+    "@turf/along": "^6.0.1",
+    "@turf/helpers": "^6.1.4",
     "@zeit/next-css": "^1.0.1",
     "axios": "^0.18.0",
     "dotenv": "^6.1.0",
@@ -36,6 +38,7 @@
     "react-mapbox-autocomplete": "^0.2.3",
     "react-places-autocomplete": "^7.2.0",
     "react-redux": "^5.1.1",
+    "request": "^2.88.0",
     "sequelize": "^4.41.2",
     "sequelize-cli": "^5.3.0"
   },

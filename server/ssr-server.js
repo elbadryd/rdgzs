@@ -70,7 +70,7 @@ app.prepare()
     });
 
     server.get('/', (req, res) => {
-      console.log('callback func', db);
+      console.log('callback func');
       console.log(req.session);
       console.log(req.sessionID);
       

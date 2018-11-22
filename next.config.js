@@ -1,11 +1,12 @@
 const withCSS = require('@zeit/next-css');
+const withESLint = require('eslint-config-airbnb');
 
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = withCSS({
   webpack: (config) => {
-    config.node = { fs: "empty" };
+    config.node = { fs: 'empty' };
     config.plugins = config.plugins || [];
 
     config.plugins = [

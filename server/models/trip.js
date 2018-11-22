@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Trip = sequelize.define('Trip', {
+  const Trip = sequelize.define('trip', {
     userId: DataTypes.INTEGER,
     origin: DataTypes.STRING,
     destination: DataTypes.STRING,

@@ -2,10 +2,12 @@ import axios from 'axios';
 import Router from 'next/router'
 import MapboxAutocomplete from 'react-mapbox-autocomplete';
 const dotenv = require('dotenv').config();
+import Trip from './trip/trip.js'
  // import { connect } from "react-redux";
 
 // import 'react-mapbox-autocomplete/index.css';
 import '../styles/index.css'
+import { callbackify } from 'util';
 class Start extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +21,8 @@ class Start extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this._originSelect = this._originSelect.bind(this); 
-    this._destinationSelect = this._destinationSelect.bind(this); 
+    this._destinationSelect = this._destinationSelect.bind(this);
+    // this.updateDeets = this.updateDeets.bind(this); 
 
   }
 
@@ -34,8 +37,14 @@ class Start extends React.Component {
   }
 
   _destinationSelect(result, lat, lng, text) {
-    this.setState({ destinatioon: { lat: lat, lng: lng } })
+    this.setState({ destination: { lat: lat, lng: lng } })
   }
+  // updateDeets(blah, obj){
+  //   this.setState({
+  //     polylie: obj.line,
+  //     details: obj.pois
+  //   })
+  // }
 
   // mapStateToProps(state){
   //   return {
@@ -44,29 +53,31 @@ class Start extends React.Component {
   // }
 
   handleSubmit(){
-  //   if (this.state.origin === null || this.state.destination === null) {
-  //     alert('please enter an origin and destination')
-  //   } else {
-  //   let points = {
-  //     originCoords: this.state.origin,
-  //     destCoords: this.state.destination
-  //   }
-  //   axios.get('/createRoute', {params: points})
-  //   .then(response=>{
-  //     this.setState({ details: response.body })
-  //     Router.push('/trip/trip');
-  //   })
-  //   .catch(err=>{
-  //     console.log(err);
-  //     alert('there was an error processing your request')
-  //   })
-  // }
-  Router.push('/')
+    if (this.state.origin === null || this.state.destination === null) {
+      alert('please enter an origin and destination')
+    } else {
+    let points = {
+      originCoords: this.state.origin,
+      destCoords: this.state.destination
+    }
+    axios.get('/createRoute', {params: points})
+    .then(response=>{
+      console.log(response);
+      // this.updateDeets(null, response)
+    })
+    .catch(err=>{
+      console.log(err);
+      alert('there was an error processing your request')
+    })
+  }
+  // this.setState({details: 'some deets'})
+  // Router.push('/trip/trip')
 }
 
 
   render() {
     return (
+      this.state.details === null ?
       <div className="search">
         {/* <input type="text" name="origin" onChange={this.handleChange} placeholder="Origin"/>
         <input type="text" name="destination" onChange={this.handleChange} placeholder="Destination" /> */}
@@ -86,16 +97,10 @@ class Start extends React.Component {
           country='us'
           resetSearch={false}
         />
-        <style jsx>{`
-        body {
-          color: yellow
-        }
-        `}
-        
-        </style>
         <input id="button" type="submit" value="Submit" onClick={this.handleSubmit} />
-
       </div>
+      : 
+        <Trip details={this.state.details} />
     );
   }
 }

@@ -1,4 +1,5 @@
 const withCSS = require('@zeit/next-css');
+const withESLint = require('eslint-config-airbnb');
 
 const path = require('path');
 const Dotenv = require('dotenv-webpack');

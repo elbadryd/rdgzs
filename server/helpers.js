@@ -2,6 +2,7 @@ const request = require('request')
 const axios   = require('axios')
 const turf    = require('@turf/helpers')
 const along   = require('@turf/along')
+const dotenv = require('dotenv').config();
 
 const makeTrip = (start = '-90.071533,29.9511', end = '-95.366302,29.761993', context, callback) => {
 function getParks(latitude, longitude) {
@@ -123,7 +124,7 @@ function getParks(latitude, longitude) {
   }
   
   request({
-    url: `https://api.mapbox.com/directions/v5/mapbox/driving/${start};${end}?geometries=geojson&access_token=${process.env.MAPBOX_TOKEN}`
+    url: `https://api.mapbox.com/directions/v5/mapbox/driving/${start};${end}?geometries=geojson&access_token=${process.env.MAPBOX_API_KEY}`
   }, (err, res, body) => {
     let data = JSON.parse(body)
     let line = turf.lineString(data.routes[0].geometry.coordinates)
@@ -141,23 +142,29 @@ function getParks(latitude, longitude) {
       let allVenues = [].concat(...values)
       .map((result, i) => {
         // array of 10 arrays (5 responses from each point searched, 2 points searched)
+
+        if (result.group.results){
         return result.group.results.map((obj) => {
           let poi =  {
           category: i,
           name: obj.venue.name,
           lat: obj.venue.location.lat,
           lng: obj.venue.location.lng,
-          img: obj.photo.prefix + '250x250' + obj.photo.suffix,
+         
+          }
+          if (obj.photo) {
+          poi.img = obj.photo.prefix + '250x250' + obj.photo.suffix;
           }
           venues.push(poi)
           return poi;
           }) 
+        }
       })
       let pois = venues.map((poi) => {
        poi.category = Math.floor((poi.category/venues.length)*10)
       return poi
       })
-      callback(null, pois, {'Content-Type': 'application/json'})
+      callback(null, { line, pois }, {'Content-Type': 'application/json'})
     })
   })
 };

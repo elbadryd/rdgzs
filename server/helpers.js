@@ -1,11 +1,11 @@
-const request = require('request')
-const axios   = require('axios')
-const turf    = require('@turf/helpers')
-const along   = require('@turf/along')
+const request = require('request');
+const axios = require('axios');
+const turf = require('@turf/helpers');
+const along = require('@turf/along');
 const dotenv = require('dotenv').config();
 
-const makeTrip = (start = '-90.071533,29.9511', end = '-95.366302,29.761993', context, callback) => {
-function getParks(latitude, longitude) {
+const makeTrip = (start, end, context, callback) => {
+  function getParks(latitude, longitude) {
     // return a promise from request to foursquare
     return new Promise((resolve, revoke) => {
       axios.get('https://api.foursquare.com/v2/search/recommendations', {
@@ -122,51 +122,50 @@ function getParks(latitude, longitude) {
       }).then(response => resolve(response.data.response)).catch(error => revoke(error));
     });
   }
-  
   request({
-    url: `https://api.mapbox.com/directions/v5/mapbox/driving/${start};${end}?geometries=geojson&access_token=${process.env.MAPBOX_API_KEY}`
+    url: `https://api.mapbox.com/directions/v5/mapbox/driving/${start};${end}?geometries=geojson&access_token=${process.env.MAPBOX_API_KEY}`,
   }, (err, res, body) => {
-    let data = JSON.parse(body)
-    let line = turf.lineString(data.routes[0].geometry.coordinates)
-    let points = Array(Math.floor((data.routes[0].distance/1000)/200)).fill().map((_, i) => along.default(line, i * 200).geometry.coordinates)
-    
+    const data = JSON.parse(body);
+    const line = turf.lineString(data.routes[0].geometry.coordinates);
+    const points = Array(Math.floor((data.routes[0].distance / 1000) / 200)).fill().map((_, i) => along.default(line, i * 200).geometry.coordinates);
+
     const promisesP = points.map(point => getParks(point[1], point[0]));
     const promisesF = points.map(point => getFood(point[1], point[0]));
     const promisesHot = points.map(point => getHotels(point[1], point[0]));
     const promisesH = points.map(point => getHist(point[1], point[0]));
     const promisesM = points.map(point => getMuseums(point[1], point[0]));
     const promises = promisesP.concat(promisesF).concat(promisesHot).concat(promisesH).concat(promisesM);
-    
-    Promise.all(promises).then(values => {
-      let venues = [];
-      let allVenues = [].concat(...values)
-      .map((result, i) => {
+
+    Promise.all(promises).then((values) => {
+      const venues = [];
+      const allVenues = [].concat(...values)
+        .map((result, i) => {
         // array of 10 arrays (5 responses from each point searched, 2 points searched)
 
-        if (result.group.results){
-        return result.group.results.map((obj) => {
-          let poi =  {
-          category: i,
-          name: obj.venue.name,
-          lat: obj.venue.location.lat,
-          lng: obj.venue.location.lng,
-         
+          if (result.group.results) {
+            return result.group.results.map((obj) => {
+              const poi = {
+                category: i,
+                name: obj.venue.name,
+                lat: obj.venue.location.lat,
+                lng: obj.venue.location.lng,
+
+              };
+              if (obj.photo) {
+                poi.img = `${obj.photo.prefix}250x250${obj.photo.suffix}`;
+              }
+              venues.push(poi);
+              return poi;
+            });
           }
-          if (obj.photo) {
-          poi.img = obj.photo.prefix + '250x250' + obj.photo.suffix;
-          }
-          venues.push(poi)
-          return poi;
-          }) 
-        }
-      })
-      let pois = venues.map((poi) => {
-       poi.category = Math.floor((poi.category/venues.length)*10)
-      return poi
-      })
-      callback(null, { line, pois }, {'Content-Type': 'application/json'})
-    })
-  })
+        });
+      const pois = venues.map((poi) => {
+        poi.category = Math.floor((poi.category / venues.length) * 10);
+        return poi;
+      });
+      callback(null, { line, pois }, { 'Content-Type': 'application/json' });
+    });
+  });
 };
 
 module.exports.makeTrip = makeTrip;

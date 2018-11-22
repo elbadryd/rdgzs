@@ -1,7 +1,7 @@
 
 const express = require('express');
 const next = require('next');
-const helpers = require('./helpers.js')
+const helpers = require('./helpers.js');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -11,11 +11,11 @@ app.prepare()
   .then(() => {
     const server = express();
     server.get('/createRoute', (req, res) => {
-      let origin = JSON.parse(req.query.originCoords)
-      let dest = JSON.parse(req.query.destCoords)
-      const start = origin.lng + ',' + origin.lat;
-      const end = dest.lng + ',' + dest.lat;
-      console.log(end, start)
+      const origin = JSON.parse(req.query.originCoords);
+      const dest = JSON.parse(req.query.destCoords);
+      const start = `${origin.lng  },${origin.lat}`;
+      const end = `${dest.lng},${dest.lat}`;
+      console.log(end, start);
       helpers.makeTrip(start, end, 'context', (a, obj) => {
         res.send(obj);
       });

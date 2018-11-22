@@ -6,7 +6,7 @@ const Dotenv = require('dotenv-webpack');
 
 module.exports = withCSS({
   webpack: (config) => {
-    config.node = { fs: "empty" };
+    config.node = { fs: 'empty' };
     config.plugins = config.plugins || [];
 
     config.plugins = [

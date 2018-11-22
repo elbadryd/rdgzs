@@ -79,8 +79,6 @@ class Start extends React.Component {
     return (
       this.state.details === null ?
       <div className="search">
-        {/* <input type="text" name="origin" onChange={this.handleChange} placeholder="Origin"/>
-        <input type="text" name="destination" onChange={this.handleChange} placeholder="Destination" /> */}
         Origin
         <MapboxAutocomplete
           publicKey={process.env.MAPBOX_API_KEY}

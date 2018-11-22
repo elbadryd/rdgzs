@@ -22,7 +22,7 @@ app.prepare()
       });
     });
     server.post('/test', (req, res) => {
-      const title = 'title';
+      const title = 'thisisatest';
       db.sequelize.query(`INSERT INTO todoitems (content) VALUES ('${title}')`);
       res.end();
     });

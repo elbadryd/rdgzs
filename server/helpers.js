@@ -2,6 +2,7 @@ const request = require('request');
 const axios = require('axios');
 const turf = require('@turf/helpers');
 const along = require('@turf/along');
+const dotenv = require('dotenv').config();
 
 const makeTrip = (start, end, context, callback) => {
   function getParks(latitude, longitude) {
@@ -122,7 +123,7 @@ const makeTrip = (start, end, context, callback) => {
     });
   }
   request({
-    url: `https://api.mapbox.com/directions/v5/mapbox/driving/${start};${end}?geometries=geojson&access_token=${process.env.MAPBOX_TOKEN}`,
+    url: `https://api.mapbox.com/directions/v5/mapbox/driving/${start};${end}?geometries=geojson&access_token=${process.env.MAPBOX_API_KEY}`,
   }, (err, res, body) => {
     const data = JSON.parse(body);
     const line = turf.lineString(data.routes[0].geometry.coordinates);
@@ -134,23 +135,31 @@ const makeTrip = (start, end, context, callback) => {
     const promisesH = points.map(point => getHist(point[1], point[0]));
     const promisesM = points.map(point => getMuseums(point[1], point[0]));
     const promises = promisesP.concat(promisesF).concat(promisesHot).concat(promisesH).concat(promisesM);
+
     Promise.all(promises).then((values) => {
       const venues = [];
-      // eslint-disable-next-line no-unused-vars
       const allVenues = [].concat(...values)
-        .map((result, i) => result.group.results.map((obj) => {
-          const poi = {
-            category: i,
-            name: obj.venue.name,
-            lat: obj.venue.location.lat,
-            lng: obj.venue.location.lng,
-            img: `${obj.photo.prefix} 250x250 ${obj.photo.suffix}`,
-          };
-          venues.push(poi);
-          return poi;
-        }));
+        .map((result, i) => {
+        // array of 10 arrays (5 responses from each point searched, 2 points searched)
+
+          if (result.group.results) {
+            return result.group.results.map((obj) => {
+              const poi = {
+                category: i,
+                name: obj.venue.name,
+                lat: obj.venue.location.lat,
+                lng: obj.venue.location.lng,
+
+              };
+              if (obj.photo) {
+                poi.img = `${obj.photo.prefix}250x250${obj.photo.suffix}`;
+              }
+              venues.push(poi);
+              return poi;
+            });
+          }
+        });
       const pois = venues.map((poi) => {
-        // eslint-disable-next-line no-param-reassign
         poi.category = Math.floor((poi.category / venues.length) * 10);
         return poi;
       });

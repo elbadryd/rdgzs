@@ -1,6 +1,10 @@
 {
   "development": {
-   "use.env.variable": "DATABASE_URL"
+   "username": "adminuser",
+   "password": "adminuser1",
+   "database": "road_frog",
+   "host": "thesis.ckeq9h4x3ugd.us-east-2.rds.amazonaws.com",
+   "dialect":"postgres"
   },
   "test": {
     "username": "root",

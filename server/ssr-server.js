@@ -13,7 +13,7 @@ app.prepare()
     server.get('/createRoute', (req, res) => {
       const origin = JSON.parse(req.query.originCoords);
       const dest = JSON.parse(req.query.destCoords);
-      const start = `${origin.lng  },${origin.lat}`;
+      const start = `${origin.lng},${origin.lat}`;
       const end = `${dest.lng},${dest.lat}`;
       console.log(end, start);
       helpers.makeTrip(start, end, 'context', (a, obj) => {

@@ -3,7 +3,9 @@ import Router from 'next/router'
 import MapboxAutocomplete from 'react-mapbox-autocomplete';
 const dotenv = require('dotenv').config();
 import Trip from './trip/trip.js'
- // import { connect } from "react-redux";
+import { connect } from 'react-redux';
+import store from '../store'
+
 
 // import 'react-mapbox-autocomplete/index.css';
 import '../styles/index.css'

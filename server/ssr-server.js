@@ -8,6 +8,8 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 const db = require('./models');
 
+let routeObj;
+
 app.prepare()
   .then(() => {
     const server = express();
@@ -42,8 +44,13 @@ app.prepare()
     server.get('/redraw', (req, res) => {
       const points = req.query.points;
       helpers.redrawRoute(points, (newRoute) => {
+        routeObj = newRoute;
         res.send(newRoute);
       });
+    });
+
+    server.get('/mvpHack', (req, res) => {
+      res.send(routeObj);
     });
 
     server.get('*', (req, res) => handle(req, res));

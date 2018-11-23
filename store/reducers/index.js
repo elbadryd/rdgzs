@@ -1,6 +1,8 @@
-import { combineReducers } from 'redux';
-import tripReducer from './tripreducer';
+// import { combineReducers } from 'redux';
+// import tripReducer from './tripreducer';
 
-export default combineReducers({
-  tripReducer,
-});
+// export default tripReducer;
+
+// // combineReducers({
+// //   tripReducer,
+// // });

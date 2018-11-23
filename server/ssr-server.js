@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const passport = require('passport');
-const LocalStrategy = require('passport-local');
+const LocalStrategy = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
 const helpers = require('./helpers.js');
 
@@ -23,30 +23,9 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 const db = require('./models');
 
+console.log(db.sequelize.models);
+
 const op = db.sequelize.Op;
-
-passport.use(new LocalStrategy(
-  (email, password, done) => {
-    // check db user for where user username === username
-    // if email === dbemail && username === dbusername
-    db.sequelize.query(`select * from users where email = ${email}`)
-      .then((user) => {
-        if (user[0][0].email === email && user[0][0].password === password) {
-          return done(null, user[0][0]);
-        }
-        return done(null, false, {
-          message: 'ya done messed it up',
-        });
-      });
-  },
-));
-
-passport.serializeUser((user, done) => done(null, user.id));
-// passport.deserializeUser((id, done) => {
-//   User.findById(id)
-//     .then(user => done(null, user))
-//     .catch(error => done(error));
-// });
 
 
 app.prepare()
@@ -71,6 +50,40 @@ app.prepare()
     server.use(passport.initialize());
     server.use(passport.session());
 
+    passport.use(new LocalStrategy(
+      {
+        usernameField: 'email',
+      },
+      (email, password, done) => {
+        // check db user for where user username === username
+        // if email === dbemail && username === dbusername
+        // email =  `"some email"; DROP DATABASE;`;
+        console.log('passport hit', email, password);
+        db.sequelize.models.user.findOne({
+          where: {
+            email,
+            password,
+          },
+          raw: true,
+        })
+          .then((user) => {
+            console.log(user, 'USER');
+            if (!user) {
+              done(new Error('wrong creds, try again'));
+            } else {
+              done(null, user);
+            }
+          });
+      },
+    ));
+
+    passport.serializeUser((user, done) => done(null, user.id));
+    passport.deserializeUser((id, done) => {
+      console.log('deserializeUser', id);
+      db.sequelize.models.user.findById(id, { raw: true })
+        .then(user => done(null, user))
+        .catch(error => done(error));
+    });
     server.get('/createRoute', (req, res) => {
       const origin = JSON.parse(req.query.originCoords);
       const dest = JSON.parse(req.query.destCoords);
@@ -85,28 +98,18 @@ app.prepare()
     server.get('/login', (req, res) => {
       console.log('GET /login');
       console.log(req.sessionID);
+      console.log(req.user);
     });
 
-    server.post('/login', (req, res) => {
-      passport.authenticate('local', {
-        successFlash: 'you did it',
-        failureFlash: 'almost there',
-      });
-      console.log('POST /login');
-      console.log(req.body);
-      res.sendStatus(200);
-    });
+    server.post('/login', passport.authenticate('local', {
+      successRedirect: '/profile',
+      failureRedirect: '/login',
+    }));
 
     server.get('/', (req, res) => {
       console.log('callback func');
       console.log(req.sessionID);
-      // user.findAll({
-      //   where: {
-      //     id: 1,
-      //   },
-      // }).then((user) => {
-      //   console.log(user);
-      // });
+     
 
       db.sequelize.query('select * from users where id = 1')
         .then((user) => {

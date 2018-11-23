@@ -366,7 +366,7 @@ addToTrip(lng, lat){
          </Head>
         <div id="map" className="absolute top right left bottom" />
         <nav id="listing-group" className="listing-group">
-          <Link href='/profile/profile'><img src="/static/user.png"></img></Link><br/>
+          <Link href='/forms/login'><img src="/static/user.png"></img></Link><br/>
           <img src="/static/info.png"></img><br/>
           <Link href='/itinerary/itinerary'><img src="/static/sports-car.png"></img></Link><br/>
           <Link href='/trip/music'><img src="/static/spotify.png"></img></Link><br/>

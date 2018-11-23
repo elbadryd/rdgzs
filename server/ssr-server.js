@@ -23,8 +23,6 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 const db = require('./models');
 
-console.log(db.sequelize.models);
-
 const op = db.sequelize.Op;
 
 
@@ -37,8 +35,6 @@ app.prepare()
 
     server.use(session({
       genid: (req) => {
-        console.log('session midware');
-        console.log(req.sessionID);
         return uuid();
       },
       secret: process.env.SS,
@@ -53,6 +49,7 @@ app.prepare()
     passport.use(new LocalStrategy(
       {
         usernameField: 'email',
+        passwordField: 'password',
       },
       (email, password, done) => {
         // check db user for where user username === username
@@ -97,22 +94,44 @@ app.prepare()
       });
     });
 
+    server.post('/signup', (req, res) => {
+      console.log(req.body);
+      //check if email is already registered
+        //if not create user, else send message that email is already registered
+      db.sequelize.models.user.findOne({
+        where: {
+          email: req.body.email,
+        },
+        raw: true,
+      }).then((user) => {
+        if (user === null) {
+          db.sequelize.models.user.create({
+            username: 'test',
+            email: req.body.email,
+            password: req.body.password,
+          });
+        } else {
+          res.send('email already registered');
+        }
+      }).catch((err) => {
+        console.log(err, 'err');
+      });
+      // db.sequelize.models.user.create({
+
+      // })
+    });
+
     server.get('/login', (req, res) => {
       console.log('GET /login');
-      console.log(req.sessionID);
       console.log(req.user);
     });
 
     server.post('/login', passport.authenticate('local', {
-      successRedirect: '/profile',
-      failureRedirect: '/login',
+      successRedirect: '/index',
+      failureRedirect: '/forms/login',
     }));
 
     server.get('/', (req, res) => {
-      console.log('callback func');
-      console.log(req.sessionID);
-     
-
       db.sequelize.query('select * from users where id = 1')
         .then((user) => {
           console.log(user[0][0]);

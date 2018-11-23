@@ -95,6 +95,4 @@ class Start extends React.Component {
     }  
   }
   
-  
-  
   export default Start

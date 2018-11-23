@@ -8,27 +8,6 @@ mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
 
 const Map = ReactMapboxGl({ accessToken: process.env.MAPBOX_API_KEY })
 
-let geo = [{ lat: 29.9565436, lng: -90.1044093 },
-{ lat: 29.9527463, lng: -90.07071909999999 },
-{ lat: 29.8944563, lng: -90.01822729999999 },
-{ lat: 29.93785, lng: -90.07592299999999 },
-{ lat: 29.95149, lng: -90.07025999999999 },
-{ lat: 29.8775019, lng: -90.04843249999999 },
-{ lat: 30.0063073, lng: -90.2519013 },
-{ lat: 29.9970293, lng: -90.161163 },
-{ lat: 29.990542, lng: -90.05786959999999 },
-{ lat: 29.8532921, lng: -90.10894599999999 },
-{ lat: 29.9488105, lng: -90.2324234 },
-{ lat: 29.9201635, lng: -90.03392319999999 },
-{ lat: 29.9076809, lng: -90.1600689 },
-{ lat: 29.945432, lng: -90.03711960000001 },
-{ lat: 29.9344245, lng: -90.0806708 },
-{ lat: 29.9979549, lng: -90.1800343 },
-{ lat: 29.9242826, lng: -90.01818469999999 },
-{ lat: 29.962082, lng: -90.02080590000001 },
-{ lat: 29.8910133, lng: -90.05855489999999 },
-{ lat: 30.0099729, lng: -90.26704439999999 }];
-
 let results = {
   "line": {
     "type": "Feature",
@@ -346,13 +325,13 @@ componentDidMount(){
   });
   // var popup = new mapboxgl.Popup({ offset: 25 }).setText(result.name);
   results.pois.forEach((result)=>{
-    var el = document.createElement("div");
     new mapboxgl.Marker()
       .setLngLat([result.lng, result.lat])
       .setPopup(new mapboxgl.Popup({ offset: 25 })
       // .setText(`Name: ${result.name} "add to trip"`))
       .setHTML(`<img src=${result.img} height="150px" width="150px"><br>
-      <strong>${result.name}</strong><div onClick=${()=>this.handleClick(result.lng, result.lat)}>add to trip"</div>`)) // sets a popup on this marker
+      <strong>${result.name}</strong>
+      <div onClick=${()=>this.handleClick(result.lng, result.lat)}>add to trip</div>`)) // sets a popup on this marker
       .addTo(map);
   });
 } 

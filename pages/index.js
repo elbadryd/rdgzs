@@ -1,8 +1,5 @@
 import Link from 'next/link'
-// import { Provider } from "react-redux";
-// import store from "./store";
-
-
+import start from './start'
 
 const Index = () => (
   <div>

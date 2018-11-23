@@ -1,4 +1,3 @@
-
 import dynamic from 'next/dynamic'
 
  const DynamicMap = dynamic(() => import('../../components/map.js'), {
@@ -8,6 +7,5 @@ import dynamic from 'next/dynamic'
 export default () => (
   <div>
     <DynamicMap />
-    <p>HOME PAGE is here!</p>
   </div>
 )

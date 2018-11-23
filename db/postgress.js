@@ -1,5 +1,5 @@
 const pg = require('pg');
-const dotenv = require('dotenv');
+const dotenv = require('dotenv').config();
 
 const conString = process.env.DATABASE_URL; // Can be found in the Details page
 const client = new pg.Client(conString);

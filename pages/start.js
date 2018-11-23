@@ -17,14 +17,15 @@ class Start extends React.Component {
       origin: null,
       destination: null,
       waypoints: [],
-      details: null,
+      polyline: null,
+      points: null,
     }
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this._originSelect = this._originSelect.bind(this); 
     this._destinationSelect = this._destinationSelect.bind(this);
-    // this.updateDeets = this.updateDeets.bind(this); 
+    this.updatePoints = this.updatePoints.bind(this); 
 
   }
 
@@ -41,18 +42,12 @@ class Start extends React.Component {
   _destinationSelect(result, lat, lng, text) {
     this.setState({ destination: { lat: lat, lng: lng } })
   }
-  // updateDeets(blah, obj){
-  //   this.setState({
-  //     polylie: obj.line,
-  //     details: obj.pois
-  //   })
-  // }
-
-  // mapStateToProps(state){
-  //   return {
-  //     details: this.state.details
-  //   }
-  // }
+  updatePoints(obj){
+    this.setState({
+      polyline: obj.data.line,
+      points: obj.data.pois
+    })
+  }
 
   handleSubmit(){
     if (this.state.origin === null || this.state.destination === null) {
@@ -65,21 +60,18 @@ class Start extends React.Component {
     axios.get('/createRoute', {params: points})
     .then(response=>{
       console.log(response);
-      // this.updateDeets(null, response)
+      this.updatePoints(response)
     })
     .catch(err=>{
       console.log(err);
       alert('there was an error processing your request')
     })
   }
-  // this.setState({details: 'some deets'})
-  // Router.push('/trip/trip')
 }
-
 
   render() {
     return (
-      this.state.details === null ?
+      this.state.points === null ?
       <div className="search">
         Origin
         <MapboxAutocomplete
@@ -99,12 +91,12 @@ class Start extends React.Component {
         />
         <input id="button" type="submit" value="Submit" onClick={this.handleSubmit} />
       </div>
-      : 
-        <Trip details={this.state.details} />
-    );
+      :
+        <Trip points={this.state.points} line={this.state.polyline}/>
+      );
+    }  
   }
-}
-
-
-export default Start
-
+  
+  
+  
+  export default Start

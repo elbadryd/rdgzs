@@ -1,6 +1,9 @@
 import ReactMapboxGl, { Layer, Feature, Marker, Popup } from 'react-mapbox-gl';
-import mapboxgl from 'mapbox-gl'
-import Head from 'next/head'
+import mapboxgl from 'mapbox-gl';
+import Head from 'next/head';
+import Link from 'next/link';
+// import start from '../pages/start.js'
+
 import { timingSafeEqual } from 'crypto';
 
 const dotenv = require('dotenv').config();
@@ -331,9 +334,10 @@ componentDidMount(){
       // .setText(`Name: ${result.name} "add to trip"`))
       .setHTML(`<img src=${result.img} height="150px" width="150px"><br>
       <strong>${result.name}</strong>
-      <div onClick=${()=>this.handleClick(result.lng, result.lat)}>add to trip</div>`)) // sets a popup on this marker
+      <div onClick=${()=>this.handleClick(result.lng, result.lat)}>add to trip</div>`))
       .addTo(map);
   });
+
 } 
 handleClick(lng, lat){
   console.log('clicked')
@@ -361,8 +365,36 @@ addToTrip(lng, lat){
               <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.css' rel='stylesheet' />
          </Head>
         <div id="map" className="absolute top right left bottom" />
+        <nav id="listing-group" className="listing-group">
+          <Link href='/forms/login'><img src="/static/user.png"></img></Link><br/>
+          <img src="/static/info.png"></img><br/>
+          <Link href='/itinerary/itinerary'><img src="/static/sports-car.png"></img></Link><br/>
+          <Link href='/trip/music'><img src="/static/spotify.png"></img></Link><br/>
+          <Link href='/trip/photos'><img src="/static/camera.png"></img></Link><br/>
+          <Link href='/start'><img src="/static/left-arrow.png"></img></Link><br/>
+
+          
+
+</nav>
       <style jsx>{`
       #map { position:absolute; top:0; bottom:0; width:100%; }
+      nav {
+        font: 20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        font-weight: 600;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 1;
+        border-radius: 3px;
+        max-width: 20%;
+        color: #fff;
+
+    }
+
+    label {
+        border-radius: 0 0 3px 3px;
+        padding: 20px;
+    }
       `}
       </style>
       </div>

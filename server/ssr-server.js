@@ -35,6 +35,17 @@ app.prepare()
           res.send(err);
         });
     });
+
+    // redraw accepts a string of points, ie: -122.42,37.78;-122.45,37.91;-122.48,37.73
+    // first is the start, last is the destination, and waypoints inbetween
+    // each point separated by a semicolon except the last point (destination)
+    server.get('/redraw', (req, res) => {
+      const points = req.query.points;
+      helpers.redrawRoute(points, (newRoute) => {
+        res.send(newRoute);
+      });
+    });
+
     server.get('*', (req, res) => handle(req, res));
     server.listen(3000, (err) => {
       if (err) throw err;

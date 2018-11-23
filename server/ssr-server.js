@@ -11,6 +11,7 @@ const LocalStrategy = require('passport-local');
 const bodyParser = require('body-parser');
 const helpers = require('./helpers.js');
 
+
 dotenv.config();
 
 const users = [{
@@ -22,11 +23,36 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 const db = require('./models');
 
+const op = db.sequelize.Op;
+
+passport.use(new LocalStrategy(
+  (email, password, done) => {
+    // check db user for where user username === username
+    // if email === dbemail && username === dbusername
+    db.sequelize.query(`select * from users where email = ${email}`)
+      .then((user) => {
+        if (user[0][0].email === email && user[0][0].password === password) {
+          return done(null, user[0][0]);
+        }
+        return done(null, false, {
+          message: 'ya done messed it up',
+        });
+      });
+  },
+));
+
+passport.serializeUser((user, done) => done(null, user.id));
+// passport.deserializeUser((id, done) => {
+//   User.findById(id)
+//     .then(user => done(null, user))
+//     .catch(error => done(error));
+// });
+
 
 app.prepare()
   .then(() => {
     const server = express();
-    
+
     server.use(bodyParser.urlencoded({ extended: false }));
     server.use(bodyParser.json());
 
@@ -42,6 +68,8 @@ app.prepare()
       cookie: { maxAge: 3600000 },
     }));
 
+    server.use(passport.initialize());
+    server.use(passport.session());
 
     server.get('/createRoute', (req, res) => {
       const origin = JSON.parse(req.query.originCoords);
@@ -60,10 +88,10 @@ app.prepare()
     });
 
     server.post('/login', (req, res) => {
-       //db.checkuser
-        //if user creds in db req session regenerate && req.session.user = req.body.username
-        //res send req.session
-      //else res send false
+      passport.authenticate('local', {
+        successFlash: 'you did it',
+        failureFlash: 'almost there',
+      });
       console.log('POST /login');
       console.log(req.body);
       res.sendStatus(200);
@@ -71,9 +99,19 @@ app.prepare()
 
     server.get('/', (req, res) => {
       console.log('callback func');
-      console.log(req.session);
       console.log(req.sessionID);
-      
+      // user.findAll({
+      //   where: {
+      //     id: 1,
+      //   },
+      // }).then((user) => {
+      //   console.log(user);
+      // });
+
+      db.sequelize.query('select * from users where id = 1')
+        .then((user) => {
+          console.log(user[0][0]);
+        });
       res.send(`bazinga id: ${req.sessionID}`);
     });
 
@@ -82,6 +120,7 @@ app.prepare()
       db.sequelize.query(`INSERT INTO todoitems (content) VALUES ('${title}')`);
       res.end();
     });
+
     server.get('/test', (req, res) => {
       db.sequelize.query('select * from todoitems')
         .then((response) => {
@@ -91,6 +130,7 @@ app.prepare()
           res.send(err);
         });
     });
+
     server.get('*', (req, res) => handle(req, res));
     server.listen(3000, (err) => {
       if (err) throw err;

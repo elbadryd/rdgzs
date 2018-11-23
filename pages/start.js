@@ -2,10 +2,8 @@ import axios from 'axios';
 import Router from 'next/router'
 import MapboxAutocomplete from 'react-mapbox-autocomplete';
 const dotenv = require('dotenv').config();
-import Trip from './trip/trip.js'
- // import { connect } from "react-redux";
 
-// import 'react-mapbox-autocomplete/index.css';
+import 'react-mapbox-autocomplete/index.css';
 import '../styles/index.css'
 import { callbackify } from 'util';
 class Start extends React.Component {
@@ -59,6 +57,7 @@ class Start extends React.Component {
     .then(response=>{
       console.log(response);
       this.updatePoints(response)
+      Router.push('/trip/trip')
     })
     .catch(err=>{
       console.log(err);
@@ -69,7 +68,6 @@ class Start extends React.Component {
 
   render() {
     return (
-      this.state.points === null ?
       <div className="search">
         Origin
         <MapboxAutocomplete
@@ -89,8 +87,6 @@ class Start extends React.Component {
         />
         <input id="button" type="submit" value="Submit" onClick={this.handleSubmit} />
       </div>
-      :
-        <Trip points={this.state.points} line={this.state.polyline}/>
       );
     }  
   }

@@ -56,7 +56,7 @@ class Start extends React.Component {
     axios.get('/createRoute', {params: points})
     .then(response=>{
       console.log(response);
-      this.updatePoints(response)
+      this.props.pageProps.response = response;
       Router.push('/trip/trip')
     })
     .catch(err=>{

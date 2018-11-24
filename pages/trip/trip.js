@@ -6,6 +6,6 @@ import dynamic from 'next/dynamic'
 });
 export default () => (
   <div>
-    <DynamicMap />
+    <DynamicMap/>
   </div>
 )

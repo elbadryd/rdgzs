@@ -327,30 +327,29 @@ componentDidMount(){
     });
   });
   // var popup = new mapboxgl.Popup({ offset: 25 }).setText(result.name);
-  results.pois.forEach((result)=>{
+  window.cainTest = [];
+  results.pois.forEach(({ img, lat, lng, name }, i)=>{
+    window.cainTest.push(() => this.handleClick(lng, lat));
     new mapboxgl.Marker()
-      .setLngLat([result.lng, result.lat])
+      .setLngLat([lng, lat])
       .setPopup(new mapboxgl.Popup({ offset: 25 })
-      // .setText(`Name: ${result.name} "add to trip"`))
-      .setHTML(`<img src=${result.img} height="150px" width="150px"><br>
-      <strong>${result.name}</strong>
-      <div onClick=${()=>this.handleClick(result.lng, result.lat)}>add to trip</div>`))
+      // .setText(`Name: ${name} "add to trip"`))
+      .setHTML(`<img src=${img} height="150px" width="150px"><br>
+      <strong>${name}</strong>
+      <div onClick="window.cainTest[${i}]()">add to trip</div>`))
       .addTo(map);
+      // <div onClick="${()=>window.cainTest(result.lng, result.lat)}">add to trip</div>`))
   });
 
 } 
 handleClick(lng, lat){
-  console.log('clicked')
+  console.log(lng, lat)
   this.addToTrip(lng, lat);
 }
 
 addToTrip(lng, lat){
-  if(window.localStorage.waypoints) {
-    window.localStorage('waypoint', [[lng, lat]])
-  } else {
-    window.localStorage.waypoints.push([lat, lng])
-  }
-  console.log(window.localStorage.waypoints)
+    window.localStorage.setItem('lat', lat)
+    window.localStorage.setItem('lng', lng)  
 } 
 
   render() {

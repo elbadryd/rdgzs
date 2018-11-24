@@ -24,8 +24,8 @@ componentDidMount(){
   const { line, pois } = this.props;
 
   let coordinates = line;
-  let centerLng = coordinates[coordinates.length / 2][0]
-  let centerLat = coordinates[coordinates.length / 2][1]
+  let centerLng = coordinates[Math.floor(coordinates.length / 2)][0]
+  let centerLat = coordinates[Math.floor(coordinates.length / 2)][1]
   var bounds = coordinates.reduce((bounds, coord)=>{
     return bounds.extend(coord);
   }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));

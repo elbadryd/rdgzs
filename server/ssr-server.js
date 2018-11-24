@@ -23,8 +23,7 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 const db = require('./models');
 
-const op = db.sequelize.Op;
-
+let routeObj;
 
 app.prepare()
   .then(() => {
@@ -89,7 +88,6 @@ app.prepare()
       const end = `${dest.lng},${dest.lat}`;
       console.log(end, start);
       helpers.makeTrip(start, end, 'context', (a, obj) => {
-        console.log(obj);
         res.send(obj);
       });
     });
@@ -153,6 +151,21 @@ app.prepare()
         .catch((err) => {
           res.send(err);
         });
+    });
+
+    // redraw accepts a string of points, ie: -122.42,37.78;-122.45,37.91;-122.48,37.73
+    // first is the start, last is the destination, and waypoints inbetween
+    // each point separated by a semicolon except the last point (destination)
+    server.get('/redraw', (req, res) => {
+      const points = req.query.points;
+      helpers.redrawRoute(points, (newRoute) => {
+        routeObj = newRoute;
+        res.send(newRoute);
+      });
+    });
+
+    server.get('/mvpHack', (req, res) => {
+      res.send(routeObj);
     });
 
     server.get('*', (req, res) => handle(req, res));

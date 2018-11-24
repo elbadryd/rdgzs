@@ -164,8 +164,21 @@ const makeTrip = (start, end, context, callback) => {
         return poi;
       });
       callback(null, { line, pois }, { 'Content-Type': 'application/json' });
-    });
+    })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+};
+
+const redrawRoute = (waypoints, callback) => {
+  request({
+    url: `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${waypoints}?geometries=geojson&roundtrip=false&source=first&destination=last&access_token=${process.env.MAPBOX_API_KEY}`,
+  }, (err, res, body) => {
+    const data = JSON.parse(body);
+    callback(data);
   });
 };
 
 module.exports.makeTrip = makeTrip;
+module.exports.redrawRoute = redrawRoute;

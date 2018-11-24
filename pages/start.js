@@ -15,8 +15,10 @@ class Start extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      origin: null,
-      destination: null,
+      originCoords: null,
+      destinationCoords: null,
+      originName: null,
+      destinationName: null,
       waypoints: [],
       polyline: null,
       points: null,
@@ -37,11 +39,15 @@ class Start extends React.Component {
   }
 
   _originSelect(result, lat, lng, text) {
-    this.setState({origin :{lat: lat, lng: lng}})
+    this.setState({originCoords :{lat: lat, lng: lng},
+      originName: result,
+    })
   }
 
   _destinationSelect(result, lat, lng, text) {
-    this.setState({ destination: { lat: lat, lng: lng } })
+    this.setState({ destinationCoords: { lat: lat, lng: lng },
+      destinationName: result,
+     })
   }
   updatePoints(obj){
     this.setState({
@@ -51,21 +57,24 @@ class Start extends React.Component {
   }
 
   handleSubmit(){
+    const { originName, destinationName, originCoords, destinationCoords } = this.state;
     if (this.state.origin === null || this.state.destination === null) {
       alert('please enter an origin and destination')
     } else {
     let points = {
-      originCoords: this.state.origin,
-      destCoords: this.state.destination
+      originCoords: originCoords,
+      destCoords: destinationCoords
     }
     axios.get('/createRoute', {params: points})
     .then(response=>{
       console.log(response)
       this.props.setTrip({
-        origin: points.originCoords,
-        destination: points.destCoords,
+        originCoords,
+        destinationCoords,
         pois: response.data.pois,
         line: response.data.line.geometry.coordinates,
+        originName,
+        destinationName,
         waypoints: [],
       })
       Router.push('/trip/trip')

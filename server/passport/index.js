@@ -1,16 +1,28 @@
 // require passport
 const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 // require session 
 const session = require('express-session')
+
 // require databse
 const db = require('../models');
 
 const options = require('session opts in config');
 
 module.exports = (app) => {
-  app.use(session('XXXX'));
+  app.use(session(options));
   app.use(passport.initialize());
   app.use(passport.session());
+
+  /* moved from server file */
+  passport.serializeUser((user, done) => done(null, user.id));
+  passport.deserializeUser((id, done) => {
+    console.log('deserializeUser', id);
+    db.sequelize.models.user.findById(id, { raw: true })
+      .then(user => done(null, user))
+      .catch(error => done(error));
+  });
+
   passport.use(new LocalStrategy(
     {
       usernameField: 'email',

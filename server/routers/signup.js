@@ -1,9 +1,9 @@
-const express = require('express');
-//const passport = require('passport');
-const createRouter = express.Router();
 const db = require('../models');
+const express = require('express');
 
-createRouter.post('/signup', (req, res) => {
+const signup = express.Router();
+
+signup.post('/signup', (req, res) => {
   console.log(req.body);
   // check if email is already registered
   // if not create user, else send message that email is already registered
@@ -26,3 +26,5 @@ createRouter.post('/signup', (req, res) => {
     console.log(err, 'err');
   });
 });
+
+module.exports.signup = signup;

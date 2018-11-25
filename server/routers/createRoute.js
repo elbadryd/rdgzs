@@ -14,3 +14,5 @@ createRouter.get('/createRoute', (req, res) => {
     res.send(obj);
   });
 });
+
+module.exports.createRouter = createRouter;

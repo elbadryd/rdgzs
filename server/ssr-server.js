@@ -1,4 +1,3 @@
-
 const express = require('express');
 const next = require('next');
 const uuid = require('uuid/v4');
@@ -10,20 +9,19 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bodyParser = require('body-parser');
 const helpers = require('./helpers.js');
-
+const setUpRouters = require('./routers');
 
 dotenv.config();
 
-const users = [{
-  id: '12345', email: 'me@me.com', password: 'password',
-}];
+// const users = [{
+//   id: '12345', email: 'me@me.com', password: 'password',
+// }];
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 const db = require('./models');
 
-let routeObj;
 
 app.prepare()
   .then(() => {
@@ -45,33 +43,33 @@ app.prepare()
     server.use(passport.initialize());
     server.use(passport.session());
 
-    passport.use(new LocalStrategy(
-      {
-        usernameField: 'email',
-        passwordField: 'password',
-      },
-      (email, password, done) => {
-        // check db user for where user username === username
-        // if email === dbemail && username === dbusername
-        // email =  `"some email"; DROP DATABASE;`;
-        console.log('passport hit', email, password);
-        db.sequelize.models.user.findOne({
-          where: {
-            email,
-            password,
-          },
-          raw: true,
-        })
-          .then((user) => {
-            console.log(user, 'USER');
-            if (!user) {
-              done(new Error('wrong creds, try again'));
-            } else {
-              done(null, user);
-            }
-          });
-      },
-    ));
+    // passport.use(new LocalStrategy(
+    //   {
+    //     usernameField: 'email',
+    //     passwordField: 'password',
+    //   },
+    //   (email, password, done) => {
+    //     // check db user for where user username === username
+    //     // if email === dbemail && username === dbusername
+    //     // email =  `"some email"; DROP DATABASE;`;
+    //     console.log('passport hit', email, password);
+    //     db.sequelize.models.user.findOne({
+    //       where: {
+    //         email,
+    //         password,
+    //       },
+    //       raw: true,
+    //     })
+    //       .then((user) => {
+    //         console.log(user, 'USER');
+    //         if (!user) {
+    //           done(new Error('wrong creds, try again'));
+    //         } else {
+    //           done(null, user);
+    //         }
+    //       });
+    //   },
+    // ));
 
     passport.serializeUser((user, done) => done(null, user.id));
     passport.deserializeUser((id, done) => {
@@ -80,17 +78,19 @@ app.prepare()
         .then(user => done(null, user))
         .catch(error => done(error));
     });
-    server.get('/createRoute', (req, res) => {
-      console.log(req.query);
-      const origin = JSON.parse(req.query.originCoords);
-      const dest = JSON.parse(req.query.destCoords);
-      const start = `${origin.lng},${origin.lat}`;
-      const end = `${dest.lng},${dest.lat}`;
-      console.log(end, start);
-      helpers.makeTrip(start, end, 'context', (a, obj) => {
-        res.send(obj);
-      });
-    });
+
+
+    // server.get('/createRoute', (req, res) => {
+    //   console.log(req.query);
+    //   const origin = JSON.parse(req.query.originCoords);
+    //   const dest = JSON.parse(req.query.destCoords);
+    //   const start = `${origin.lng},${origin.lat}`;
+    //   const end = `${dest.lng},${dest.lat}`;
+    //   console.log(end, start);
+    //   helpers.makeTrip(start, end, 'context', (a, obj) => {
+    //     res.send(obj);
+    //   });
+    // });
 
     server.post('/signup', (req, res) => {
       console.log(req.body);
@@ -123,7 +123,7 @@ app.prepare()
       console.log('GET /login');
       console.log(req.user);
     });
-
+ 
     server.post('/login', passport.authenticate('local', {
       successRedirect: '/index',
       failureRedirect: '/forms/login',
@@ -137,21 +137,21 @@ app.prepare()
       res.send(`bazinga id: ${req.sessionID}`);
     });
 
-    server.post('/test', (req, res) => {
-      const title = 'thisisatest';
-      db.sequelize.query(`INSERT INTO todoitems (content) VALUES ('${title}')`);
-      res.end();
-    });
+    // server.post('/test', (req, res) => {
+    //   const title = 'thisisatest';
+    //   db.sequelize.query(`INSERT INTO todoitems (content) VALUES ('${title}')`);
+    //   res.end();
+    // });
 
-    server.get('/test', (req, res) => {
-      db.sequelize.query('select * from todoitems')
-        .then((response) => {
-          res.send(response);
-        })
-        .catch((err) => {
-          res.send(err);
-        });
-    });
+    // server.get('/test', (req, res) => {
+    //   db.sequelize.query('select * from todoitems')
+    //     .then((response) => {
+    //       res.send(response);
+    //     })
+    //     .catch((err) => {
+    //       res.send(err);
+    //     });
+    // });
 
     // redraw accepts a string of points, ie: -122.42,37.78;-122.45,37.91;-122.48,37.73
     // first is the start, last is the destination, and waypoints inbetween
@@ -164,17 +164,24 @@ app.prepare()
       });
     });
 
-    server.get('/mvpHack', (req, res) => {
-      res.send(routeObj);
-    });
-
-    server.get('*', (req, res) => handle(req, res));
-    server.listen(3000, (err) => {
-      if (err) throw err;
-      console.log('> Ready on http://localhost:3000');
-    });
+    // server.get('*', (req, res) => handle(req, res));
+    // server.listen(3000, (err) => {
+    //   if (err) throw err;
+    //   console.log('> Ready on http://localhost:3000');
+    // });
   })
   .catch((ex) => {
     console.error(ex.stack);
     process.exit(1);
   });
+
+
+
+
+// app.use(cors());
+app.use(bodyParser.json());
+setUpRouters(server);
+
+setupPassport();
+
+module.exports.server = server;

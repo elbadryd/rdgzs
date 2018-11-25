@@ -1,16 +1,25 @@
 // require passport
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-// require session 
-const session = require('express-session')
+// require session
+const session = require('express-session');
 
 // require databse
 const db = require('../models');
 
 const options = require('session opts in config');
 
+
 module.exports = (app) => {
-  app.use(session(options));
+  app.use(session({
+    genid: (req) => {
+      return uuid();
+    },
+    secret: process.env.SS,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 3600000 },
+  }));
   app.use(passport.initialize());
   app.use(passport.session());
 

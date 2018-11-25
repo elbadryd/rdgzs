@@ -1,9 +1,9 @@
 const express = require('express');
-// const passport = require('passport');
+//const passport = require('passport');
 const createRouter = express.Router();
 const db = require('../models');
 
-createRouter.get.post('/signup', (req, res) => {
+createRouter.post('/signup', (req, res) => {
   console.log(req.body);
   // check if email is already registered
   // if not create user, else send message that email is already registered

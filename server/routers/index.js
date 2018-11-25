@@ -1,9 +1,9 @@
-const express = require('express');
+
 // require passport
 // const db = require('../models');
-const loginRouter = require('./createRoute');
+const loginRouter = require('./login');
 const signupRouter = require('./signup');
-const createRouter = require('./login');
+const createRouter = require('./createRoute');
 
 // createRouter.get('/', (req, res) => {
 //   db.sequelize.query('select * from users where id = 1')
@@ -13,10 +13,8 @@ const createRouter = require('./login');
 //   res.send(`bazinga id: ${req.sessionID}`);
 // });
 
-
-
 module.exports = (app) => {
   app.use('/login', loginRouter);
   app.use('/signup', signupRouter);
-  app.use('/createRoute', createRouter)
+  app.use('/createRoute', createRouter);
 };

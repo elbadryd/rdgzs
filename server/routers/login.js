@@ -1,5 +1,4 @@
 const express = require('express');
-// require passport
 const passport = require('passport');
 
 const login = express.Router();
@@ -14,6 +13,5 @@ login.post('/login', passport.authenticate('local', {
   successRedirect: '/index',
   failureRedirect: '/forms/login',
 }));
-
 
 module.exports.login = login;

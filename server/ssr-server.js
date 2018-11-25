@@ -23,9 +23,11 @@ app.prepare().then(() => {
   setUpPassport(server);
   setUpRouters(server);
 
-  server.get('*', (req, res) => {
-    handle(req, res);
-  });
+  server.get('*', handle);
+  
+  // (req, res) => {
+  //   handle(req, res);
+  // });
   server.listen(PORT, () => console.log('Server listening on %s', PORT));
 })
 // add .get for * with route handler

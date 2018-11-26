@@ -23,8 +23,8 @@ class ItineraryList extends React.Component {
     return (
       <div>
       <div>{this.props.origin}</div>
-   <div> {fakeItinerary.waypoints.map(stop=>{
-      return <div className="item" key={stop.name}>1<ItineraryItem name={stop.name} /></div>
+   <div> {this.props.waypoints.map(stop=>{
+      return <div className="item" key={stop.name}>1<ItineraryItem name={stop.name}/></div>
     })}
       </div>
         <div>{this.props.dest}</div>

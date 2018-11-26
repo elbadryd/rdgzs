@@ -2,7 +2,8 @@ import ReactMapboxGl, { Layer, Feature, Marker, Popup } from 'react-mapbox-gl';
 import mapboxgl from 'mapbox-gl';
 import Head from 'next/head';
 import Link from 'next/link';
-// import start from '../pages/start.js'
+import { connect } from 'react-redux';
+import { setWaypointsAction } from '../store/actions/tripactions.js'
 
 import { timingSafeEqual } from 'crypto';
 
@@ -17,7 +18,6 @@ class DynamicMap extends React.Component {
     this.state = {
     }
     this.addToTrip = this.addToTrip.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
 
 componentDidMount(){
@@ -65,7 +65,7 @@ componentDidMount(){
   // var popup = new mapboxgl.Popup({ offset: 25 }).setText(result.name);
   window.cainTest = [];
   pois.forEach(({ img, lat, lng, name }, i)=>{
-    window.cainTest.push(() => this.handleClick(lng, lat));
+    window.cainTest.push(() => this.addToTrip(lng, lat, name));
     new mapboxgl.Marker()
       .setLngLat([lng, lat])
       .setPopup(new mapboxgl.Popup({ offset: 25 })
@@ -74,18 +74,18 @@ componentDidMount(){
       <strong>${name}</strong>
       <div onClick="window.cainTest[${i}]()">add to trip</div>`))
       .addTo(map);
-      // <div onClick="${()=>window.cainTest(result.lng, result.lat)}">add to trip</div>`))
   });
 
 } 
-handleClick(lng, lat){
-  console.log(lng, lat)
-  this.addToTrip(lng, lat);
-}
 
-addToTrip(lng, lat){
-    window.localStorage.setItem('lat', lat)
-    window.localStorage.setItem('lng', lng)  
+
+addToTrip(lng, lat, name){
+   this.props.setWaypoint({
+       lng,
+       lat,
+       name,
+   })
+   console.log(this.props.waypoints)
 } 
 
   render() {
@@ -106,7 +106,7 @@ addToTrip(lng, lat){
           <Link href='/itinerary/itinerary'><img src="/static/sports-car.png"></img></Link><br/>
           <Link href='/trip/music'><img src="/static/spotify.png"></img></Link><br/>
           <Link href='/trip/photos'><img src="/static/camera.png"></img></Link><br/>
-          <Link href='/start'><img src="/static/left-arrow.png"></img></Link><br/>
+          <Link href='/start'><img src="/static/left-arrow.png"></img></Link>
 
           
 
@@ -136,4 +136,9 @@ addToTrip(lng, lat){
     )
   }
 }
-export default DynamicMap;
+export default connect(
+  null,
+  dispatch => ({
+    setWaypoint: setWaypointsAction(dispatch)
+  })
+)(DynamicMap)

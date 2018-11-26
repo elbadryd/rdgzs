@@ -23,7 +23,8 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 const db = require('./models');
 
-let routeObj;
+const op = db.sequelize.Op;
+
 
 app.prepare()
   .then(() => {
@@ -33,9 +34,7 @@ app.prepare()
     server.use(bodyParser.json());
 
     server.use(session({
-      genid: (req) => {
-        return uuid();
-      },
+      genid: () => uuid(),
       secret: process.env.SS,
       resave: false,
       saveUninitialized: true,
@@ -55,7 +54,7 @@ app.prepare()
         // if email === dbemail && username === dbusername
         // email =  `"some email"; DROP DATABASE;`;
         console.log('passport hit', email, password);
-        db.sequelize.models.user.findOne({
+        db.sequelize.models.creds.findOne({
           where: {
             email,
             password,
@@ -65,7 +64,7 @@ app.prepare()
           .then((user) => {
             console.log(user, 'USER');
             if (!user) {
-              done(new Error('wrong creds, try again'));
+              done(null, false, { message: 'Incorrect email or password' });
             } else {
               done(null, user);
             }
@@ -88,26 +87,31 @@ app.prepare()
       const end = `${dest.lng},${dest.lat}`;
       console.log(end, start);
       helpers.makeTrip(start, end, 'context', (a, obj) => {
+        console.log(obj);
         res.send(obj);
       });
     });
 
     server.post('/signup', (req, res) => {
       console.log(req.body);
-      //check if email is already registered
-        //if not create user, else send message that email is already registered
-      db.sequelize.models.user.findOne({
+      // check if email is already registered
+      // if not create user, else send message that email is already registered
+      db.sequelize.models.creds.findOne({
         where: {
           email: req.body.email,
         },
         raw: true,
-      }).then((user) => {
-        if (user === null) {
-          db.sequelize.models.user.create({
-            username: 'test',
-            email: req.body.email,
-            password: req.body.password,
-          });
+      }).then((creds) => {
+        // if creds === null, create new user and pass
+        if (creds === null) {
+          db.sequelize.models.user.create()
+            .then(user => db.sequelize.models.creds.create({
+              email: req.body.email,
+              password: req.body.password,
+              userId: user.id,
+            })).catch((err) => {
+              console.log(err, 'err');
+            });
         } else {
           res.send('email already registered');
         }
@@ -124,13 +128,19 @@ app.prepare()
       console.log(req.user);
     });
 
-    server.post('/login', passport.authenticate('local', {
-      successRedirect: '/index',
-      failureRedirect: '/forms/login',
-    }));
+    server.post('/login', passport.authenticate('local'),
+      (req, res) => {
+        res.redirect('/start');
+      });
+
+    server.get('/logout', (req, res) => {
+      console.log('logout hit');
+      req.logout();
+      res.redirect('/start');
+    });
 
     server.get('/', (req, res) => {
-      db.sequelize.query('select * from users where id = 1')
+      db.sequelize.query('select * from users where id = 1', 'GET /')
         .then((user) => {
           console.log(user[0][0]);
         });
@@ -151,21 +161,6 @@ app.prepare()
         .catch((err) => {
           res.send(err);
         });
-    });
-
-    // redraw accepts a string of points, ie: -122.42,37.78;-122.45,37.91;-122.48,37.73
-    // first is the start, last is the destination, and waypoints inbetween
-    // each point separated by a semicolon except the last point (destination)
-    server.get('/redraw', (req, res) => {
-      const points = req.query.points;
-      helpers.redrawRoute(points, (newRoute) => {
-        routeObj = newRoute;
-        res.send(newRoute);
-      });
-    });
-
-    server.get('/mvpHack', (req, res) => {
-      res.send(routeObj);
     });
 
     server.get('*', (req, res) => handle(req, res));

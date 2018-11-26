@@ -42,6 +42,12 @@ class Login extends React.Component {
     })
   }
 
+  submitLogout() {
+    axios.get('/logout', (req, res) => {
+      console.log(res);
+    })
+  }
+
   render() {
     return (
       <div>
@@ -49,8 +55,9 @@ class Login extends React.Component {
         <input name="email" onChange={this.handleChange}></input>
         <span>Password:</span>
         <input name="password" onChange={this.handleChange}></input>
-        <button onClick={this.submitLogin}>Submit</button>
+        <button onClick={this.submitLogin}>Login</button>
         <button onClick={this.signUp}>SignUp</button>
+        <button>Logout</button>
       </div>
     )
   }

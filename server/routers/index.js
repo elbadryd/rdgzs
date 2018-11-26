@@ -16,8 +16,8 @@ const { redrawRouter } = require('./redraw');
 // });
 
 module.exports = (app) => {
-  // app.use('/login', loginRouter);
-  // app.use('/signup', signupRouter);
+  app.use('/login', loginRouter);
+  app.use('/signup', signupRouter);
   app.use('/createRoute', createRoute);
-  // app.use('/redraw', redrawRouter);
+  app.use('/redraw', redrawRouter);
 };

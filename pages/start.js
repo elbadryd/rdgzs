@@ -94,6 +94,7 @@ class Start extends React.Component {
           publicKey={process.env.MAPBOX_API_KEY}
           inputClass='form-control search'
           onSuggestionSelect={this._originSelect}
+          country='us'
           resetSearch={false}
         />
         Destination
@@ -101,6 +102,7 @@ class Start extends React.Component {
           publicKey={process.env.MAPBOX_API_KEY}
           inputClass='form-control search'
           onSuggestionSelect={this._destinationSelect}
+          country='us'
           resetSearch={false}
         />
         <input id="button" type="submit" value="Submit" onClick={this.handleSubmit} />

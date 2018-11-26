@@ -9,6 +9,8 @@ const tripState = {
   waypoints: [],
   line: null,
   pois: [],
+  originName: null,
+  destinationName: null,
 };
 // const store = createStore(
 //   reducers,

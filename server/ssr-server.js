@@ -88,6 +88,7 @@ app.prepare()
       const end = `${dest.lng},${dest.lat}`;
       console.log(end, start);
       helpers.makeTrip(start, end, 'context', (a, obj) => {
+        console.log(a);
         res.send(obj);
       });
     });

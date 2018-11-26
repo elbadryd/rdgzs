@@ -9,7 +9,7 @@ const initialState = {
 };
 
 export default function tripReducer(state = initialState, action) {
-  console.log(action);
+  console.log(action.trip, action.newWaypoint);
   switch (action.type) {
     case TRIP_TYPES.SET_ORIGIN:
       return { ...state, origin: action.origin };
@@ -18,7 +18,7 @@ export default function tripReducer(state = initialState, action) {
       return { ...state, destination: action.destination };
 
     case TRIP_TYPES.SET_WAYPOINTS:
-      return { ...state, waypoints: action.waypoints };
+      return { ...state, waypoints: [...state.waypoints, action.waypoint] };
 
     case TRIP_TYPES.SET_LINE:
       return { ...state, line: action.line };

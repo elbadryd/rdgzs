@@ -3,9 +3,10 @@ import mapboxgl from 'mapbox-gl';
 import Head from 'next/head';
 import Link from 'next/link';
 import { connect } from 'react-redux';
-import { setWaypointsAction } from '../store/actions/tripactions.js'
+import { setWaypointsAction, setLineAction } from '../store/actions/tripactions.js'
 
 import { timingSafeEqual } from 'crypto';
+import Axios from 'axios';
 
 const dotenv = require('dotenv').config();
 mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
@@ -18,11 +19,23 @@ class DynamicMap extends React.Component {
     this.state = {
     }
     this.addToTrip = this.addToTrip.bind(this);
+    this.populateMap = this.populateMap.bind(this);
   }
 
 componentDidMount(){
-  const { line, pois } = this.props;
+  if (this.props.line && this.props.pois) {
+    return this.populateMap();
+  }
+  let map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v9',
+    center: [-98.420679, 39.772537],
+    zoom: 3
+  });
+} 
 
+populateMap(){
+  const { line, pois } = this.props;
   let coordinates = line;
   let centerLng = coordinates[Math.floor(coordinates.length / 2)][0]
   let centerLat = coordinates[Math.floor(coordinates.length / 2)][1]
@@ -62,30 +75,42 @@ componentDidMount(){
       padding: 20
     });
   });
-  // var popup = new mapboxgl.Popup({ offset: 25 }).setText(result.name);
   window.cainTest = [];
   pois.forEach(({ img, lat, lng, name }, i)=>{
     window.cainTest.push(() => this.addToTrip(lng, lat, name));
     new mapboxgl.Marker()
       .setLngLat([lng, lat])
       .setPopup(new mapboxgl.Popup({ offset: 25 })
-      // .setText(`Name: ${name} "add to trip"`))
       .setHTML(`<img src=${img} height="150px" width="150px"><br>
       <strong>${name}</strong>
       <div onClick="window.cainTest[${i}]()">add to trip</div>`))
       .addTo(map);
   });
 
-} 
+}
 
 
 addToTrip(lng, lat, name){
+  const { line, waypoints } = this.props;
    this.props.setWaypoint({
        lng,
        lat,
        name,
    })
-   console.log(this.props.waypoints)
+   let currentWaypointsString = `${lng},${lat};`
+   waypoints.map(waypoint=>{
+     currentWaypointsString += `${waypoint.lng},${waypoint.lat};` 
+   })
+   let queryString = `${line[0][0]},${line[0][1]};${currentWaypointsString}${line[line.length-1][0]},${line[line.length-1][1]}`  
+   Axios.get('/redraw', {
+     params: queryString
+   })
+   .then(response=>{
+     console.log(response);
+   })
+   .catch(err=>{
+     console.log(err)
+   })
 } 
 
   render() {

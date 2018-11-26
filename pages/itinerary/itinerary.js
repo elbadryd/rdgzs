@@ -1,7 +1,19 @@
-import { Itinerary } from '../components/itinerary.js';
+import ItineraryList  from '../../components/itineraryList.js';
+import { connect } from 'react-redux';
 
-const itineraryPage = () => (
-    <Itinerary></Itinerary>
-)
+export default connect(
+    state => ({
+        dest: state.destinationName,
+        origin: state.originName,
+        waypoints: state.waypoints
+    }),
+    null
+)(({ dest, origin, waypoints }) => {
+    return (
+        <div>
+            <div>Your Upcoming Trip</div>
+            <ItineraryList dest={dest} origin={origin} waypoints={waypoints} />
 
-export default itineraryPage;
+        </div>
+    )
+})

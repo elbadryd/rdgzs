@@ -10,12 +10,13 @@ export default connect(
   state => ({
     line: state.line,
     pois: state.pois,
+    waypoints: state.waypoints
   }),
   null
-)(({line, pois}) => {
+)(({line, pois, waypoints}) => {
   return (
   <div>
-    <DynamicMap pois={pois} line={line}/>
+    <DynamicMap pois={pois} line={line} waypoints={waypoints}/>
   </div>
   )
 })

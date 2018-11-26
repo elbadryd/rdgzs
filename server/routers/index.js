@@ -1,9 +1,11 @@
 
 // require passport
 // const db = require('../models');
-const loginRouter = require('./login');
-const signupRouter = require('./signup');
-const createRouter = require('./createRoute');
+
+const { loginRouter } = require('./login');
+const { signupRouter } = require('./signup');
+const { createRoute } = require('./createRoute');
+const { redrawRouter } = require('./redraw');
 
 // createRouter.get('/', (req, res) => {
 //   db.sequelize.query('select * from users where id = 1')
@@ -14,7 +16,8 @@ const createRouter = require('./createRoute');
 // });
 
 module.exports = (app) => {
-  app.use('/login', loginRouter);
-  app.use('/signup', signupRouter);
-  app.use('/createRoute', createRouter);
+  // app.use('/login', loginRouter);
+  // app.use('/signup', signupRouter);
+  app.use('/createRoute', createRoute);
+  // app.use('/redraw', redrawRouter);
 };

@@ -1,14 +1,10 @@
 // require passport
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const uuid = require('uuid/v4');
-
 // require session
 const session = require('express-session');
-
-// require databse
+const uuid = require('uuid/v4');
 const db = require('../models');
-
 
 module.exports = (app) => {
   app.use(session({
@@ -28,7 +24,7 @@ module.exports = (app) => {
     console.log('deserializeUser', id);
     db.sequelize.models.user.findById(id, { raw: true })
       .then(user => done(null, user))
-      .catch(error => done(error));
+      .catch(error => done(error)); 
   });
 
   passport.use(new LocalStrategy(

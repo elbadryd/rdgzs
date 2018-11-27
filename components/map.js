@@ -4,9 +4,9 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { connect } from 'react-redux';
 import { setWaypointsAction, setLineAction } from '../store/actions/tripactions.js'
+import Axios from 'axios';
 
 import { timingSafeEqual } from 'crypto';
-import Axios from 'axios';
 
 const dotenv = require('dotenv').config();
 mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
@@ -19,20 +19,21 @@ class DynamicMap extends React.Component {
     this.state = {
     }
     this.addToTrip = this.addToTrip.bind(this);
-    this.populateMap = this.populateMap.bind(this);
+    this.redrawLine = this.redrawLine.bind(this);
   }
 
 componentDidMount(){
-  if (this.props.line && this.props.pois) {
+  const { line, pois } = this.props;
+  if (line && pois) {
     return this.populateMap();
   }
-  let map = new mapboxgl.Map({
+  const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v9',
-    center: [-98.420679, 39.772537],
-    zoom: 3
+    center: [-98.5795, 39.8283],
+    zoom: 3,
   });
-} 
+}
 
 populateMap(){
   const { line, pois } = this.props;
@@ -47,7 +48,10 @@ populateMap(){
     style: 'mapbox://styles/mapbox/streets-v9',
     center: [centerLng, centerLat],
   });
+  // let data = {
+  // }
   map.on('load', function () {
+  // map.addSource('lineConfig', data);
     map.addLayer({
       "id": "route",
       "type": "line",
@@ -58,7 +62,7 @@ populateMap(){
           "properties": {},
           "geometry": {
             "type": "LineString",
-            "coordinates": coordinates
+            "coordinates": line
           }
         }
       },
@@ -89,6 +93,19 @@ populateMap(){
 
 }
 
+redrawLine(){
+  // const { line } = this.props;
+  // let map = document.getElementById('map');
+  // map.setData('route', {
+  //   type: 'line', "data": {
+  //     "type": "Feature",
+  //     "properties": {},
+  //     "geometry": {
+  //       "type": "LineString",
+  //       "coordinates": line
+  //     }
+  //   } })
+}
 
 addToTrip(lng, lat, name){
   const { line, waypoints } = this.props;
@@ -105,9 +122,15 @@ addToTrip(lng, lat, name){
    Axios.get('/redraw', {
      params: queryString
    })
-   .then(response=>{
-     console.log(response);
-   })
+   .then((response)=>{
+     let line = response.data.trips[0].geometry.coordinates
+     this.props.setLine({
+       line
+     });
+    })
+    // .then(() => {
+    //   this.redrawLine();
+    // })
    .catch(err=>{
      console.log(err)
    })
@@ -164,6 +187,7 @@ addToTrip(lng, lat, name){
 export default connect(
   null,
   dispatch => ({
-    setWaypoint: setWaypointsAction(dispatch)
+    setWaypoint: setWaypointsAction(dispatch),
+    setLine: setLineAction(dispatch)
   })
 )(DynamicMap)

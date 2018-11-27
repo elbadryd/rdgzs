@@ -20,25 +20,13 @@ app.prepare().then(() => {
   setUpPassport(server);
   routes(server);
 
-  server.get('*', (req, res) => {
-    // const parsedUrl = parse(req.url, true);
-    // const { pathname, query = {} } = parsedUrl;
-    // // const route = routes[pathname];
-    
-    // // if (route) {
-    //   console.log(route, 'true');
-    //   return app.render(req, res, route.page, query);
-    // }
-    return handler(req, res);
-  });
+  server.get('*', handler);
 
   server.listen(PORT, (err) => {
     if (err) throw err;
     console.log(`> Ready on http://localhost:${PORT}`);
   });
 })
-// add .get for * with route handler
-
   .catch((ex) => {
     console.error(ex.stack, 'error in catch');
     process.exit(1);

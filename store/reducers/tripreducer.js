@@ -21,7 +21,7 @@ export default function tripReducer(state = initialState, action) {
       return { ...state, waypoints: [...state.waypoints, action.waypoint] };
 
     case TRIP_TYPES.SET_LINE:
-      return { ...state, line: action.line };
+      return { ...state, line: action.line.line };
 
     case TRIP_TYPES.SET_POIS:
       return { ...state, pois: action.pois };

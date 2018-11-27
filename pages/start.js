@@ -91,6 +91,7 @@ class Start extends React.Component {
       <div className="search">
         Origin
         <MapboxAutocomplete
+          country='us'
           publicKey={process.env.MAPBOX_API_KEY}
           inputClass='form-control search'
           onSuggestionSelect={this._originSelect}
@@ -99,6 +100,7 @@ class Start extends React.Component {
         />
         Destination
         <MapboxAutocomplete
+          country='us'
           publicKey={process.env.MAPBOX_API_KEY}
           inputClass='form-control search'
           onSuggestionSelect={this._destinationSelect}

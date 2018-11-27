@@ -6,7 +6,6 @@ class ItineraryItem extends React.Component {
   }
 
   componentDidMount() {
-    console.log('ellp')
   }
 
 

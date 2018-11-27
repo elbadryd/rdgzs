@@ -21,7 +21,7 @@ module.exports = (app) => {
 
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser((id, done) => {
-    console.log('deserializeUser', id);
+    // console.log('deserializeUser', id);
     db.sequelize.models.user.findById(id, { raw: true })
       .then(user => done(null, user))
       .catch(error => done(error));

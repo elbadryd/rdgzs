@@ -37,8 +37,12 @@ class Login extends React.Component {
       password: this.state.password,
     }).then((res) => {
       console.log(res);
+      if (res.data.loggedIn) {
+        // window.location.pathname = '/about';
+        //add some logged in action
+      }
     }).catch((err) => {
-      console.log(err);
+        //add some not logged in action
     })
   }
 

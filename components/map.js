@@ -3,7 +3,8 @@ import mapboxgl from 'mapbox-gl';
 import Head from 'next/head';
 import Link from 'next/link';
 import { connect } from 'react-redux';
-import { setWaypointsAction } from '../store/actions/tripactions.js'
+import { setWaypointsAction, setLineAction } from '../store/actions/tripactions.js'
+import Axios from 'axios';
 
 import { timingSafeEqual } from 'crypto';
 
@@ -18,10 +19,12 @@ class DynamicMap extends React.Component {
     this.state = {
     }
     this.addToTrip = this.addToTrip.bind(this);
+    this.redrawLine = this.redrawLine.bind(this);
   }
 
 componentDidMount(){
   const { line, pois } = this.props;
+  console.log(line, 'oldline');
 
   let coordinates = line;
   let centerLng = coordinates[Math.floor(coordinates.length / 2)][0]
@@ -78,14 +81,39 @@ componentDidMount(){
 
 } 
 
+redrawLine(){
+  // make this function
+}
 
 addToTrip(lng, lat, name){
+  const { line, waypoints } = this.props;
    this.props.setWaypoint({
        lng,
        lat,
        name,
    })
-   console.log(this.props.waypoints)
+   let currentWaypointsString = `${lng},${lat};`
+   waypoints.map(waypoint=>{
+     currentWaypointsString += `${waypoint.lng},${waypoint.lat};` 
+   })
+   console.log(line, 'lineBeforeString')
+   let queryString = `${line[0][0]},${line[0][1]};${currentWaypointsString}${line[line.length-1][0]},${line[line.length-1][1]}`  
+
+   Axios.get('/redraw', {
+     params: queryString
+   })
+   .then((response)=>{
+     let line = response.data.trips[0].geometry.coordinates
+     this.props.setLine({
+       line
+     });
+    })
+    .then(() => {
+      this.redrawLine();
+    })
+   .catch(err=>{
+     console.log(err)
+   })
 } 
 
   render() {
@@ -139,6 +167,7 @@ addToTrip(lng, lat, name){
 export default connect(
   null,
   dispatch => ({
-    setWaypoint: setWaypointsAction(dispatch)
+    setWaypoint: setWaypointsAction(dispatch),
+    setLine: setLineAction(dispatch)
   })
 )(DynamicMap)

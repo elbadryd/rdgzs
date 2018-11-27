@@ -4,7 +4,8 @@ const helpers = require('../helpers.js');
 const redraw = express.Router();
 
 redraw.get('/', (req, res) => {
-  const points = req.query.points;
+  const points = req.query['0'];
+  console.log(points, 'points at the endpoint');
   helpers.redrawRoute(points, (newRoute) => {
     res.send(newRoute);
   });

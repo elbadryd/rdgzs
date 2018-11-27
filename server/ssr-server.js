@@ -27,7 +27,6 @@ app.prepare().then(() => {
     console.log(`> Ready on http://localhost:${PORT}`);
   });
 })
-
   .catch((ex) => {
     console.error(ex.stack, 'error in catch');
     process.exit(1);

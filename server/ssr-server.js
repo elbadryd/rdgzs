@@ -31,5 +31,3 @@ app.prepare().then(() => {
     console.error(ex.stack, 'error in catch');
     process.exit(1);
   });
-
-// how to expor?

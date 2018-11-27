@@ -24,7 +24,7 @@ module.exports = (app) => {
     console.log('deserializeUser', id);
     db.sequelize.models.user.findById(id, { raw: true })
       .then(user => done(null, user))
-      .catch(error => done(error)); 
+      .catch(error => done(error));
   });
 
   passport.use(new LocalStrategy(
@@ -37,7 +37,7 @@ module.exports = (app) => {
       // if email === dbemail && username === dbusername
       // email =  `"some email"; DROP DATABASE;`;
       console.log('passport hit', email, password);
-      db.sequelize.models.user.findOne({
+      db.sequelize.models.creds.findOne({
         where: {
           email,
           password,
@@ -51,7 +51,8 @@ module.exports = (app) => {
           } else {
             done(null, user);
           }
-        });
+        })
+        .catch(err => console.error(err));
     },
   ));
 };

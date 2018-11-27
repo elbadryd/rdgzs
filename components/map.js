@@ -7,11 +7,13 @@ import { setWaypointsAction, setLineAction } from '../store/actions/tripactions.
 import Axios from 'axios';
 
 import { timingSafeEqual } from 'crypto';
+import { runInContext } from 'vm';
 
 const dotenv = require('dotenv').config();
 mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
 
 const Map = ReactMapboxGl({ accessToken: process.env.MAPBOX_API_KEY })
+let map
 
 class DynamicMap extends React.Component {
   constructor(props) {
@@ -27,7 +29,7 @@ componentDidMount(){
   if (line && pois) {
     return this.populateMap();
   }
-  const map = new mapboxgl.Map({
+   map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v9',
     center: [-98.5795, 39.8283],
@@ -43,29 +45,28 @@ populateMap(){
   var bounds = coordinates.reduce((bounds, coord)=>{
     return bounds.extend(coord);
   }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
-  const map = new mapboxgl.Map({
+  map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v9',
     center: [centerLng, centerLat],
   });
-  // let data = {
-  // }
+  let data = {
+    "type": "geojson",
+    "data": {
+      "type": "Feature",
+      "properties": { },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": line
+      }
+    }
+  }
   map.on('load', function () {
-  // map.addSource('lineConfig', data);
+  map.addSource('route', data);
     map.addLayer({
       "id": "route",
       "type": "line",
-      "source": {
-        "type": "geojson",
-        "data": {
-          "type": "Feature",
-          "properties": {},
-          "geometry": {
-            "type": "LineString",
-            "coordinates": line
-          }
-        }
-      },
+      "source": "route",
       "layout": {
         "line-join": "round",
         "line-cap": "round"
@@ -94,17 +95,15 @@ populateMap(){
 }
 
 redrawLine(){
-  // const { line } = this.props;
-  // let map = document.getElementById('map');
-  // map.setData('route', {
-  //   type: 'line', "data": {
-  //     "type": "Feature",
-  //     "properties": {},
-  //     "geometry": {
-  //       "type": "LineString",
-  //       "coordinates": line
-  //     }
-  //   } })
+  const { line } = this.props;
+  map.getSource('route').setData({
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "LineString",
+        "coordinates": line
+      }
+    })
 }
 
 addToTrip(lng, lat, name){
@@ -128,9 +127,9 @@ addToTrip(lng, lat, name){
        line
      });
     })
-    // .then(() => {
-    //   this.redrawLine();
-    // })
+    .then(() => {
+      this.redrawLine();
+    })
    .catch(err=>{
      console.log(err)
    })

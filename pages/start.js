@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import store from '../store'
 
 
-import 'react-mapbox-autocomplete/index.css';
+// import 'react-mapbox-autocomplete/index.css';
 import '../styles/index.css'
 import { callbackify } from 'util';
 import { setTripAction } from '../store/actions/tripactions.js';

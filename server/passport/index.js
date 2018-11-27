@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 // require passport
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -21,7 +22,7 @@ module.exports = (app) => {
 
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser((id, done) => {
-    console.log('deserializeUser', id);
+    // console.log('deserializeUser', id);
     db.sequelize.models.user.findById(id, { raw: true })
       .then(user => done(null, user))
       .catch(error => done(error));
@@ -33,14 +34,10 @@ module.exports = (app) => {
       passwordField: 'password',
     },
     (email, password, done) => {
-      // check db user for where user username === username
-      // if email === dbemail && username === dbusername
-      // email =  `"some email"; DROP DATABASE;`;
       console.log('passport hit', email, password);
       db.sequelize.models.creds.findOne({
         where: {
           email,
-          password,
         },
         raw: true,
       })
@@ -48,11 +45,23 @@ module.exports = (app) => {
           console.log(user, 'USER');
           if (!user) {
             done(new Error('wrong creds, try again'));
-          } else {
-            done(null, user);
           }
+          
+          const hashed = bcrypt.hashSync(password, user.salt);
+          if (user.password === hashed) {
+            return done(null, user);
+          }
+
+          return done(null, false, {
+            message: 'Incorrect credentials.',
+          });
         })
-        .catch(err => console.error(err));
+        .catch((err) => {
+          console.error(err);
+          done(null, false, {
+            message: 'failed',
+          });
+        });
     },
   ));
 };

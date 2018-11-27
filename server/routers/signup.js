@@ -1,7 +1,9 @@
+const bcrypt = require('bcrypt');
 const express = require('express');
 const db = require('../models');
 
 const signup = express.Router();
+
 
 signup.post('/', (req, res) => {
   console.log(req.body);
@@ -15,11 +17,15 @@ signup.post('/', (req, res) => {
   }).then((creds) => {
     // if creds === null, create new user and pass
     if (creds === null) {
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(req.body.password, salt);
+      console.log(salt, 'SALT');
       db.sequelize.models.user.create()
         .then(user => db.sequelize.models.creds.create({
           email: req.body.email,
-          password: req.body.password,
+          password: hash,
           userId: user.id,
+          salt: salt,
         })).catch((err) => {
           console.log(err, 'err');
         });

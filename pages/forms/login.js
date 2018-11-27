@@ -38,11 +38,12 @@ class Login extends React.Component {
     }).then((res) => {
       console.log(res);
       if (res.data.loggedIn) {
-        // window.location.pathname = '/about';
+        window.location.pathname = '/about';
         //add some logged in action
       }
     }).catch((err) => {
         //add some not logged in action
+        alert('nope');
     })
   }
 

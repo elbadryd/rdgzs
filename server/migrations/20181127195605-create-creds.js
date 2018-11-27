@@ -13,7 +13,7 @@ module.exports = {
         references: {
           model: 'users',
           key: 'id',
-          deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+          deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
         },
       },
       email: {
@@ -22,12 +22,15 @@ module.exports = {
       password: {
         type: Sequelize.STRING
       },
+      salt: {
+        type: Sequelize.STRING
+      },
       createdAt: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.DATE
       }
     });

@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import store from '../store'
 
 
-import 'react-mapbox-autocomplete/index.css';
+// import 'react-mapbox-autocomplete/index.css';
 import '../styles/index.css'
 import { callbackify } from 'util';
 import { setTripAction } from '../store/actions/tripactions.js';
@@ -95,6 +95,7 @@ class Start extends React.Component {
           publicKey={process.env.MAPBOX_API_KEY}
           inputClass='form-control search'
           onSuggestionSelect={this._originSelect}
+          country='us'
           resetSearch={false}
         />
         Destination
@@ -103,6 +104,7 @@ class Start extends React.Component {
           publicKey={process.env.MAPBOX_API_KEY}
           inputClass='form-control search'
           onSuggestionSelect={this._destinationSelect}
+          country='us'
           resetSearch={false}
         />
         <input id="button" type="submit" value="Submit" onClick={this.handleSubmit} />

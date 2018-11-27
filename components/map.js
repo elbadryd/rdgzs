@@ -7,11 +7,13 @@ import { setWaypointsAction, setLineAction } from '../store/actions/tripactions.
 import Axios from 'axios';
 
 import { timingSafeEqual } from 'crypto';
+import { runInContext } from 'vm';
 
 const dotenv = require('dotenv').config();
 mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
 
 const Map = ReactMapboxGl({ accessToken: process.env.MAPBOX_API_KEY })
+let map
 
 class DynamicMap extends React.Component {
   constructor(props) {
@@ -24,34 +26,47 @@ class DynamicMap extends React.Component {
 
 componentDidMount(){
   const { line, pois } = this.props;
-  console.log(line, 'oldline');
+  if (line && pois) {
+    return this.populateMap();
+  }
+   map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v9',
+    center: [-98.5795, 39.8283],
+    zoom: 3,
+  });
+}
 
+populateMap(){
+  const { line, pois } = this.props;
   let coordinates = line;
   let centerLng = coordinates[Math.floor(coordinates.length / 2)][0]
   let centerLat = coordinates[Math.floor(coordinates.length / 2)][1]
   var bounds = coordinates.reduce((bounds, coord)=>{
     return bounds.extend(coord);
   }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
-  const map = new mapboxgl.Map({
+  map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v9',
     center: [centerLng, centerLat],
   });
+  let data = {
+    "type": "geojson",
+    "data": {
+      "type": "Feature",
+      "properties": { },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": line
+      }
+    }
+  }
   map.on('load', function () {
+  map.addSource('route', data);
     map.addLayer({
       "id": "route",
       "type": "line",
-      "source": {
-        "type": "geojson",
-        "data": {
-          "type": "Feature",
-          "properties": {},
-          "geometry": {
-            "type": "LineString",
-            "coordinates": coordinates
-          }
-        }
-      },
+      "source": "route",
       "layout": {
         "line-join": "round",
         "line-cap": "round"
@@ -65,24 +80,30 @@ componentDidMount(){
       padding: 20
     });
   });
-  // var popup = new mapboxgl.Popup({ offset: 25 }).setText(result.name);
   window.cainTest = [];
   pois.forEach(({ img, lat, lng, name }, i)=>{
     window.cainTest.push(() => this.addToTrip(lng, lat, name));
     new mapboxgl.Marker()
       .setLngLat([lng, lat])
       .setPopup(new mapboxgl.Popup({ offset: 25 })
-      // .setText(`Name: ${name} "add to trip"`))
       .setHTML(`<img src=${img} height="150px" width="150px"><br>
       <strong>${name}</strong>
       <div onClick="window.cainTest[${i}]()">add to trip</div>`))
       .addTo(map);
   });
 
-} 
+}
 
 redrawLine(){
-  // make this function
+  const { line } = this.props;
+  map.getSource('route').setData({
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "LineString",
+        "coordinates": line
+      }
+    })
 }
 
 addToTrip(lng, lat, name){
@@ -96,9 +117,7 @@ addToTrip(lng, lat, name){
    waypoints.map(waypoint=>{
      currentWaypointsString += `${waypoint.lng},${waypoint.lat};` 
    })
-   console.log(line, 'lineBeforeString')
    let queryString = `${line[0][0]},${line[0][1]};${currentWaypointsString}${line[line.length-1][0]},${line[line.length-1][1]}`  
-
    Axios.get('/redraw', {
      params: queryString
    })

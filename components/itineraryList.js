@@ -1,6 +1,7 @@
 import ItineraryItem from './itineraryItem';
 import Axios from 'axios';
 import Router from 'next/router'
+import Head from 'next/head'
 const dotenv = require('dotenv').config();
 
 
@@ -25,6 +26,7 @@ class ItineraryList extends React.Component {
   render() {
     return (
       <div>
+
       <div>{this.props.origin}</div>
    <div> {this.props.waypoints.map((stop, index)=>{
       return <div className="item" key={stop.name}>{index}<ItineraryItem name={stop.name}/></div>

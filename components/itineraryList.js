@@ -29,7 +29,7 @@ class ItineraryList extends React.Component {
 
       <div>{this.props.origin}</div>
    <div> {this.props.waypoints.map((stop, index)=>{
-      return <div className="item" key={stop.name}>{index}<ItineraryItem name={stop.name}/></div>
+      return <div className="item" key={stop.name}>{index + 1}<ItineraryItem name={stop.name}/></div>
     })}
       </div>
         <div>{this.props.dest}</div>

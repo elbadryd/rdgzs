@@ -4,8 +4,6 @@ import MapboxAutocomplete from 'react-mapbox-autocomplete';
 const dotenv = require('dotenv').config();
 import { connect } from 'react-redux';
 import store from '../store'
-
-
 // import 'react-mapbox-autocomplete/index.css';
 import '../styles/index.css'
 import { callbackify } from 'util';
@@ -75,7 +73,7 @@ class Start extends React.Component {
         destinationName,
         waypoints: [],
       })
-      Router.push('/')
+      // this.props.closeDrawer(null);
     })
     .catch(err=>{
       console.log(err);

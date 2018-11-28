@@ -57,7 +57,8 @@ componentDidMount(){
 }
 componentDidUpdate(prevProps){
   if (this.props.line !== prevProps.line){
-    this.setState({ currentDrawer: null })
+    this.populateMap();
+    this.setState({ isVisible: false })
   } 
 }
 

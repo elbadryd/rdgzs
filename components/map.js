@@ -56,7 +56,7 @@ componentDidMount(){
   });
 }
 componentDidUpdate(prevProps){
-  if (this.props.line !== prevProps.line){
+  if (this.props.pois !== prevProps.pois){
     this.populateMap();
     this.setState({ isVisible: false })
   } 
@@ -185,7 +185,6 @@ setPois(key){
           <Link href='/trip/music'><img src="/static/spotify.png"></img></Link><br/>
           <Link href='/trip/photos'><img src="/static/camera.png"></img></Link><br/>
           <img src="/static/left-arrow.png" onClick={()=>this.renderDrawer('start')}></img>
-          <div id="food" name="food" onClick={this.setPois}>food</div>
 
           <Dock position="bottom"
             size={this.state.size}

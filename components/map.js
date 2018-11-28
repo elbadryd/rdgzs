@@ -7,6 +7,9 @@ import Axios from 'axios';
 import Dock from 'react-dock'
 import ItineraryView from './itineraryView.js'
 import mapHelpers from './mapHelpers.js'
+import Start from './start.js'
+import PoiView from './pois.js'
+
 
 import { timingSafeEqual } from 'crypto';
 import { runInContext } from 'vm';
@@ -14,7 +17,18 @@ import { runInContext } from 'vm';
 const dotenv = require('dotenv').config();
 mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
 
+let map;
+
 const markers =  [[],[],[],[],[]]
+
+
+// const markers =  {
+//   parks: [],
+//   food: [],
+//   hotels: [],
+//   history: [],
+//   muesums: [],
+// }
 
 class DynamicMap extends React.Component {
   constructor(props) {
@@ -26,25 +40,38 @@ class DynamicMap extends React.Component {
       customAnimation: false,
       slow: false,
       size: 0.50,
-      map: null
+      map: null,
+      currentDrawer: null,
+      parks: false,
+      food: false,
+      history: false,
+      hotels: false,
+      muesums: false,
     };
     this.addToTrip = this.addToTrip.bind(this);
     this.redrawLine = this.redrawLine.bind(this);
     this.renderDrawer = this.renderDrawer.bind(this);
-    this.interestClick = this.interestClick.bind(this);
+    this.setPois = this.setPois.bind(this);
   }
 
 componentDidMount(){
   const { line, pois } = this.props;
-  if (line && pois) {
-    return this.populateMap();
+  if (line) {
+    console.log(line);
+   this.populateMap();
   }
-  new mapboxgl.Map({
+  map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v9',
     center: [-98.5795, 39.8283],
     zoom: 3,
   });
+}
+componentDidUpdate(prevProps){
+  if (this.props.pois !== prevProps.pois){
+    this.populateMap();
+    this.setState({ isVisible: false })
+  } 
 }
 
 populateMap(){
@@ -56,7 +83,7 @@ populateMap(){
     return bounds.extend(coord);
   }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
   
-  const map = new mapboxgl.Map({
+  map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v9',
     center: [centerLng, centerLat],
@@ -140,13 +167,36 @@ addToTrip(lng, lat, name, map){
    })
 } 
 
-renderDrawer(){
-  // console.log('clicked');
-  // const duration = this.state.slow ? 2000 : 200;
-  // return (
-    
-  // );
-  this.setState({ isVisible: !this.state.isVisible})
+renderDrawer(type){
+  this.setState({ 
+    isVisible: !this.state.isVisible,
+    currentDrawer: type
+  })
+}
+
+setPois(key){
+  this.setState({
+    //tggle state property of key
+    [key]: !this.state[key]
+  })
+  let markersObj = {
+    parks: 0,
+    food: 1,
+    hotels: 2,
+    history: 3,
+    museums: 4,
+  }
+  console.log(this.state[key], 'state')
+  console.log(this.state[markersObj[key]])
+    if (this.state[key]) {
+      markers[markersObj[key]].map((marker) => {
+        marker.addTo(map)
+      })
+    } else {
+      markers[markersObj[key]].map((marker) => {
+        marker.remove();
+      });
+    }
 }
 
   render() {
@@ -155,11 +205,12 @@ renderDrawer(){
         <div id="map" className="absolute top right left bottom" />
         <nav id="listing-group" className="listing-group">
           <Link href='/forms/login'><img src="/static/user.png"></img></Link><br/>
-          <img src="/static/info.png"></img><br/>
-          <img src="/static/sports-car.png" onClick={this.renderDrawer} zindex={4}></img><br/>
+          <img src="/static/info.png" onClick={()=> this.renderDrawer('pois')}></img><br/>
+          <img src="/static/sports-car.png" onClick={() => this.renderDrawer('itnierary')} zindex={4}></img><br/>
           <Link href='/trip/music'><img src="/static/spotify.png"></img></Link><br/>
           <Link href='/trip/photos'><img src="/static/camera.png"></img></Link><br/>
-          <Link href='/start'><img src="/static/left-arrow.png"></img></Link>
+          <img src="/static/left-arrow.png" onClick={()=>this.renderDrawer('start')}></img>
+
           <Dock position="bottom"
             size={this.state.size}
             isVisible={this.state.isVisible}
@@ -181,25 +232,17 @@ renderDrawer(){
                 flexDirection: 'column',
                 color: 'black'
               }}>
-                <div onClick={this.renderDrawer}
+                <div onClick={()=>this.renderDrawer(null)}
                   style={{
                   position: 'absolute',
                   zIndex: 1,
                   left: '10px',
                   top: '10px',
                 }}><img src="/static/left-arrow.png" size="20px"></img></div>
-                <ItineraryView></ItineraryView>
-                {/* <div>Position: {position}</div>
-                <div>Resizing: {isResizing ? 'true' : 'false'}</div> */}
-                {/* <Glyphicon glyph='remove'
-                  onClick={() => this.setState({ isVisible: false })}
-                  style={{
-                    position: 'absolute',
-                    zIndex: 1,
-                    right: '10px',
-                    top: '10px',
-                    cursor: 'pointer'
-                  }} /> */}
+                {this.state.currentDrawer === 'itnierary' ? <ItineraryView></ItineraryView> : null}
+                {this.state.currentDrawer === 'pois' ? <PoiView setPois={this.setPois}></PoiView>: null }
+                {this.state.currentDrawer === 'start' ? <Start closeDrawer={this.renderDrawer}/> : null}
+
               </div>
             }
           </Dock>

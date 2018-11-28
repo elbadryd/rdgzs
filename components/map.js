@@ -1,10 +1,12 @@
 import ReactMapboxGl, { Layer, Feature, Marker, Popup } from 'react-mapbox-gl';
 import mapboxgl from 'mapbox-gl';
-import Head from 'next/head';
 import Link from 'next/link';
 import { connect } from 'react-redux';
 import { setWaypointsAction, setLineAction } from '../store/actions/tripactions.js'
 import Axios from 'axios';
+import Dock from 'react-dock'
+import ItineraryView from './itineraryView.js'
+
 
 import { timingSafeEqual } from 'crypto';
 import { runInContext } from 'vm';
@@ -19,9 +21,16 @@ class DynamicMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-    }
+      positionIdx: 0,
+      isVisible: false,
+      fluid: true,
+      customAnimation: false,
+      slow: false,
+      size: 0.50
+    };
     this.addToTrip = this.addToTrip.bind(this);
     this.redrawLine = this.redrawLine.bind(this);
+    this.renderDrawer = this.renderDrawer.bind(this);
   }
 
 componentDidMount(){
@@ -135,25 +144,69 @@ addToTrip(lng, lat, name){
    })
 } 
 
+renderDrawer(){
+  // console.log('clicked');
+  // const duration = this.state.slow ? 2000 : 200;
+  // return (
+    
+  // );
+  this.setState({ isVisible: !this.state.isVisible})
+}
+
   render() {
     return (
     <div>
-      <Head>
-        <title> Welcome to your trip</title>
-        <meta charset='utf-8' />
-          <meta name='viewport' content='width=device-width, height=devive-height, initial-scale=1' />
-              <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
-            <link href='https://api.mapbox.com/mapbox-assembly/mbx/v0.18.0/assembly.min.css' rel='stylesheet'/>
-              <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.css' rel='stylesheet' />
-         </Head>
         <div id="map" className="absolute top right left bottom" />
         <nav id="listing-group" className="listing-group">
           <Link href='/forms/login'><img src="/static/user.png"></img></Link><br/>
           <img src="/static/info.png"></img><br/>
-          <Link href='/itinerary/itinerary'><img src="/static/sports-car.png"></img></Link><br/>
+          <img src="/static/sports-car.png" onClick={this.renderDrawer} zindex={4}></img><br/>
           <Link href='/trip/music'><img src="/static/spotify.png"></img></Link><br/>
           <Link href='/trip/photos'><img src="/static/camera.png"></img></Link><br/>
           <Link href='/start'><img src="/static/left-arrow.png"></img></Link>
+          <Dock position="bottom"
+            size={this.state.size}
+            isVisible={this.state.isVisible}
+            onVisibleChange={this.handleVisibleChange}
+            onSizeChange={this.handleSizeChange}
+            fluid={this.state.fluid}
+            dimStyle={{ background: 'rgba(0, 0, 100, 0.2)' }}
+            dockStyle={this.state.customAnimation ? { transition: transitions } : null}
+            zIndex={3}
+            // duration={duration}
+            >
+            {({ position, isResizing }) =>
+              <div style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                color: 'black'
+              }}>
+                <div onClick={this.renderDrawer}
+                  style={{
+                  position: 'absolute',
+                  zIndex: 1,
+                  left: '10px',
+                  top: '10px',
+                }}><img src="/static/left-arrow.png" size="20px"></img></div>
+                <ItineraryView></ItineraryView>
+                {/* <div>Position: {position}</div>
+                <div>Resizing: {isResizing ? 'true' : 'false'}</div> */}
+                {/* <Glyphicon glyph='remove'
+                  onClick={() => this.setState({ isVisible: false })}
+                  style={{
+                    position: 'absolute',
+                    zIndex: 1,
+                    right: '10px',
+                    top: '10px',
+                    cursor: 'pointer'
+                  }} /> */}
+              </div>
+            }
+          </Dock>
 
           
 

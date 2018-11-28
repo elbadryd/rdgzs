@@ -2,7 +2,6 @@ import axios from 'axios';
 import Router from 'next/router'
 import MapboxAutocomplete from 'react-mapbox-autocomplete';
 const dotenv = require('dotenv').config();
-import Trip from './trip/trip.js'
 import { connect } from 'react-redux';
 import store from '../store'
 
@@ -29,7 +28,6 @@ class Start extends React.Component {
     this._originSelect = this._originSelect.bind(this); 
     this._destinationSelect = this._destinationSelect.bind(this);
     this.updatePoints = this.updatePoints.bind(this); 
-
   }
 
   handleChange() {
@@ -77,7 +75,7 @@ class Start extends React.Component {
         destinationName,
         waypoints: [],
       })
-      Router.push('/trip/trip')
+      Router.push('/')
     })
     .catch(err=>{
       console.log(err);
@@ -108,6 +106,31 @@ class Start extends React.Component {
           resetSearch={false}
         />
         <input id="button" type="submit" value="Submit" onClick={this.handleSubmit} />
+        {/* <style jsx>{`
+        .react-mapbox-ac-menu {
+  width: auto;
+  position: absolute;
+  z-index: 9999;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  margin-top: -1.3rem;
+}
+
+.react-mapbox-ac-input {
+  margin-bottom: 1.5rem;
+}
+
+.react-mapbox-ac-suggestion {
+  font-size: 14px;
+  cursor: pointer;
+  padding: .5rem 1.5rem;
+}
+
+.react-mapbox-ac-suggestion:hover {
+  background-color: #58a;
+}
+        `}
+        </style> */}
       </div>
       );
     }  

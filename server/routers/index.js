@@ -21,4 +21,3 @@ module.exports = (app) => {
   app.use('/createRoute', createRoute);
   app.use('/redraw', redrawRouter);
 };
-

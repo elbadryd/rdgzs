@@ -31,22 +31,4 @@ const drawTheMap = (map, line, bounds) => {
   });
 };
 
-// const poiHandler = (poi, i) => {
-//   const obj = {
-//     type: 'Feature',
-//     properties: {
-//       description: `<img src=${poi.img} height="150px" width="150px"><br>
-//       <strong>${poi.name}</strong>
-//       <div onClick="window.cainTest[${i}]()">add to trip</div>`,
-//       icon: 'theatre',
-//     },
-//     geometry: {
-//       type: 'Point',
-//       coordinates: [poi.lng, poi.lat],
-//     },
-//   };
-//   return obj;
-// };
-
-// module.exports.poiHandler = poiHandler;
 module.exports.drawTheLine = drawTheMap;

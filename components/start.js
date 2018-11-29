@@ -75,11 +75,11 @@ class Start extends React.Component {
     let splitDest = destinationName.split(',');
     let tripName = splitOrigin + ' to ' + splitDest;
     if (this.state.userID) {
-      axois.post('/addTrip', { userID, originCoords, destinationCoords, tripName })
+      axois.post('/trip', { userID, originCoords, destinationCoords, tripName })
       .then((response) => {
         console.log(response);
         //get tripID from respose and set tripID to state so it can dispatch to store
-      })      
+      })
     }
     let points = {
       originCoords: originCoords,
@@ -97,7 +97,7 @@ class Start extends React.Component {
         destinationName,
         waypoints: [],
       })
-      // this.props.closeDrawer(null);
+      // set trip ID 
     })
     .catch(err=>{
       console.log(err);

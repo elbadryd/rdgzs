@@ -10,6 +10,8 @@ createRoute.get('/', (req, res) => {
   const start = `${origin.lng},${origin.lat}`;
   const end = `${dest.lng},${dest.lat}`;
   helpers.makeTrip(start, end, 'context', (a, obj) => {
+    // add trip to user profile
+    
     res.send(obj);
   });
 });

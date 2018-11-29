@@ -10,6 +10,6 @@ module.exports = (app) => {
   app.use('/signup', signupRouter);
   app.use('/createRoute', createRoute);
   app.use('/redraw', redrawRouter);
-  app.use('/addStop', addStopRouter);
-  app.use('/addTrip', addTripRouter);
+  app.use('/stop', addStopRouter);
+  app.use('/trip', addTripRouter);
 };

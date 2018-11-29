@@ -21,15 +21,6 @@ let map;
 
 const markers =  [[],[],[],[],[]]
 
-
-// const markers =  {
-//   parks: [],
-//   food: [],
-//   hotels: [],
-//   history: [],
-//   muesums: [],
-// }
-
 class DynamicMap extends React.Component {
   constructor(props) {
     super(props);
@@ -141,21 +132,20 @@ redrawLine(map){
 }
 
 addToTrip(lng, lat, name, map){
-  const { line, waypoints } = this.props;
+  const { tripID, line, waypoints } = this.props;
   // let newStop = true;
   // waypoints.forEach((point) => {
   //   if (point.lat === lat && point.lng === lng) {
   //     newStop = false;
   //   }
   //  })
-
   
    this.props.setWaypoint({
        lng,
        lat,
        name,
    })
-  // axios.post('/addStop', {
+  // axios.post('/stop', {
   //  body: ({lng, lat, name, tripID})
   // }
 

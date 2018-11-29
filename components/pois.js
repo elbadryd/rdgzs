@@ -23,11 +23,16 @@ class PoiView extends React.Component {
   constructor(props) {
     super(props);
 }
-
+// <div onClick={this.props.setPois.bind(this, div.type)}><img src={div.img}></img></div>
     render() {
     return (
       content.map(div=>{
-        return <div onClick={this.props.setPois.bind(this, div.type)}><img src={div.img}></img></div>
+        return  <div class="card" style={{width: '18rem'}}>
+          <img onClick={this.props.setPois.bind(this, div.type)} class="card-img-top" src={div.img} alt="Card image cap" />
+            <div class="card-body">
+              <p class="card-text">{div.type}</p>
+            </div>
+            </div>
       })
     )
   }

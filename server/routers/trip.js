@@ -9,12 +9,28 @@ trip.post('/', (req, res) => {
 });
 
 trip.get('/', (req, res) => {
-  // should be fired when profile loads
-  // db query return all trips by userID
+  console.log(req.body);
+  db.sequelize.models.trips.findAll({
+    where: { userId: req.body.userId },
+  })
+    .then((response) => {
+      res.send(response);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
 });
 
 trip.delete('/', (req, res) => {
-  // delete trip from table
+  db.sequelize.models.trips.destroy({
+    where: { tripId: req.body.tripId },
+  })
+    .then((response) => {
+      res.send(response);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
 });
 
 

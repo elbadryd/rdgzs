@@ -47,12 +47,6 @@ class Login extends React.Component {
     })
   }
 
-  submitLogout() {
-    axios.get('/logout', (req, res) => {
-      console.log(res);
-    })
-  }
-
   render() {
     return (
       <div>
@@ -62,7 +56,6 @@ class Login extends React.Component {
         <input name="password" type="password" onChange={this.handleChange}></input>
         <button onClick={this.submitLogin}>Login</button>
         <button onClick={this.signUp}>SignUp</button>
-        <button>Logout</button>
       </div>
     )
   }

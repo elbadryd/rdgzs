@@ -106,12 +106,9 @@ class Start extends React.Component {
       axios.post('/trip', { userID, originCoords, destinationCoords, tripName, originName, destinationName })
       .then((dbres) => {
         console.log(dbres, 'DBRESPONSE');
-       this.setState({tripId: dbres.data.id});
-
-
-
-        this.createRoute();
-        //get tripID from respose and set tripID to state so it can dispatch to store
+       this.setState({tripId: dbres.data.id}, () => {
+         this.createRoute();
+       });
       })
     }
       this.createRoute();

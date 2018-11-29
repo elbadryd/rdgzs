@@ -45,6 +45,7 @@ class DynamicMap extends React.Component {
     this.redrawLine = this.redrawLine.bind(this);
     this.renderDrawer = this.renderDrawer.bind(this);
     this.setPois = this.setPois.bind(this);
+    this.getWebsite = this.getWebsite.bind(this);
   }
 
 componentDidMount(){
@@ -93,14 +94,16 @@ populateMap(){
   ];
   const markers =  [[],[],[],[],[]]
   window.cainTest = [];
-  pois.forEach(({ lat, lng, name, img, category }, i)=>{ 
+  window.patTest = []
+  pois.forEach(({ venueID, lat, lng, name, img, category }, i)=>{ 
+    window.patTest.push(() => this.getWebsite(venueID))
     window.cainTest.push(() => this.addToTrip(lng, lat, name, map));
-    console.log(category,)
     if (category < 5) {
     markers[category].push(new mapboxgl.Marker({color: markerColors[category]})
     .setLngLat([lng, lat])
     .setPopup(new mapboxgl.Popup({ offset: 25 })
     .setHTML(`<img src=${img} height="150px" width="150px"><br>
+    <div key=${venueID} onClick=window.patTest[${i}]()>visit website<div>
     <strong>${name}</strong>
     <div key=${i} onClick="window.cainTest[${i}]()">add to trip</div>`)))
   } else {
@@ -119,7 +122,25 @@ populateMap(){
     // poiData.push(poiGeoSon)
   // poiData add source and layers
 }
+getWebsite(venueID) {
+  Axios.get(`https://api.foursquare.com/v2/venues/${venueID}`, {
+    params: {
+      client_id: process.env.FOURSQUARE_ID,
+      client_secret: process.env.FOURSQUARE_SECRET,
+      v: '20181120',
+    }
+  })
+  .then((response) => {
 
+    if (response.data.response.venue.url) {
+      window.open(response.data.response.venue.url)
+    }
+    else {
+      console.log(response);
+      window.open(response.data.response.venue.canonicalUrl)
+    }
+  });
+}
 
 redrawLine(map){
   const { line } = this.props;

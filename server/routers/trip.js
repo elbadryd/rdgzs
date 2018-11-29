@@ -4,7 +4,6 @@ const db = require('../models');
 const trip = express.Router();
 
 trip.post('/', (req, res) => {
-  let obj = req.body;
   // db query adding trip to trip table
   // res.send(tripID)
 });

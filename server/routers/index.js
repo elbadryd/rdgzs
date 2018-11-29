@@ -2,8 +2,8 @@ const { loginRouter } = require('./login');
 const { signupRouter } = require('./signup');
 const { createRoute } = require('./createRoute');
 const { redrawRouter } = require('./redraw');
-const { stopRouter } = require('./addStop');
-const { tripRouter } = require('./addTrip');
+const { stopRouter } = require('./stop');
+const { tripRouter } = require('./trip');
 
 module.exports = (app) => {
   app.use('/login', loginRouter);

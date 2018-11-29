@@ -43,12 +43,6 @@ const makeTrip = (start, end, context, callback) => {
     const promisesM = points.map(point => getPoi(point[1], point[0], catObj.museums, num));
     const promises = promisesP.concat(promisesF).concat(promisesHot).concat(promisesH).concat(promisesM);
 
-    console.log(promisesP.length);
-    console.log(promisesF.length);
-    console.log(promisesHot.length);
-    console.log(promisesH.length);
-    console.log(promisesM.length);
-
     Promise.all(promises).then((values) => {
       const venues = [];
       const allVenues = [].concat(...values)

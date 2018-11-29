@@ -68,10 +68,10 @@ class Profile extends React.Component {
   render() {
     return (
       <div>
-        {trips.map(trip=>{
+        {trips.map((trip, i) =>{
           let splitOrigin = trip.origin.split(',');
           let splitDest = trip.dest.split(',');
-          return <div className="card" style={{width: '18rem'}}>
+          return <div key={i} className="card" style={{width: '18rem'}}>
             <img className="card-img-top" src="/static/mountain.png" alt="Card image cap" />
               <div className="card-body">
                 <h5 className="card-title">{splitOrigin[0]} to {splitDest[0]}</h5>

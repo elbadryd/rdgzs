@@ -110,7 +110,7 @@ populateMap(){
     .setPopup(new mapboxgl.Popup({ offset: 25 })
     .setHTML(`<img src=${img} height="150px" width="150px"><br>
     <strong>${name}</strong>
-    <div onClick="window.cainTest[${i}]()">add to trip</div>`)))
+    <div key=${i} onClick="window.cainTest[${i}]()">add to trip</div>`)))
   } else {
     console.log(category, name)
   }

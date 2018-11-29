@@ -8,6 +8,7 @@ import Dock from 'react-dock'
 import ItineraryView from './itineraryView.js'
 import Start from './start.js'
 import PoiView from './pois.js'
+import User from './user.js'
 
 
 import { timingSafeEqual } from 'crypto';
@@ -179,7 +180,7 @@ setPois(key){
     <div>
         <div id="map" className="absolute top right left bottom" />
         <nav id="listing-group" className="listing-group">
-          <Link href='/forms/login'><img src="/static/user.png"></img></Link><br/>
+          <img src="/static/user.png" onClick={this.renderDrawer.bind(this, 'user')}></img><br/>
           <img src="/static/info.png" onClick={()=> this.renderDrawer('pois')}></img><br/>
           <img src="/static/sports-car.png" onClick={() => this.renderDrawer('itnierary')} zindex={4}></img><br/>
           <Link href='/trip/music'><img src="/static/spotify.png"></img></Link><br/>
@@ -217,6 +218,7 @@ setPois(key){
                 {this.state.currentDrawer === 'itnierary' ? <ItineraryView></ItineraryView> : null}
                 {this.state.currentDrawer === 'pois' ? <PoiView setPois={this.setPois}></PoiView>: null }
                 {this.state.currentDrawer === 'start' ? <Start closeDrawer={this.renderDrawer}/> : null}
+                {this.state.currentDrawer === 'user' ? <User/> : null}
 
               </div>
             }

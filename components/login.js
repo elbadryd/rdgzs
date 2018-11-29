@@ -7,12 +7,14 @@ class Login extends React.Component {
     this.state = {
         email: null,
         password: null,
-        // username: null,
+        loggedIn: false,
     };
     this.signUp = this.signUp.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.submitLogin = this.submitLogin.bind(this);
   }
+
+
 
   handleChange() {
     this.setState({
@@ -36,12 +38,9 @@ class Login extends React.Component {
       email: this.state.email,
       password: this.state.password,
     }).then((res) => {
-      console.log(res);
-      if (res.data.loggedIn) {
-        window.location.pathname = '/about';
-        //add some logged in action
-      }
-    }).catch((err) => {
+      alert('you\'re in!')
+      })
+      .catch((err) => {
         //add some not logged in action
         alert('nope');
     })
@@ -59,7 +58,7 @@ class Login extends React.Component {
         <span>Email:</span>
         <input name="email" onChange={this.handleChange}></input>
         <span>Password:</span>
-        <input name="password" onChange={this.handleChange}></input>
+        <input name="password" type="password" onChange={this.handleChange}></input>
         <button onClick={this.submitLogin}>Login</button>
         <button onClick={this.signUp}>SignUp</button>
         <button>Logout</button>

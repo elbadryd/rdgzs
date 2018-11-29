@@ -39,6 +39,7 @@ class Login extends React.Component {
       password: this.state.password,
     }).then((res) => {
       alert('you\'re in!')
+      this.props.setLogin()
       })
       .catch((err) => {
         //add some not logged in action

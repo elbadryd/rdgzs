@@ -8,20 +8,25 @@ class User extends React.Component {
     this.state = {
       loggedIn: false
     }
+    this.setLogin = this.setLogin.bind(this);
   }
   
   componentDidMount() {
     axios.get('/login')
       .then(response => {
         if (response.data.user !== null) {
-          this.setState({ loggedIn: true })
+          this.setLogin()
         }
       })
   }
 
+  setLogin(){
+    this.setState({loggedIn: !this.state.loggedIn})
+  }
+
   render(){
     return (
-      this.state.loggedIn ? <Profile></Profile> : <Login></Login>
+      this.state.loggedIn ? <Profile></Profile> : <Login setLogin={this.setLogin}></Login>
     )
   }
 

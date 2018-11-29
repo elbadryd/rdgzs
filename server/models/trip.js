@@ -4,8 +4,10 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     origin: DataTypes.STRING,
     destination: DataTypes.STRING,
-    date: DataTypes.DATE,
-    name: DataTypes.STRING
+    trip_name: DataTypes.STRING,
+    origin_name: DataTypes.STRING,
+    destination_name: DataTypes.STRING,
+    img: DataTypes.STRING,
   }, {});
   trip.associate = function(models) {
     // associations can be defined here

@@ -20,7 +20,7 @@ mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
 
 let map;
 
-const markers =  [[],[],[],[],[]]
+
 
 class DynamicMap extends React.Component {
   constructor(props) {
@@ -39,6 +39,7 @@ class DynamicMap extends React.Component {
       history: false,
       hotels: false,
       muesums: false,
+      markers: null,
     };
     this.addToTrip = this.addToTrip.bind(this);
     this.redrawLine = this.redrawLine.bind(this);
@@ -90,7 +91,7 @@ populateMap(){
     'rgb(200, 0, 200)',
     'rgb(150, 10, 100)'
   ];
-
+  const markers =  [[],[],[],[],[]]
   window.cainTest = [];
   pois.forEach(({ lat, lng, name, img, category }, i)=>{ 
     window.cainTest.push(() => this.addToTrip(lng, lat, name, map));
@@ -106,7 +107,7 @@ populateMap(){
     console.log(category, name)
   }
   });
-
+  this.setState({ markers })
     
   for (let i = 0; i < 5; i++) {
   markers[i].map((marker) => {
@@ -194,11 +195,11 @@ setPois(key){
   console.log(this.state[key], 'state')
   console.log(this.state[markersObj[key]])
     if (this.state[key]) {
-      markers[markersObj[key]].map((marker) => {
+      this.state.markers[markersObj[key]].map((marker) => {
         marker.addTo(map)
       })
     } else {
-      markers[markersObj[key]].map((marker) => {
+      this.state.markers[markersObj[key]].map((marker) => {
         marker.remove();
       });
     }

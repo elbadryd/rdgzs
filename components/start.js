@@ -78,6 +78,7 @@ class Start extends React.Component {
       axois.post('/addTrip', { userID, originCoords, destCoords, tripName })
       .then((response) => {
         console.log(response);
+        //get tripID from respose and set tripID to state so it can dispatch to store
       })      
     }
     let points = {

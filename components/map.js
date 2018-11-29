@@ -149,7 +149,7 @@ addToTrip(lng, lat, name, map){
        lat,
        name,
    })
-  // Axios.post('/addStop', {
+  // axios.post('/addStop', {
   //  body: ({lng, lat, name, tripID})
   // }
 

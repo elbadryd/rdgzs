@@ -86,11 +86,11 @@ populateMap(){
   mapHelpers.drawTheLine(map, line, bounds)
 
   let markerColors = [
-    'rgb(25, 25, 100)',
-    'rgb(50, 0, 200)',
-    'rgb(75, 0, 40)',
-    'rgb(200, 0, 200)',
-    'rgb(150, 10, 100)'
+    'rgb(157, 188, 60)',
+    'rgb(255, 225, 25)',
+    'rgb(57, 92, 112)',
+    'rgb(170, 110, 40)',
+    'rgb(242, 70, 101)'
   ];
   const markers =  [[],[],[],[],[]]
   window.cainTest = [];

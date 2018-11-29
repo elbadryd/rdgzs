@@ -132,21 +132,29 @@ redrawLine(map){
         "coordinates": line
       }
     })
-    // markers[0].map((marker) => {
-    //   marker.remove()
-    // })
-    // markers[1].map((marker) => {
-    //   marker.addTo(map);
-    // })
 }
 
 addToTrip(lng, lat, name, map){
   const { line, waypoints } = this.props;
+  // let newStop = true;
+  // waypoints.forEach((point) => {
+  //   if (point.lat === lat && point.lng === lng) {
+  //     newStop = false;
+  //   }
+  //  })
+
+  
    this.props.setWaypoint({
        lng,
        lat,
        name,
    })
+  // Axios.post('/addStop', {
+  //  body: ({lng, lat, name, tripID})
+  // }
+
+
+
    let currentWaypointsString = `${lng},${lat};`
    waypoints.map(waypoint=>{
      currentWaypointsString += `${waypoint.lng},${waypoint.lat};` 

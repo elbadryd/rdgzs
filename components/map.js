@@ -179,9 +179,9 @@ setPois(key){
     return (
     <div>
         <div id="map" className="absolute top right left bottom" />
+          <img id="profile" src="/static/user.png" onClick={this.renderDrawer.bind(this, 'user')}></img><br/>
         <nav id="listing-group" className="listing-group">
-          <img src="/static/user.png" onClick={this.renderDrawer.bind(this, 'user')}></img><br/>
-          <img src="/static/info.png" onClick={()=> this.renderDrawer('pois')}></img><br/>
+          <img src="/static/distance.png" onClick={()=> this.renderDrawer('pois')}></img><br/>
           <img src="/static/sports-car.png" onClick={() => this.renderDrawer('itnierary')} zindex={4}></img><br/>
           <Link href='/trip/music'><img src="/static/spotify.png"></img></Link><br/>
           <Link href='/trip/photos'><img src="/static/camera.png"></img></Link><br/>
@@ -214,7 +214,7 @@ setPois(key){
                   zIndex: 1,
                   left: '10px',
                   top: '10px',
-                }}><img src="/static/left-arrow.png" size="20px"></img></div>
+                }}><img src="/static/down-arrow.png" size="20px"></img></div>
                 {this.state.currentDrawer === 'itnierary' ? <ItineraryView></ItineraryView> : null}
                 {this.state.currentDrawer === 'pois' ? <PoiView setPois={this.setPois}></PoiView>: null }
                 {this.state.currentDrawer === 'start' ? <Start closeDrawer={this.renderDrawer}/> : null}
@@ -240,6 +240,11 @@ setPois(key){
         max-width: 20%;
         color: #fff;
 
+    }
+    #profile{
+      position: absolute;
+      top: 10px;
+      right: 10px;
     }
 
     label {

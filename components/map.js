@@ -102,13 +102,19 @@ populateMap(){
   window.cainTest = [];
   pois.forEach(({ lat, lng, name, img, category }, i)=>{ 
     window.cainTest.push(() => this.addToTrip(lng, lat, name, map));
+    console.log(category,)
+    if (category < 5) {
     markers[category].push(new mapboxgl.Marker({color: markerColors[category]})
     .setLngLat([lng, lat])
     .setPopup(new mapboxgl.Popup({ offset: 25 })
     .setHTML(`<img src=${img} height="150px" width="150px"><br>
     <strong>${name}</strong>
     <div onClick="window.cainTest[${i}]()">add to trip</div>`)))
+  } else {
+    console.log(category, name)
+  }
   });
+
     
   for (let i = 0; i < 5; i++) {
   markers[i].map((marker) => {

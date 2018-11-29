@@ -33,7 +33,7 @@ class Start extends React.Component {
   componentDidMount() {
     axios.get('/login')
     .then(response => {
-      if (response.data.user.id) {
+      if (response.data.user) {
       this.setState({ userID: response.data.user.id })
      } else {
        this.setState({ userID: null })
@@ -67,7 +67,7 @@ class Start extends React.Component {
   }
 
   handleSubmit(){
-    const { originName, destinationName, originCoords, destinationCoords } = this.state;
+    const { userID, originName, destinationName, originCoords, destinationCoords } = this.state;
     if (this.state.origin === null || this.state.destination === null) {
       alert('please enter an origin and destination')
     } else {
@@ -75,7 +75,7 @@ class Start extends React.Component {
     let splitDest = destinationName.split(',');
     let tripName = splitOrigin + ' to ' + splitDest;
     if (this.state.userID) {
-      axois.post('/addTrip', { userID, originCoords, destCoords, tripName })
+      axois.post('/addTrip', { userID, originCoords, destinationCoords, tripName })
       .then((response) => {
         console.log(response);
         //get tripID from respose and set tripID to state so it can dispatch to store

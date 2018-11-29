@@ -14,19 +14,19 @@ const catObj = {
 
 const makeTrip = (start, end, context, callback) => {
   function getPoi(latitude, longitude, categoryID, resultNum) {
-  return new Promise((resolve, revoke) => {
-    axios.get('https://api.foursquare.com/v2/search/recommendations', {
-      params: {
-        client_id: process.env.FOURSQUARE_ID,
-        client_secret: process.env.FOURSQUARE_SECRET,
-        ll: `${latitude},${longitude}`,
-        categoryId: categoryID,
-        v: '20181120',
-        limit: resultNum,
-        radius: 100000,
-      },
-    }).then(response => resolve(response.data.response)).catch(error => revoke(error));
-  });
+    return new Promise((resolve, revoke) => {
+      axios.get('https://api.foursquare.com/v2/search/recommendations', {
+        params: {
+          client_id: process.env.FOURSQUARE_ID,
+          client_secret: process.env.FOURSQUARE_SECRET,
+          ll: `${latitude},${longitude}`,
+          categoryId: categoryID,
+          v: '20181120',
+          limit: resultNum,
+          radius: 100000,
+        },
+      }).then(response => resolve(response.data.response)).catch(error => revoke(error));
+    });
   }
   request({
     url: `https://api.mapbox.com/directions/v5/mapbox/driving/${start};${end}?geometries=geojson&access_token=${process.env.MAPBOX_API_KEY}`,
@@ -51,7 +51,7 @@ const makeTrip = (start, end, context, callback) => {
           if (result.group.results) {
             // if length is less than num, push null for the difference
             if (result.group.results.length < num) {
-              let diff = num - result.group.results.length;
+              const diff = num - result.group.results.length;
               for (let d = 0; (d < num - diff); d += 1) {
                 venues.push({ category: i, lat: null });
               }
@@ -59,6 +59,7 @@ const makeTrip = (start, end, context, callback) => {
             return result.group.results.map((obj) => {
               const poi = {
                 category: i,
+                venueID: obj.venue.id,
                 name: obj.venue.name,
                 lat: obj.venue.location.lat,
                 lng: obj.venue.location.lng,

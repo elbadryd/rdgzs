@@ -34,10 +34,11 @@ const makeTrip = (start, end, context, callback) => {
     const data = JSON.parse(body);
     const line = turf.lineString(data.routes[0].geometry.coordinates);
     let points = Array(Math.floor((data.routes[0].distance / 1000) / 200)).fill().map((_, i) => along.default(line, i * 200).geometry.coordinates);
-    // let requestFrequency = points.length;
 
     if (points.length > 10) {
-      points = points.filter((point, i) => i % 2);
+      while (points.length > 10) {
+        points = points.filter((point, i) => i % 2);
+      }
     }
 
     const num = 2;

@@ -6,6 +6,7 @@ import { setWaypointsAction, setLineAction } from '../store/actions/tripactions.
 import Axios from 'axios';
 import Dock from 'react-dock'
 import ItineraryView from './itineraryView.js'
+import mapHelpers from './mapHelpers.js'
 import Start from './start.js'
 import PoiView from './pois.js'
 import User from './user.js'
@@ -17,8 +18,18 @@ import { runInContext } from 'vm';
 const dotenv = require('dotenv').config();
 mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
 
-const Map = ReactMapboxGl({ accessToken: process.env.MAPBOX_API_KEY })
-let map
+let map;
+
+const markers =  [[],[],[],[],[]]
+
+
+// const markers =  {
+//   parks: [],
+//   food: [],
+//   hotels: [],
+//   history: [],
+//   muesums: [],
+// }
 
 class DynamicMap extends React.Component {
   constructor(props) {
@@ -30,6 +41,7 @@ class DynamicMap extends React.Component {
       customAnimation: false,
       slow: false,
       size: 0.50,
+      map: null,
       currentDrawer: null,
       parks: false,
       food: false,
@@ -49,7 +61,7 @@ componentDidMount(){
     console.log(line);
    this.populateMap();
   }
-   map = new mapboxgl.Map({
+  map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v9',
     center: [-98.5795, 39.8283],
@@ -71,56 +83,47 @@ populateMap(){
   var bounds = coordinates.reduce((bounds, coord)=>{
     return bounds.extend(coord);
   }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+  
   map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v9',
     center: [centerLng, centerLat],
   });
-  let data = {
-    "type": "geojson",
-    "data": {
-      "type": "Feature",
-      "properties": { },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": line
-      }
-    }
-  }
-  map.on('load', function () {
-  map.addSource('route', data);
-    map.addLayer({
-      "id": "route",
-      "type": "line",
-      "source": "route",
-      "layout": {
-        "line-join": "round",
-        "line-cap": "round"
-      },
-      "paint": {
-        "line-color": "#E87111",
-        "line-width": 6
-      }
-    })
-    .fitBounds(bounds, {
-      padding: 20
-    });
-  });
-  window.cainTest = [];
-  pois.forEach(({ img, lat, lng, name }, i)=>{
-    window.cainTest.push(() => this.addToTrip(lng, lat, name));
-    new mapboxgl.Marker()
-      .setLngLat([lng, lat])
-      .setPopup(new mapboxgl.Popup({ offset: 25 })
-      .setHTML(`<img src=${img} height="150px" width="150px"><br>
-      <strong>${name}</strong>
-      <div onClick="window.cainTest[${i}]()">add to trip</div>`))
-      .addTo(map);
-  });
 
+  mapHelpers.drawTheLine(map, line, bounds)
+
+  let markerColors = [
+    'rgb(25, 25, 100)',
+    'rgb(50, 0, 200)',
+    'rgb(75, 0, 40)',
+    'rgb(200, 0, 200)',
+    'rgb(150, 10, 100)'
+  ];
+
+  window.cainTest = [];
+  pois.forEach(({ lat, lng, name, img, category }, i)=>{ 
+    window.cainTest.push(() => this.addToTrip(lng, lat, name, map));
+    markers[category].push(new mapboxgl.Marker({color: markerColors[category]})
+    .setLngLat([lng, lat])
+    .setPopup(new mapboxgl.Popup({ offset: 25 })
+    .setHTML(`<img src=${img} height="150px" width="150px"><br>
+    <strong>${name}</strong>
+    <div onClick="window.cainTest[${i}]()">add to trip</div>`)))
+  });
+    
+  for (let i = 0; i < 5; i++) {
+  markers[i].map((marker) => {
+    marker.addTo(map)
+  })
+  }
+
+    // let poiGeoSon = mapHelpers.poiHandler(poi, i);
+    // poiData.push(poiGeoSon)
+  // poiData add source and layers
 }
 
-redrawLine(){
+
+redrawLine(map){
   const { line } = this.props;
   map.getSource('route').setData({
       "type": "Feature",
@@ -132,13 +135,27 @@ redrawLine(){
     })
 }
 
-addToTrip(lng, lat, name){
+addToTrip(lng, lat, name, map){
   const { line, waypoints } = this.props;
+  // let newStop = true;
+  // waypoints.forEach((point) => {
+  //   if (point.lat === lat && point.lng === lng) {
+  //     newStop = false;
+  //   }
+  //  })
+
+  
    this.props.setWaypoint({
        lng,
        lat,
        name,
    })
+  // axios.post('/addStop', {
+  //  body: ({lng, lat, name, tripID})
+  // }
+
+
+
    let currentWaypointsString = `${lng},${lat};`
    waypoints.map(waypoint=>{
      currentWaypointsString += `${waypoint.lng},${waypoint.lat};` 
@@ -152,9 +169,7 @@ addToTrip(lng, lat, name){
      this.props.setLine({
        line
      });
-    })
-    .then(() => {
-      this.redrawLine();
+     this.redrawLine(map);
     })
    .catch(err=>{
      console.log(err)
@@ -173,6 +188,24 @@ setPois(key){
     //tggle state property of key
     [key]: !this.state[key]
   })
+  let markersObj = {
+    parks: 0,
+    food: 1,
+    hotels: 2,
+    history: 3,
+    museums: 4,
+  }
+  console.log(this.state[key], 'state')
+  console.log(this.state[markersObj[key]])
+    if (this.state[key]) {
+      markers[markersObj[key]].map((marker) => {
+        marker.addTo(map)
+      })
+    } else {
+      markers[markersObj[key]].map((marker) => {
+        marker.remove();
+      });
+    }
 }
 
   render() {
@@ -226,7 +259,7 @@ setPois(key){
 
           
 
-</nav>
+          </nav>
       <style jsx>{`
       #map { position:absolute; top:0; bottom:0; width:100%; }
       nav {

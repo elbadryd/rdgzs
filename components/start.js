@@ -19,6 +19,7 @@ class Start extends React.Component {
       waypoints: [],
       polyline: null,
       points: null,
+      userID: null
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -27,6 +28,19 @@ class Start extends React.Component {
     this._destinationSelect = this._destinationSelect.bind(this);
     this.updatePoints = this.updatePoints.bind(this); 
   }
+
+  
+  componentDidMount() {
+    axios.get('/login')
+    .then(response => {
+      if (response.data.user.id) {
+      this.setState({ userID: response.data.user.id })
+     } else {
+       this.setState({ userID: null })
+     }
+    })
+  }
+
 
   handleChange() {
     this.setState({
@@ -57,6 +71,16 @@ class Start extends React.Component {
     if (this.state.origin === null || this.state.destination === null) {
       alert('please enter an origin and destination')
     } else {
+    let splitOrigin = originName.split(',');
+    let splitDest = destinationName.split(',');
+    let tripName = splitOrigin + ' to ' + splitDest;
+    if (this.state.userID) {
+      axois.post('/addTrip', { userID, originCoords, destCoords, tripName })
+      .then((response) => {
+        console.log(response);
+        //get tripID from respose and set tripID to state so it can dispatch to store
+      })      
+    }
     let points = {
       originCoords: originCoords,
       destCoords: destinationCoords
@@ -79,8 +103,8 @@ class Start extends React.Component {
       console.log(err);
       alert('there was an error processing your request')
     })
+    }
   }
-}
 
   render() {
     return (

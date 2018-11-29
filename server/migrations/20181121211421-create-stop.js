@@ -14,18 +14,12 @@ module.exports = {
           model: 'trips',
           key: 'id',
           deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
-        }
-      },
-      placeId: {
-        type: Sequelize.STRING
+        },
       },
       name: {
         type: Sequelize.STRING
       },
-      desc: {
-        type: Sequelize.STRING
-      },
-      image: {
+      long_lat: {
         type: Sequelize.STRING
       },
       createdAt: {

@@ -14,7 +14,7 @@ module.exports = {
           model: 'stops',
           key: 'id',
           deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
-        }
+        },
       },
       geotag: {
         type: Sequelize.JSON

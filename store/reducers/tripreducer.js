@@ -6,6 +6,7 @@ const initialState = {
   waypoints: [],
   line: null,
   pois: [],
+  tripId: null,
 };
 
 export default function tripReducer(state = initialState, action) {

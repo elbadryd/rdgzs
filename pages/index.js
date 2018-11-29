@@ -11,10 +11,11 @@ export default connect(
   state => ({
     line: state.line,
     pois: state.pois,
-    waypoints: state.waypoints
+    waypoints: state.waypoints,
+    tripId: state.tripId,
   }),
   null
-)(({ line, pois, waypoints }) => {
+)(({ line, pois, waypoints, tripId }) => {
   return (
     <div>
       <Head>
@@ -28,7 +29,7 @@ export default connect(
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossOrigin="anonymous"></script>
 
         </Head>
-      <DynamicMap pois={pois} line={line} waypoints={waypoints} />
+      <DynamicMap pois={pois} line={line} tripId={tripId} waypoints={waypoints} />
     </div>
   )
 })

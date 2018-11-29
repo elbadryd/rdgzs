@@ -23,12 +23,28 @@ class PoiView extends React.Component {
   constructor(props) {
     super(props);
 }
-
     render() {
     return (
-      content.map(div=>{
-        return <div onClick={this.props.setPois.bind(this, div.type)}><img src={div.img}></img></div>
-      })
+
+        <table>
+          {content.map((div, i) => {
+            return <td scope="col" className="columns" style={{padding: '15px'}}>
+              <img key ={i} onClick={this.props.setPois.bind(this, div.type)} src={div.img} />
+              <div key={div.type} >{div.type}</div>
+              </td>
+          })}
+          {/* {content.map(div=>{
+          return <th scope="row" className="rows">
+          </th>
+          })} */}
+        </table> 
+      // content.map(div=>{
+      //   return  <div class="card" style={{width: '18rem'}}>
+      //     <img onClick={this.props.setPois.bind(this, div.type)} class="card-img-top" src={div.img} alt="Card image cap" />
+      //       <div class="card-body">
+      //         <p class="card-text">{div.type}</p>
+      //       </div>
+      //       </div>
     )
   }
 }

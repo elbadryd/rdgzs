@@ -97,7 +97,7 @@ class Start extends React.Component {
         destinationName,
         waypoints: [],
       })
-      // this.props.closeDrawer(null);
+      // set trip ID 
     })
     .catch(err=>{
       console.log(err);

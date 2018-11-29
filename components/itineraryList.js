@@ -13,6 +13,9 @@ class ItineraryList extends React.Component {
     }
     this.getDirections = this.getDirections.bind(this);
   }
+  componentDidMount(){
+    console.log(this.props);
+  }
 
   getDirections(){
     const { origin, dest } = this.props;

@@ -102,9 +102,9 @@ populateMap(){
     markers[category].push(new mapboxgl.Marker({color: markerColors[category]})
     .setLngLat([lng, lat])
     .setPopup(new mapboxgl.Popup({ offset: 25 })
-    .setHTML(`<img src=${img} height="150px" width="150px"><br>
-    <div key=${venueID} onClick=window.patTest[${i}]()>visit website<div>
+    .setHTML(`<img src=${img} height="150px" width="150px" onClick=window.patTest[${i}]()><br>
     <strong>${name}</strong>
+    <br>
     <div key=${i} onClick="window.cainTest[${i}]()">add to trip</div>`)))
   } else {
     console.log(category, name)

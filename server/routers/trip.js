@@ -45,14 +45,18 @@ trip.get('/', (req, res) => {
 });
 
 trip.delete('/', (req, res) => {
-  db.sequelize.models.trips.destroy({
-    where: { tripId: req.body.tripId },
+  console.log(req.query[0]);
+  db.sequelize.models.trip.destroy({
+    where: { id: req.query[0] },
   })
+  // db.sequelize.models.stop.destroy({
+  //   where: { tripId: req.query[0] },
+  // })
     .then((response) => {
-      res.send(response);
+      res.send(202);
     })
     .catch((err) => {
-      res.send(err);
+      res.send(500);
     });
 });
 

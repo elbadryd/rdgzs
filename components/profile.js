@@ -1,29 +1,6 @@
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { setTripAction } from '../store/actions/tripactions.js';
-
-
-
-const trips = [{
-  dest: "San Francisco, California, United States",
-  origin: "Los Angeles, California, United States",
-waypoints: [
-{ lng: -118.88610363006592, lat: 35.432001625506366, name: "California Living Museum (CALM)" },
-{ lng: -120.29498392493531, lat: 35.72639233024035, name: "James Dean Memorial Site" },
-{ lng: -121.63295580786168, lat: 37.067567414421674, name: "CordeValle" },
-{ lng: -120.57794451713562, lat: 37.36472558325653, name: "Castle Air Museum" },
-]
-},{
-  dest: "Cincinnati, Ohio, United States",
-origin: "New York, New York, United States",
-waypoints: [
- { lng: -75.73760611585303, lat: 40.86324488683987, name: "Lehigh Gorge Scenic Railway" },
-{ lng: -77.74483647659362, lat: 39.47396905935212, name: "Antietam National Battlefield" },
- { lng: -80.01221664761947, lat: 40.45703001820447, name: "Mattress Factory Museum" },
-{ lng: -83.00652412043002, lat: 39.37572385209102, name: "Hopewell Culture National Historical Park" }
-]
-}
-];
 class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -88,10 +65,13 @@ seeTrip(){
     //     })
   }
 
-removeTrip() {
-    axios.delete('/trip', { tripId })
+removeTrip(index) {
+  const id = this.state.tripData[index].id
+    axios.delete('/trip', { params: id })
       .then(response=>{
-        console.log(response)
+        this.setState({
+          tripData: this.state.tripData.filter(trip=> trip.id !== id)
+        })
       })
       .catch(err=>{
         console.log(err)
@@ -119,7 +99,7 @@ removeTrip() {
                 <h5 className="card-title">{trip.trip_name}</h5>
                 <p className="card-text"></p>
                 <a onClick={this.seeTrip} className="btn btn-primary">See Trip</a>
-              <a href={this.removeTrip} className="btn btn-primary">Remove Trip</a>
+              <a onClick={this.removeTrip.bind(this, i)} className="btn btn-primary">Remove Trip</a>
               </div>
 </div>
         })}

@@ -75,7 +75,6 @@ class Start extends React.Component {
       destCoords: destinationCoords,
     } })
       .then(response => {
-        console.log(response)
         this.props.setTrip({
           originCoords,
           destinationCoords,
@@ -105,7 +104,6 @@ class Start extends React.Component {
     if (this.state.userID) {
       axios.post('/trip', { userID, originCoords, destinationCoords, tripName, originName, destinationName })
       .then((dbres) => {
-        console.log(dbres, 'DBRESPONSE');
        this.setState({tripId: dbres.data.id}, () => {
          this.createRoute();
        });

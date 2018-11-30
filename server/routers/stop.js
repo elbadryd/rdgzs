@@ -4,9 +4,19 @@ const db = require('../models');
 const stop = express.Router();
 
 stop.post('/', (req, res) => {
-  const obj = req.body;
-  // query to add stop to table
-  // res.send('ok')
+  console.log(req.body, 'STOP');
+  const longlat = `${req.body.stop.lng}, ${req.body.stop.lat}`;
+  db.sequelize.models.stop.create({
+    long_lat: longlat,
+    name: req.body.stop.name,
+    tripId: req.body.stop.tripId,
+  })
+    .then((dbres) => {
+      res.send(dbres);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
 });
 
 stop.get('/', (req, res) => {

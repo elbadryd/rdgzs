@@ -70,6 +70,7 @@ class Start extends React.Component {
 
   createRoute() {
     const { originCoords, destinationCoords, originName, destinationName, tripId } = this.state;
+    console.log(tripId);
     axios.get('/createRoute', { params: { 
       originCoords: originCoords,
       destCoords: destinationCoords,
@@ -108,8 +109,9 @@ class Start extends React.Component {
          this.createRoute();
        });
       })
-    }
+    } else {
       this.createRoute();
+    }
   }
 }
 

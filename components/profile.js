@@ -67,11 +67,16 @@ seeTrip(){
 
 removeTrip(index) {
   const id = this.state.tripData[index].id
+  console.log(id, this.state.tripData, 'tripData')
     axios.delete('/trip', { params: id })
       .then(response=>{
-        this.setState({
-          tripData: this.state.tripData.filter(trip=> trip.id !== id)
-        })
+        if (response.data === "Accepted") {
+          this.setState({
+            tripData: this.state.tripData.filter(trip=> trip.id !== id)
+          })
+        } else {
+          console.log(response);
+        }
       })
       .catch(err=>{
         console.log(err)

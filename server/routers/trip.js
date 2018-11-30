@@ -20,7 +20,6 @@ trip.post('/', (req, res) => {
     destination_name: destinationName,
   })
     .then((dbres) => {
-      console.log(dbres, 'RESPONSE');
       res.send(dbres);
     })
     .catch((err) => {

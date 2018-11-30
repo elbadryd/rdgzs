@@ -108,8 +108,10 @@ class Start extends React.Component {
          this.createRoute();
        });
       })
-    }
+    } else {
       this.createRoute();
+      
+    }
   }
 }
 

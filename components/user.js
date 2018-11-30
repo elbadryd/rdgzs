@@ -6,7 +6,7 @@ class User extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false
+      loggedIn: false,
     }
     this.setLogin = this.setLogin.bind(this);
   }
@@ -21,7 +21,8 @@ class User extends React.Component {
   }
 
   setLogin(){
-    this.setState({loggedIn: !this.state.loggedIn})
+    this.setState({loggedIn: !this.state.loggedIn,
+    })
   }
 
   render(){

@@ -38,7 +38,6 @@ class Login extends React.Component {
       email: this.state.email,
       password: this.state.password,
     }).then((res) => {
-      alert('you\'re in!')
       this.props.setLogin()
       })
       .catch((err) => {

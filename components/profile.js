@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { setTripAction } from '../store/actions/tripactions.js';
+import ProfileTrip from './profileTrip.js';
 
 
 
@@ -28,15 +29,37 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      userId: null
     };
     this.seeTrip = this.seeTrip.bind(this);
   }
 
-  componentDidMount() {
-    //server request for user's trip & stop Info
-  }
+componentDidMount() {
+  axios.get('/login')
+  .then(res=>{
+    console.log(res)
+  })
+  .catch(err=>{
+    console.log
+  })
+  // const { userId } = this.props;
+  //   axios.get('/trip', { userId })
+  //   .then(response=>{
+  //     console.log(response)
+  //   })
+  //   .catch(err=>{
+  //     console.log(err);
+  //   })
+}
 
-  seeTrip(){
+seeTrip(){
+  axios.get('/stop', { tripId })
+    .then(response=>{
+      console.log(response)
+    })
+    .catch(err => {
+      console.log(err)
+    })
     // const { originName, destinationName, originCoords, destinationCoords, waypoints } = this.state;
   
     //   let points = {
@@ -64,6 +87,17 @@ class Profile extends React.Component {
     //     })
   }
 
+removeTrip() {
+    axios.delete('/trip', { tripId })
+      .then(response=>{
+        console.log(response)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    }
+  
+
 
   render() {
     return (
@@ -77,7 +111,7 @@ class Profile extends React.Component {
                 <h5 className="card-title">{splitOrigin[0]} to {splitDest[0]}</h5>
                 <p className="card-text"></p>
                 <a onClick={this.seeTrip} className="btn btn-primary">See Trip</a>
-              <a href="" className="btn btn-primary">Remove Trip</a>
+              <a href={this.removeTrip} className="btn btn-primary">Remove Trip</a>
               </div>
 </div>
         })}

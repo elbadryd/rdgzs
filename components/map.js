@@ -11,7 +11,6 @@ import Start from './start.js'
 import PoiView from './pois.js'
 import User from './user.js'
 
-
 import { timingSafeEqual } from 'crypto';
 import { runInContext } from 'vm';
 
@@ -19,8 +18,6 @@ const dotenv = require('dotenv').config();
 mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
 
 let map;
-
-
 
 class DynamicMap extends React.Component {
   constructor(props) {
@@ -156,13 +153,9 @@ redrawLine(map){
 
 addToTrip(lng, lat, name, map){
   const { tripID, line, waypoints } = this.props;
-  console.log(lat, lng);
   let newWaypoint = {lng: parseFloat(lng).toFixed(6), lat: parseFloat(lat).toFixed(6), name}
-  console.log(newWaypoint);
-  console.log(waypoints);
   let alreadyStopped = () => {
     let filtered = waypoints.filter(point => `${point.lat},${point.lng}`!== `${newWaypoint.lat},${newWaypoint.lng}`)
-    console.log(filtered, waypoints);
     return filtered.length < waypoints.length;
   }
   if (alreadyStopped()) {
@@ -180,10 +173,7 @@ addToTrip(lng, lat, name, map){
   }).then((response)=>{
     let line = response.data.trips[0].geometry.coordinates
     let count = 0;  
-    
-    // let newWaypoint = {lng: parseFloat(lng).toFixed(6), lat: parseFloat(lat).toFixed(6), name}
-    console.log(newWaypoint);
-    console.log(line)
+
     let wayLng = newWaypoint.lng.toString();
     let wayLat = newWaypoint.lat.toString();
     let checkLng =  wayLng.slice(0, wayLng.length - 4);
@@ -218,11 +208,11 @@ addToTrip(lng, lat, name, map){
      });
     this.redrawLine(map);
   })
-  // .then(() => {
-  //   Axios.post('/stop', {
-  //    body: ({lng, lat, name, tripID})
-  //   }).then(response => console.log(response))
-  // })
+  .then(() => {
+    Axios.post('/stop', {
+     body: ({lng, lat, name, tripID})
+    }).then(response => console.log(response))
+  })
   .catch(err=>{
      console.log(err)
   })
@@ -308,10 +298,7 @@ setPois(key){
               </div>
             }
           </Dock>
-
-          
-
-          </nav>
+        </nav>
       <style jsx>{`
       #map { position:absolute; top:0; bottom:0; width:100%; }
       nav {

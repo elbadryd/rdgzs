@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { setTripAction } from '../store/actions/tripactions.js';
-import ProfileTrip from './profileTrip.js';
 
 
 

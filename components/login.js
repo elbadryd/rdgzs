@@ -26,8 +26,10 @@ class Login extends React.Component {
     axios.post('/signup', {
       email: this.state.email,
       password: this.state.password,
-    }).then((res) => {
-      console.log(res);
+    }).then((response) => {
+      if (response.data === 'hi') {
+        this.submitLogin();
+      }
     }).catch((err) => {
       console.log(err);
     })
@@ -46,12 +48,6 @@ class Login extends React.Component {
     })
   }
 
-  submitLogout() {
-    axios.get('/logout', (req, res) => {
-      console.log(res);
-    })
-  }
-
   render() {
     return (
       <div>
@@ -61,7 +57,6 @@ class Login extends React.Component {
         <input name="password" type="password" onChange={this.handleChange}></input>
         <button onClick={this.submitLogin}>Login</button>
         <button onClick={this.signUp}>SignUp</button>
-        <button>Logout</button>
       </div>
     )
   }

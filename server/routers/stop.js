@@ -5,7 +5,7 @@ const stop = express.Router();
 
 stop.post('/', (req, res) => {
   console.log(req.body, 'STOP');
-  const longlat = `${req.body.stop.lng}, ${req.body.stop.lat}`;
+  const longlat = `${req.body.stop.lng},${req.body.stop.lat}`;
   db.sequelize.models.stop.create({
     long_lat: longlat,
     name: req.body.stop.name,

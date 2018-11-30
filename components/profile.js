@@ -123,7 +123,7 @@ removeTrip() {
 </div>
         })}
 
-        <a href="" className="btn btn-primary" onClick={this.submitLogout}>Logout</a>
+        <a href="" className="btn btn-danger" onClick={this.submitLogout}>Logout</a>
 
       </div>
     )

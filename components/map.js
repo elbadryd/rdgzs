@@ -11,7 +11,6 @@ import Start from './start.js'
 import PoiView from './pois.js'
 import User from './user.js'
 
-
 import { timingSafeEqual } from 'crypto';
 import { runInContext } from 'vm';
 
@@ -19,8 +18,6 @@ const dotenv = require('dotenv').config();
 mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
 
 let map;
-
-
 
 class DynamicMap extends React.Component {
   constructor(props) {
@@ -155,7 +152,7 @@ redrawLine(map){
 }
 
 addToTrip(lng, lat, name, map){
-  const { tripID, line, waypoints } = this.props;
+  const { tripId, line, waypoints } = this.props;
   // let newStop = true;
   // waypoints.forEach((point) => {
   //   if (point.lat === lat && point.lng === lng) {
@@ -168,11 +165,12 @@ addToTrip(lng, lat, name, map){
        lat,
        name,
    })
-  // axios.post('/stop', {
-  //  body: ({lng, lat, name, tripID})
-  // }
 
-
+  Axios.post('/stop', {
+   stop: {lng, lat, name, tripId}
+  }).catch((err) => {
+    console.error(err);
+  })
 
    let currentWaypointsString = `${lng},${lat};`
    waypoints.map(waypoint=>{
@@ -274,10 +272,7 @@ setPois(key){
               </div>
             }
           </Dock>
-
-          
-
-          </nav>
+        </nav>
       <style jsx>{`
       #map { position:absolute; top:0; bottom:0; width:100%; }
       nav {

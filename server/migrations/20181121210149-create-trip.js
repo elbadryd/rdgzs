@@ -14,18 +14,26 @@ module.exports = {
           model: 'users',
           key: 'id',
           deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+        },
       },
-    },
       origin: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       destination: {
+        allowNull: false,
         type: Sequelize.STRING
       },
-      date: {
-        type: Sequelize.DATE
+      trip_name: {
+        type: Sequelize.STRING
       },
-      name: {
+      origin_name: {
+        type: Sequelize.STRING
+      },
+      destination_name: {
+        type: Sequelize.STRING
+      },
+      img: {
         type: Sequelize.STRING
       },
       createdAt: {

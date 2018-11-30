@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { setTripAction } from '../store/actions/tripactions.js'
 
 class Login extends React.Component {
   constructor(props) {
@@ -12,6 +14,7 @@ class Login extends React.Component {
     this.signUp = this.signUp.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.submitLogin = this.submitLogin.bind(this);
+    this.saveTrip = this.saveTrip.bind(this);
   }
 
 
@@ -45,7 +48,23 @@ class Login extends React.Component {
       .catch((err) => {
         //add some not logged in action
         alert('nope');
+    }).then(()=>{
+      this.saveTrip();
     })
+  }
+
+  saveTrip(){
+    const { originCoords, destinationCoords, originName, destinationName } = this.props;
+    const tripName = `${originName.split(',')[0]} to ${destinationName.split(',')[0]}`
+    axios.post('/trip', { originCoords, destinationCoords, tripName, originName, destinationName })
+    .then(response=>{
+      console.log(response.data)
+      //send TripId to store
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+    // axios.post('/stop')
   }
 
   render() {
@@ -63,4 +82,13 @@ class Login extends React.Component {
 }
 
 
-export default Login;
+export default connect(
+  state => ({
+    originName: state.originName,
+    destinationName: state.destinationName,
+    originCoords: state.origin,
+    destinationCoords: state.destination,
+    waypoints: state.waypoints,
+  })
+  , null
+)(Login);

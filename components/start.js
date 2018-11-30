@@ -8,6 +8,7 @@ import store from '../store'
 import '../styles/index.css'
 import { callbackify } from 'util';
 import { setTripAction } from '../store/actions/tripactions.js';
+import { createReadStream } from 'fs';
 class Start extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +20,8 @@ class Start extends React.Component {
       waypoints: [],
       polyline: null,
       points: null,
-      userID: null
+      userID: null,
+      tripId: null,
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -66,7 +68,33 @@ class Start extends React.Component {
     })
   }
 
-  handleSubmit(){
+  createRoute() {
+    const { originCoords, destinationCoords, originName, destinationName, tripId } = this.state;
+    axios.get('/createRoute', { params: { 
+      originCoords: originCoords,
+      destCoords: destinationCoords,
+    } })
+      .then(response => {
+        console.log(response)
+        this.props.setTrip({
+          originCoords,
+          destinationCoords,
+          pois: response.data.pois,
+          line: response.data.line.geometry.coordinates,
+          originName,
+          destinationName,
+          waypoints: [], 
+          tripId,
+        })
+      })
+      .catch(err => {
+        console.log(err);
+        alert('there was an error processing your request')
+      })
+    }
+  
+
+  handleSubmit() {
     const { userID, originName, destinationName, originCoords, destinationCoords } = this.state;
     if (this.state.origin === null || this.state.destination === null) {
       alert('please enter an origin and destination')
@@ -75,36 +103,17 @@ class Start extends React.Component {
     let splitDest = destinationName.split(',');
     let tripName = splitOrigin + ' to ' + splitDest;
     if (this.state.userID) {
-      axois.post('/trip', { userID, originCoords, destinationCoords, tripName })
-      .then((response) => {
-        console.log(response);
-        //get tripID from respose and set tripID to state so it can dispatch to store
+      axios.post('/trip', { userID, originCoords, destinationCoords, tripName, originName, destinationName })
+      .then((dbres) => {
+        console.log(dbres, 'DBRESPONSE');
+       this.setState({tripId: dbres.data.id}, () => {
+         this.createRoute();
+       });
       })
     }
-    let points = {
-      originCoords: originCoords,
-      destCoords: destinationCoords
-    }
-    axios.get('/createRoute', {params: points})
-    .then(response=>{
-      console.log(response)
-      this.props.setTrip({
-        originCoords,
-        destinationCoords,
-        pois: response.data.pois,
-        line: response.data.line.geometry.coordinates,
-        originName,
-        destinationName,
-        waypoints: [],
-      })
-      // set trip ID 
-    })
-    .catch(err=>{
-      console.log(err);
-      alert('there was an error processing your request')
-    })
-    }
+      this.createRoute();
   }
+}
 
   render() {
     return (

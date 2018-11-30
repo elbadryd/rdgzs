@@ -64,6 +64,15 @@ class Profile extends React.Component {
     //     })
   }
 
+  submitLogout() {
+    axios.get('/logout', (req, res) => {
+      console.log(res);
+    })
+      .then(() => {
+        console.log('logged out');
+      })
+  }
+
 
   render() {
     return (
@@ -81,7 +90,8 @@ class Profile extends React.Component {
               </div>
 </div>
         })}
-        <a href="" className="btn btn-primary">Logout</a>
+
+        <a href="" className="btn btn-primary" onClick={this.submitLogout}>Logout</a>
 
       </div>
     )

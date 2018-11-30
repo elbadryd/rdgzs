@@ -42,7 +42,6 @@ module.exports = (app) => {
         raw: true,
       })
         .then((user) => {
-          console.log(user, 'USER');
           if (!user) {
             done(new Error('wrong creds, try again'));
           }

@@ -11,6 +11,7 @@ const tripState = {
   pois: [],
   originName: null,
   destinationName: null,
+  tripId: null,
 };
 // const store = createStore(
 //   reducers,

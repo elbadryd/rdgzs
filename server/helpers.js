@@ -33,9 +33,16 @@ const makeTrip = (start, end, context, callback) => {
   }, (err, res, body) => {
     const data = JSON.parse(body);
     const line = turf.lineString(data.routes[0].geometry.coordinates);
-    const points = Array(Math.floor((data.routes[0].distance / 1000) / 200)).fill().map((_, i) => along.default(line, i * 200).geometry.coordinates);
+    let points = Array(Math.floor((data.routes[0].distance / 1000) / 200)).fill().map((_, i) => along.default(line, i * 200).geometry.coordinates);
+
+    if (points.length > 10) {
+      while (points.length > 10) {
+        points = points.filter((point, i) => i % 2);
+      }
+    }
 
     const num = 2;
+    // throttle?
     const promisesP = points.map(point => getPoi(point[1], point[0], catObj.parks, num));
     const promisesF = points.map(point => getPoi(point[1], point[0], catObj.food, num));
     const promisesHot = points.map(point => getPoi(point[1], point[0], catObj.hotels, num));

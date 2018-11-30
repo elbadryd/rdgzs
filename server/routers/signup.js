@@ -25,8 +25,12 @@ signup.post('/', (req, res) => {
           email: req.body.email,
           password: hash,
           userId: user.id,
-          salt: salt,
-        })).catch((err) => {
+          salt,
+        }))
+        .then((response) => {
+          res.send('hi');
+        })
+        .catch((err) => {
           console.log(err, 'err');
         });
     } else {

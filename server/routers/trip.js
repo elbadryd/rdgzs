@@ -30,15 +30,17 @@ trip.post('/', (req, res) => {
 });
 
 trip.get('/', (req, res) => {
-  console.log(req.body);
-  db.sequelize.models.trips.findAll({
-    where: { userId: req.body.userId },
+  console.log(req, 'trip req');
+  db.sequelize.models.trip.findAll({
+    where: { userId: req.user.id },
   })
     .then((response) => {
       res.send(response);
+      console.log(response);
     })
     .catch((err) => {
       res.send(err);
+      console.log(err);
     });
 });
 

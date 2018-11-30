@@ -28,27 +28,29 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userId: null
+      userId: null,
+      tripData: [],
+
     };
     this.seeTrip = this.seeTrip.bind(this);
   }
 
 componentDidMount() {
-  axios.get('/login')
-  .then(res=>{
-    console.log(res)
-  })
-  .catch(err=>{
-    console.log
-  })
-  // const { userId } = this.props;
-  //   axios.get('/trip', { userId })
-  //   .then(response=>{
-  //     console.log(response)
-  //   })
-  //   .catch(err=>{
-  //     console.log(err);
-  //   })
+  // axios.get('/login')
+  // .then(res=>{
+  //   this.setState({ userId: res.data.user.id })
+  // })
+  // .catch(err=>{
+  //   console.log(err)
+  // })
+  // const { userId } = this.state
+    axios.get('/trip')
+    .then(response=>{
+      this.setState({ tripData: response.data })
+    })
+    .catch(err=>{
+      console.log(err);
+    })
 }
 
 seeTrip(){
@@ -109,13 +111,12 @@ removeTrip() {
   render() {
     return (
       <div>
-        {trips.map((trip, i) =>{
-          let splitOrigin = trip.origin.split(',');
-          let splitDest = trip.dest.split(',');
+        {this.state.tripData.map((trip, i) =>{
+
           return <div key={i} className="card" style={{width: '18rem'}}>
             <img className="card-img-top" src="/static/mountain.png" alt="Card image cap" />
               <div className="card-body">
-                <h5 className="card-title">{splitOrigin[0]} to {splitDest[0]}</h5>
+                <h5 className="card-title">{trip.trip_name}</h5>
                 <p className="card-text"></p>
                 <a onClick={this.seeTrip} className="btn btn-primary">See Trip</a>
               <a href={this.removeTrip} className="btn btn-primary">Remove Trip</a>

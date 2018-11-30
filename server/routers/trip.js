@@ -29,29 +29,35 @@ trip.post('/', (req, res) => {
 });
 
 trip.get('/', (req, res) => {
-  console.log(req.body);
-  db.sequelize.models.trips.findAll({
-    where: { userId: req.body.userId },
+  console.log(req, 'trip req');
+  db.sequelize.models.trip.findAll({
+    where: { userId: req.user.id },
   })
     .then((response) => {
       res.send(response);
+      console.log(response);
     })
     .catch((err) => {
       res.send(err);
+      console.log(err);
     });
 });
 
 trip.delete('/', (req, res) => {
-  db.sequelize.models.trips.destroy({
-    where: { tripId: req.body.tripId },
+  console.log(req.query[0]);
+  db.sequelize.models.stop.destroy({
+    where: { tripId: req.query[0] },
+  });
+  db.sequelize.models.trip.destroy({
+    where: { id: req.query[0] },
   })
     .then((response) => {
-      res.send(response);
+      res.send(202);
     })
     .catch((err) => {
-      res.send(err);
+      console.log(err);
+      res.send(500);
     });
 });
-
 
 module.exports.tripRouter = trip;

@@ -44,22 +44,6 @@ trip.get('/', (req, res) => {
     });
 });
 
-// trip.delete('/', (req, res) => {
-//   console.log(req.query[0]);
-//   db.sequelize.models.trip.destroy({
-//     where: { id: req.query[0] },
-//   })
-//     .then((response) => {
-//       if (response === 1) {
-//         res.send(200);
-//       } else {
-//         res.send(response);
-//       }
-//     })
-//     .catch((err) => {
-//       res.send(err);
-//     });
-// });
 trip.delete('/', (req, res) => {
   console.log(req.query[0]);
   db.sequelize.models.stop.destroy({

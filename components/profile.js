@@ -13,14 +13,6 @@ class Profile extends React.Component {
   }
 
 componentDidMount() {
-  // axios.get('/login')
-  // .then(res=>{
-  //   this.setState({ userId: res.data.user.id })
-  // })
-  // .catch(err=>{
-  //   console.log(err)
-  // })
-  // const { userId } = this.state
     axios.get('/trip')
     .then(response=>{
       this.setState({ tripData: response.data })

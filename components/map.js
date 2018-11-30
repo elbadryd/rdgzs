@@ -156,12 +156,15 @@ redrawLine(map){
 
 addToTrip(lng, lat, name, map){
   const { tripID, line, waypoints } = this.props;
-  // let newStop = true;
-  // waypoints.forEach((point) => {
-  //   if (point.lat === lat && point.lng === lng) {
-  //     newStop = false;
-  //   }
-  //  })
+  let alreadyStopped = () => {
+    let filtered = waypoints.filter(point => `${point.lat},${point.lng}`!== `${lat},${lng}`)
+    console.log(filtered, waypoints);
+    return filtered.length < waypoints.length;
+  }
+  if (alreadyStopped()) {
+    console.log('already a stop!')
+    return;
+  }
   
    this.props.setWaypoint({
        lng,

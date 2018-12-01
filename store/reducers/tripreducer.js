@@ -20,8 +20,10 @@ export default function tripReducer(state = initialState, action) {
       return { ...state, destination: action.destination };
 
     case TRIP_TYPES.SET_WAYPOINTS:
-      console.log(action.waypoints, 'in store');
       return { ...state, waypoints: action.waypoints.orderedWaypoints };
+
+    case TRIP_TYPES.REMOVE_WAYPOINT:
+      return { ...state, waypoints: state.waypoints.filter(waypoint => waypoint.name !== action.waypoint.waypoint) };
 
     case TRIP_TYPES.SET_LINE:
       return { ...state, line: action.line.line };

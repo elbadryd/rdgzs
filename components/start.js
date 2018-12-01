@@ -1,14 +1,9 @@
 import axios from 'axios';
-import Router from 'next/router'
 import MapboxAutocomplete from 'react-mapbox-autocomplete';
 const dotenv = require('dotenv').config();
 import { connect } from 'react-redux';
-import store from '../store'
-// import 'react-mapbox-autocomplete/index.css';
 import '../styles/index.css'
-import { callbackify } from 'util';
 import { setTripAction } from '../store/actions/tripactions.js';
-import { createReadStream } from 'fs';
 class Start extends React.Component {
   constructor(props) {
     super(props);
@@ -137,32 +132,7 @@ class Start extends React.Component {
           country='us'
           resetSearch={false}
         />
-        <input id="button" type="submit" value="Submit" onClick={this.handleSubmit} />
-        {/* <style jsx>{`
-        .react-mapbox-ac-menu {
-  width: auto;
-  position: absolute;
-  z-index: 9999;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  margin-top: -1.3rem;
-}
-
-.react-mapbox-ac-input {
-  margin-bottom: 1.5rem;
-}
-
-.react-mapbox-ac-suggestion {
-  font-size: 14px;
-  cursor: pointer;
-  padding: .5rem 1.5rem;
-}
-
-.react-mapbox-ac-suggestion:hover {
-  background-color: #58a;
-}
-        `}
-        </style> */}
+        <button type="button" className="btn btn-success btn-block" onClick={this.handleSubmit} >Let's Go!</button>
       </div>
       );
     }  

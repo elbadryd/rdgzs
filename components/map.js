@@ -1,6 +1,4 @@
-import ReactMapboxGl, { Layer, Feature, Marker, Popup } from 'react-mapbox-gl';
-import mapboxgl from 'mapbox-gl';
-import Link from 'next/link';
+ import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import { setWaypointsAction, setLineAction } from '../store/actions/tripactions.js'
 import Axios from 'axios';
@@ -10,9 +8,8 @@ import mapHelpers from './mapHelpers.js'
 import Start from './start.js'
 import PoiView from './pois.js'
 import User from './user.js'
-
-import { timingSafeEqual } from 'crypto';
-import { runInContext } from 'vm';
+import Photos from './photos.js'
+import mapCSS from '../styles/map.css'
 
 const dotenv = require('dotenv').config();
 mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
@@ -102,7 +99,7 @@ populateMap(){
     .setHTML(`<img src=${img} height="150px" width="150px" onClick=window.patTest[${i}]()><br>
     <strong>${name}</strong>
     <br>
-    <div key=${i} onClick="window.cainTest[${i}]()">add to trip</div>`)))
+    <button type="button" className="btn btn-primary" onClick="window.cainTest[${i}]()"><strong>Add to Trip<strong></button>`)))
   } else {
     console.log(category, name)
   }
@@ -189,16 +186,12 @@ addToTrip(lng, lat, name, map){
         const wLn = waypoints[count].lng.toString();
         const wLat = wLa.slice(0, wLa.length - 4);
         const wLng = wLn.slice(0, wLn.length - 4);
-        console.log(pLat, wLat, pLng, wLng, 'point and waypoint')
 
         if (pLat > wLat - .02 && pLat < wLat + .02 && pLng > wLng - .02 && pLng < wLng + .02) {
-          console.log('same!')
           count++;
         }
       } if (pLat > checkLat - .02 && pLat < checkLat + .02 && pLng > checkLng - .02 && pLng < checkLng + .02) {
-        console.log('here');
         let orderedWaypoints = waypoints.slice(0, count).concat([newWaypoint]).concat(waypoints.slice(count))
-        console.log(orderedWaypoints, 'ordered');
         this.props.setWaypoints({ orderedWaypoints })
       }
     })
@@ -208,9 +201,11 @@ addToTrip(lng, lat, name, map){
     this.redrawLine(map);
   })
   .then(() => {
+    if (tripId){
     Axios.post('/stop', {
      stop: ({lng, lat, name, tripId})
-    }).then()
+    })
+  }
   })
   .catch(err=>{
      console.log(err)
@@ -257,8 +252,8 @@ setPois(key){
         <nav id="listing-group" className="listing-group">
           <img src="/static/distance.png" onClick={()=> this.renderDrawer('pois')}></img><br/>
           <img src="/static/sports-car.png" onClick={() => this.renderDrawer('itnierary')} zindex={4}></img><br/>
-          <Link href='/trip/music'><img src="/static/spotify.png"></img></Link><br/>
-          <Link href='/trip/photos'><img src="/static/camera.png"></img></Link><br/>
+          <img src="/static/spotify.png"></img><br/>
+          <img src="/static/camera.png" onClick={this.renderDrawer.bind(this, 'photos')}></img><br/>
           <img src="/static/left-arrow.png" onClick={()=>this.renderDrawer('start')}></img>
 
           <Dock position="bottom"
@@ -293,36 +288,13 @@ setPois(key){
                 {this.state.currentDrawer === 'pois' ? <PoiView setPois={this.setPois}></PoiView>: null }
                 {this.state.currentDrawer === 'start' ? <Start closeDrawer={this.renderDrawer}/> : null}
                 {this.state.currentDrawer === 'user' ? <User/> : null}
+                {this.state.currentDrawer === 'photos' ? <Photos/> : null}
 
               </div>
             }
           </Dock>
         </nav>
-      <style jsx>{`
-      #map { position:absolute; top:0; bottom:0; width:100%; }
-      nav {
-        font: 20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        font-weight: 600;
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        z-index: 1;
-        border-radius: 3px;
-        max-width: 20%;
-        color: #fff;
-
-    }
-    #profile{
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    }
-
-    label {
-        border-radius: 0 0 3px 3px;
-        padding: 20px;
-    }
-      `}
+      <style jsx>{mapCSS}
       </style>
       </div>
     )

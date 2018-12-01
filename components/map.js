@@ -10,6 +10,7 @@ import mapHelpers from './mapHelpers.js'
 import Start from './start.js'
 import PoiView from './pois.js'
 import User from './user.js'
+import Photos from './photos.js'
 
 import { timingSafeEqual } from 'crypto';
 import { runInContext } from 'vm';
@@ -233,7 +234,7 @@ setPois(key){
           <img src="/static/distance.png" onClick={()=> this.renderDrawer('pois')}></img><br/>
           <img src="/static/sports-car.png" onClick={() => this.renderDrawer('itnierary')} zindex={4}></img><br/>
           <Link href='/trip/music'><img src="/static/spotify.png"></img></Link><br/>
-          <Link href='/trip/photos'><img src="/static/camera.png"></img></Link><br/>
+          <img src="/static/camera.png" onClick={this.renderDrawer.bind(this, 'photos')}></img><br/>
           <img src="/static/left-arrow.png" onClick={()=>this.renderDrawer('start')}></img>
 
           <Dock position="bottom"
@@ -268,6 +269,7 @@ setPois(key){
                 {this.state.currentDrawer === 'pois' ? <PoiView setPois={this.setPois}></PoiView>: null }
                 {this.state.currentDrawer === 'start' ? <Start closeDrawer={this.renderDrawer}/> : null}
                 {this.state.currentDrawer === 'user' ? <User/> : null}
+                {this.state.currentDrawer === 'photos' ? <Photos/> : null}
 
               </div>
             }

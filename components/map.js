@@ -172,8 +172,6 @@ addToTrip(lng, lat, name, map){
     line.map(point=>{
       const pLat = point[1]
       const pLng = point[0]
-      console.log(pLat,pLng,lat,lng)
-      console.log(line);
       if (waypoints[count]) {
         const wLat = waypoints[count].lat
         const wLng = waypoints[count].lng

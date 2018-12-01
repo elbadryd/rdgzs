@@ -5,14 +5,15 @@ export default connect(
   state => ({
     dest: state.destinationName,
     origin: state.originName,
-    waypoints: state.waypoints
+    waypoints: state.waypoints,
+    tripId: state.tripId,
   }),
   null
-)(({ dest, origin, waypoints }) => {
+)(({ dest, origin, waypoints, tripId }) => {
   return (
     <div>
       <div>Your Upcoming Trip</div>
-      <ItineraryList dest={dest} origin={origin} waypoints={waypoints} />
+      <ItineraryList tripId={tripId} dest={dest} origin={origin} waypoints={waypoints} />
 
     </div>
   )

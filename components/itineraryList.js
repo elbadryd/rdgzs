@@ -1,4 +1,3 @@
-import ItineraryItem from './itineraryItem';
 import Axios from 'axios';
 import Router from 'next/router'
 import Head from 'next/head'
@@ -12,6 +11,7 @@ class ItineraryList extends React.Component {
       item: []
     }
     this.getDirections = this.getDirections.bind(this);
+    this.removeStop = this.removeStop.bind(this);
   }
   componentDidMount(){
     console.log(this.props);
@@ -26,6 +26,10 @@ class ItineraryList extends React.Component {
     Router.push(`https://www.google.com/maps/dir/${origin}/${directionsString}/${dest}`);
   };
 
+  removeStop(stopName) {
+
+  }
+
   render() {
     return (
       <div className="container_fluid">
@@ -38,9 +42,9 @@ class ItineraryList extends React.Component {
 
         <div className="row">
            {this.props.waypoints.map((stop, index)=>{
-            return <div className="item col-md" key={stop.name}>{index + 1}
+            return <div className="item col-md" key={stop.name}> {index + 1}
                {stop.name}
-               <button type="button" className="col-md btn btn-danger btn-sm">x</button>
+               <button type="button" className="col-md btn btn-danger btn-sm" onClick={this.removeStop.bind(this, stop.name)}>x</button>
             </div>
             })}
         </div>

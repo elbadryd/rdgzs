@@ -54,12 +54,27 @@ class Login extends React.Component {
   }
 
   saveTrip(){
-    const { originCoords, destinationCoords, originName, destinationName } = this.props;
+    const { originCoords, destinationCoords, originName, destinationName, setTrip, waypoints } = this.props;
     const tripName = `${originName.split(',')[0]} to ${destinationName.split(',')[0]}`
     axios.post('/trip', { originCoords, destinationCoords, tripName, originName, destinationName })
     .then(response=>{
       console.log(response.data)
-      //send TripId to store
+      let funcs = waypoints.map(waypoint=>{
+        return axios.post('/stop', {
+          stop: { lng: waypoint.lng,
+                  lat: waypoint.lat,
+                  name: waypoint.name,
+                  tripId: response.data.id
+                 }
+        })
+      })
+      axios.all(funcs)
+      .then(response=>{
+        console.log(response)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
     })
     .catch(err=>{
       console.log(err)
@@ -90,5 +105,7 @@ export default connect(
     destinationCoords: state.destination,
     waypoints: state.waypoints,
   })
-  , null
+  , dispatch => ({
+    setTrip: setTripAction(dispatch)
+  })
 )(Login);

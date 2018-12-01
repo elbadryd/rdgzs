@@ -99,7 +99,7 @@ populateMap(){
     .setHTML(`<img src=${img} height="150px" width="150px" onClick=window.patTest[${i}]()><br>
     <strong>${name}</strong>
     <br>
-    <button type="button" className="btn btn-primary" onClick="window.cainTest[${i}]()"><strong>Add to Trip<strong></button>`)))
+    <button type="button" className="btn btn-primary btn-sm" onClick="window.cainTest[${i}]()">Add to Trip</button>`)))
   } else {
     console.log(category, name)
   }

@@ -5,24 +5,30 @@ class Photos extends React.Component {
   constructor(props){
     super(props)
     this.state-={
-
+      photos: []
     }
   }
 
   componentDidMount(){
+    //query db for user's photos to display, add to state
     let myUploadWidget;
     document.getElementById("upload_widget_opener").addEventListener("click", function () {
       myUploadWidget = window.cloudinary.openUploadWidget({
-        cloudName: 'rdgz', uploadPreset: 'preset1'
-      }, (error, result) => { });
+        cloudName: 'rdgz', uploadPreset: 'rdgzPreset', 
+      }, (error, result) => { 
+        console.log(result);
+        //url comes back on result.success obj
+        //take url from success obj, store in db with tripId
+        //need to figure out how to capture geotag info
+      });
     }, false);
   }
 
   render(){
     return(
       <div>
-      <div><img src="/static/camera.png"></img>add photos</div>
-      <a href="#" id="upload_widget_opener">Upload multiple images</a>
+        <div><img id="upload_widget_opener" src="/static/camera.png"></img>add photos</div>
+      {/* <a href="#" id="upload_widget_opener">Upload multiple images</a> */}
       </div>
     )
   }

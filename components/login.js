@@ -81,7 +81,6 @@ class Login extends React.Component {
     .catch(err=>{
       console.log(err)
     })
-    // axios.post('/stop')
   }
 
   render() {
@@ -91,8 +90,8 @@ class Login extends React.Component {
         <input name="email" onChange={this.handleChange}></input>
         <span>Password:</span>
         <input name="password" type="password" onChange={this.handleChange}></input>
-        <button onClick={this.submitLogin}>Login</button>
-        <button onClick={this.signUp}>SignUp</button>
+        <button type="button" className="btn btn-success btn-block" onClick={this.submitLogin}>Login</button>
+        <button type="button" className="btn btn-success btn-block" onClick={this.signUp}>SignUp</button>
       </div>
     )
   }

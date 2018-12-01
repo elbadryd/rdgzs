@@ -133,7 +133,6 @@ getWebsite(venueID) {
       window.open(response.data.response.venue.url)
     }
     else {
-      console.log(response);
       window.open(response.data.response.venue.canonicalUrl)
     }
   });
@@ -210,8 +209,8 @@ addToTrip(lng, lat, name, map){
   })
   .then(() => {
     Axios.post('/stop', {
-     body: ({lng, lat, name, tripId})
-    }).then(response => console.log(response))
+     stop: ({lng, lat, name, tripId})
+    }).then()
   })
   .catch(err=>{
      console.log(err)

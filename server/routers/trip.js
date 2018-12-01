@@ -35,7 +35,6 @@ trip.get('/', (req, res) => {
   })
     .then((response) => {
       res.send(response);
-      console.log(response);
     })
     .catch((err) => {
       res.send(err);

@@ -26,7 +26,6 @@ class ItineraryList extends React.Component {
   };
 
   removeStop(stop) {
-    console.log(stop, 'itinerery, remove stop');
     Axios.post('/stop/itinerary', {
       tripId: this.props.tripId,
       stop,

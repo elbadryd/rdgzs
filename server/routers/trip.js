@@ -30,7 +30,6 @@ trip.post('/', (req, res) => {
 });
 
 trip.get('/', (req, res) => {
-  console.log(req, 'trip req');
   db.sequelize.models.trip.findAll({
     where: { userId: req.user.id },
   })

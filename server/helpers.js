@@ -12,7 +12,7 @@ const catObj = {
   museums: '4bf58dd8d48988d181941735',
 };
 
-const makeTrip = (start, end, context, callback) => {
+const makeTrip = (waypoints, context, callback) => {
   function getPoi(latitude, longitude, categoryID, resultNum) {
     return new Promise((resolve, revoke) => {
       axios.get('https://api.foursquare.com/v2/search/recommendations', {
@@ -29,22 +29,14 @@ const makeTrip = (start, end, context, callback) => {
     });
   }
   request({
-    url: `https://api.mapbox.com/directions/v5/mapbox/driving/${start};${end}?geometries=geojson&access_token=${process.env.MAPBOX_API_KEY}`,
+    url: `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${waypoints}?geometries=geojson&roundtrip=false&source=first&destination=last&access_token=${process.env.MAPBOX_API_KEY}`,
   }, (err, res, body) => {
     const data = JSON.parse(body);
-    const line = turf.lineString(data.routes[0].geometry.coordinates);
-    let points = Array(Math.floor((data.routes[0].distance / 1000) / 200)).fill().map((_, i) => along.default(line, i * 200).geometry.coordinates);
+    const line = turf.lineString(data.trips[0].geometry.coordinates);
+    let points = Array(Math.floor((data.trips[0].distance / 1000) / 200)).fill().map((_, i) => along.default(line, i * 200).geometry.coordinates);
 
     if (points.length > 10) {
       points = points.filter((point, i) => i % 2);
-
-      // while (points.length > 10) {
-      //   if (points.length > 15) {
-      //     points = points.filter((point, i) => i % 2);
-      //   } else {
-      //     points = points.filter((point, i) => i % 3);
-      //   }
-      // }
     }
 
     const num = 2;

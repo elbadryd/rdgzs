@@ -111,10 +111,6 @@ populateMap(){
     marker.addTo(map)
   })
   }
-
-    // let poiGeoSon = mapHelpers.poiHandler(poi, i);
-    // poiData.push(poiGeoSon)
-  // poiData add source and layers
 }
 getWebsite(venueID) {
   Axios.get(`https://api.foursquare.com/v2/venues/${venueID}`, {

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { setTripAction } from '../store/actions/tripactions.js';
+
 class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -22,37 +23,62 @@ componentDidMount() {
     })
 }
 
-seeTrip(){
-  axios.get('/stop', { tripId })
-    .then()
+seeTrip(index){
+  const tripId = this.state.tripData[index].id
+  axios.get(`/stop/?tripid=${tripId}`, { 
+    params: tripId 
+  }).then((response) => {
+    const waypoints = response.data
+    let start = this.state.tripData[index].origin + ';'
+    let stop =  this.state.tripData[index].destination;
+    let queryString = [start];
+    waypoints.map((point) => {
+    queryString[0] += point.long_lat + ';'; 
+    })
+    queryString[0] += stop;
+    axios.get('/createRoute', { 
+      params: { 
+        qstring: queryString[0]
+    } }).then((route) => {
+      const pois = route.data.pois;
+      const line = route.data.line.geometry.coordinates
+      let orderedWaypoints = [];
+      line.map((point) => {
+        let pLng = point[0];
+        let pLat = point[1];
+        waypoints.map((w) => {
+          let coords = w.long_lat.split(',')
+          let wLng = Number(coords[0]);
+          let wLat = Number(coords[1]);
+          if (pLat < wLat + .02 && pLat > wLat - .02 && pLng < wLng +.02 && pLng > wLng - .02) {
+            if (orderedWaypoints.filter(obj => (obj.name === w.name)).length === 0)
+            orderedWaypoints.push({ name: w.name, lat: wLat, lng: wLng })
+          }
+        });
+      });
+      let originCoords = this.state.tripData[index].origin.split(',')
+      let destCoords = this.state.tripData[index].destination.split(',')
+      let origin = {lat: Number(originCoords[1]), lng: Number(originCoords[0]) }
+      let destination = {lat: Number(destCoords[1]), lng: Number(destCoords[0]) }
+      let originName = this.state.tripData[index].origin_name
+      let destinationName = this.state.tripData[index].destination_name
+      let tripName = this.state.tripData[index].trip_name
+      console.log('storeValues', origin, destination, pois, line, originName, destinationName, orderedWaypoints, tripId, tripName);
+      this.props.setTrip({
+        origin,
+        destination,
+        pois,
+        line, 
+        originName,
+        destinationName,
+        waypoints: orderedWaypoints,
+        tripId,
+      })
+    })
+  })
     .catch(err => {
       console.log(err)
     })
-    // const { originName, destinationName, originCoords, destinationCoords, waypoints } = this.state;
-  
-    //   let points = {
-    //     originCoords: originCoords,
-    //     destCoords: destinationCoords
-    //   }
-    //   axios.get('/createRoute', { params: points })
-    //     .then(response => {
-    //       console.log(response)
-    //       this.props.setTrip({
-    //         originCoords,
-    //         destinationCoords,
-    //         pois: response.data.pois,
-    //         line: response.data.line.geometry.coordinates,
-    //         originName,
-    //         destinationName,
-    //         waypoints,
-    //         //waypoints should show up on map
-    //       })
-    //       // set trip ID 
-    //     })
-    //     .catch(err => {
-    //       console.log(err);
-    //       alert('there was an error processing your request')
-    //     })
   }
 
 removeTrip(index) {
@@ -91,7 +117,7 @@ removeTrip(index) {
               <div className="card-body">
                 <h5 className="card-title">{trip.trip_name}</h5>
                 <p className="card-text"></p>
-                <a onClick={this.seeTrip} className="btn btn-primary">See Trip</a>
+                <a onClick={this.seeTrip.bind(this, i)} className="btn btn-primary">See Trip</a>
               <a onClick={this.removeTrip.bind(this, i)} className="btn btn-primary">Remove Trip</a>
               </div>
 </div>

@@ -32,7 +32,17 @@ stop.get('/', (req, res) => {
 });
 
 stop.post('/itinerary', (req, res) => {
-  // db.sequelize.models.stops.
+  console.log(req.body);
+  const longlat = `${req.body.stop.lng},${req.body.stop.lat}`;
+  db.sequelize.models.stop.destroy({
+    where: {
+      tripId: req.body.tripId,
+      long_lat: longlat,
+    },
+  })
+    .catch((err) => {
+      console.error(err);
+    });
 });
 
 

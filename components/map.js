@@ -149,9 +149,9 @@ redrawLine(map){
 
 addToTrip(lng, lat, name, map){
   const { tripId, line, waypoints } = this.props;
-  let newWaypoint = {lng: parseFloat(lng).toFixed(6), lat: parseFloat(lat).toFixed(6), name}
+  let newWaypoint = {lng, lat, name}
   let alreadyStopped = () => {
-    let filtered = waypoints.filter(point => `${point.lat},${point.lng}`!== `${newWaypoint.lat},${newWaypoint.lng}`)
+    let filtered = waypoints.filter(point => `${point.lat},${point.lng}`!== `${lat},${lng}`)
     return filtered.length < waypoints.length;
   }
   if (alreadyStopped()) {
@@ -169,28 +169,21 @@ addToTrip(lng, lat, name, map){
   }).then((response)=>{
     let line = response.data.trips[0].geometry.coordinates
     let count = 0;  
-
-    let wayLng = newWaypoint.lng.toString();
-    let wayLat = newWaypoint.lat.toString();
-    let checkLng =  wayLng.slice(0, wayLng.length - 4);
-    let checkLat =  wayLat.slice(0, wayLat.length - 4);
-
     line.map(point=>{
-      const latFloat = parseFloat(point[1]).toFixed(6).toString();
-      const lngFloat =  parseFloat(point[0]).toFixed(6).toString();
-      const pLat = latFloat.slice(0, latFloat.length - 4);
-      const pLng = lngFloat.slice(0, lngFloat.length - 4);
-      
+      const pLat = point[1]
+      const pLng = point[0]
+      console.log(pLat,pLng,lat,lng)
+      console.log(line);
       if (waypoints[count]) {
-        let wLa = waypoints[count].lat.toString();  
-        const wLn = waypoints[count].lng.toString();
-        const wLat = wLa.slice(0, wLa.length - 4);
-        const wLng = wLn.slice(0, wLn.length - 4);
+        const wLat = waypoints[count].lat
+        const wLng = waypoints[count].lng
+        console.log(pLat, wLat, pLng, wLng, 'point and waypoint')
 
         if (pLat > wLat - .02 && pLat < wLat + .02 && pLng > wLng - .02 && pLng < wLng + .02) {
           count++;
         }
-      } if (pLat > checkLat - .02 && pLat < checkLat + .02 && pLng > checkLng - .02 && pLng < checkLng + .02) {
+      } if (pLat > lat - .02 && pLat < lat + .02 && pLng > lng - .02 && pLng < lng + .02) {
+        console.log('here');
         let orderedWaypoints = waypoints.slice(0, count).concat([newWaypoint]).concat(waypoints.slice(count))
         this.props.setWaypoints({ orderedWaypoints })
       }

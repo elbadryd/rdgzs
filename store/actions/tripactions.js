@@ -15,6 +15,11 @@ export const setWaypointsAction = dispatch => waypoints => dispatch({
   waypoints,
 });
 
+export const removeWaypointAction = dispatch => waypoint => dispatch({
+  type: TRIP_TYPES.REMOVE_WAYPOINT,
+  waypoint,
+});
+
 export const setLineAction = dispatch => line => dispatch({
   type: TRIP_TYPES.SET_LINE,
   line,

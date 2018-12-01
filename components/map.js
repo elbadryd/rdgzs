@@ -99,7 +99,7 @@ populateMap(){
     .setHTML(`<img src=${img} height="150px" width="150px" onClick=window.patTest[${i}]()><br>
     <strong>${name}</strong>
     <br>
-    <button type="button" className="btn btn-primary" onClick="window.cainTest[${i}]()"><strong>Add to Trip<strong></button>`)))
+    <button type="button" className="btn btn-primary btn-sm" onClick="window.cainTest[${i}]()">Add to Trip</button>`)))
   } else {
     console.log(category, name)
   }
@@ -175,13 +175,10 @@ addToTrip(lng, lat, name, map){
       if (waypoints[count]) {
         const wLat = waypoints[count].lat
         const wLng = waypoints[count].lng
-        console.log(pLat, wLat, pLng, wLng, 'point and waypoint')
-
         if (pLat > wLat - .02 && pLat < wLat + .02 && pLng > wLng - .02 && pLng < wLng + .02) {
           count++;
         }
       } if (pLat > lat - .02 && pLat < lat + .02 && pLng > lng - .02 && pLng < lng + .02) {
-        console.log('here');
         let orderedWaypoints = waypoints.slice(0, count).concat([newWaypoint]).concat(waypoints.slice(count))
         this.props.setWaypoints({ orderedWaypoints })
       }
@@ -222,8 +219,6 @@ setPois(key){
     history: 3,
     museums: 4,
   }
-  console.log(this.state[key], 'state')
-  console.log(this.state[markersObj[key]])
     if (this.state[key]) {
       this.state.markers[markersObj[key]].map((marker) => {
         marker.addTo(map)

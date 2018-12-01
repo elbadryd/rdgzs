@@ -1,7 +1,7 @@
 {
   "development": {
    "username": "adminuser",
-   "password": "rpd4life",
+   "password": "dariopario",
    "database": "road_frog",
    "host": "thesis.ckeq9h4x3ugd.us-east-2.rds.amazonaws.com",
    "dialect":"postgres"

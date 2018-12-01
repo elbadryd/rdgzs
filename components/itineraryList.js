@@ -1,5 +1,8 @@
+import Axios from 'axios';
 import Router from 'next/router'
 const dotenv = require('dotenv').config();
+import { connect } from 'react-redux'
+import { removeWaypointAction } from '../store/actions/tripactions.js'
 
 
 class ItineraryList extends React.Component {
@@ -23,9 +26,13 @@ class ItineraryList extends React.Component {
   };
 
   removeStop(stop) {
+    console.log(stop, 'itinerery, remove stop');
     Axios.post('/stop/itinerary', {
       tripId: this.props.tripId,
       stop,
+    })
+    this.props.removeWaypoint({
+      waypoint: stop.name
     })
   }
 
@@ -58,4 +65,9 @@ class ItineraryList extends React.Component {
   }
 }
 
-export default ItineraryList
+export default connect(
+  null,
+  dispatch => ({
+    removeWaypoint: removeWaypointAction(dispatch),
+  })
+)(ItineraryList)

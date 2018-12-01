@@ -20,7 +20,7 @@ stop.post('/', (req, res) => {
 });
 
 stop.get('/', (req, res) => {
-  db.sequelize.models.stops.findAll({
+  db.sequelize.models.stop.findAll({
     where: { tripId: req.body.tripId },
   })
     .then((response) => {

@@ -172,18 +172,13 @@ addToTrip(lng, lat, name, map){
     line.map(point=>{
       const pLat = point[1]
       const pLng = point[0]
-      console.log(pLat,pLng,lat,lng)
-      console.log(line);
       if (waypoints[count]) {
         const wLat = waypoints[count].lat
         const wLng = waypoints[count].lng
-        console.log(pLat, wLat, pLng, wLng, 'point and waypoint')
-
         if (pLat > wLat - .02 && pLat < wLat + .02 && pLng > wLng - .02 && pLng < wLng + .02) {
           count++;
         }
       } if (pLat > lat - .02 && pLat < lat + .02 && pLng > lng - .02 && pLng < lng + .02) {
-        console.log('here');
         let orderedWaypoints = waypoints.slice(0, count).concat([newWaypoint]).concat(waypoints.slice(count))
         this.props.setWaypoints({ orderedWaypoints })
       }
@@ -224,8 +219,6 @@ setPois(key){
     history: 3,
     museums: 4,
   }
-  console.log(this.state[key], 'state')
-  console.log(this.state[markersObj[key]])
     if (this.state[key]) {
       this.state.markers[markersObj[key]].map((marker) => {
         marker.addTo(map)

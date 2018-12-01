@@ -60,7 +60,9 @@ class Login extends React.Component {
     const tripName = `${originName.split(',')[0]} to ${destinationName.split(',')[0]}`
     axios.post('/trip', { originCoords, destinationCoords, tripName, originName, destinationName })
     .then(response=>{
-      console.log(response.data)
+      setTrip({
+        tripId: response.data.id
+      })
       let funcs = waypoints.map(waypoint=>{
         return axios.post('/stop', {
           stop: { lng: waypoint.lng,

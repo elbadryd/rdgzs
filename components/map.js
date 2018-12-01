@@ -152,7 +152,7 @@ redrawLine(map){
 }
 
 addToTrip(lng, lat, name, map){
-  const { tripID, line, waypoints } = this.props;
+  const { tripId, line, waypoints } = this.props;
   let newWaypoint = {lng: parseFloat(lng).toFixed(6), lat: parseFloat(lat).toFixed(6), name}
   let alreadyStopped = () => {
     let filtered = waypoints.filter(point => `${point.lat},${point.lng}`!== `${newWaypoint.lat},${newWaypoint.lng}`)
@@ -210,7 +210,7 @@ addToTrip(lng, lat, name, map){
   })
   .then(() => {
     Axios.post('/stop', {
-     body: ({lng, lat, name, tripID})
+     body: ({lng, lat, name, tripId})
     }).then(response => console.log(response))
   })
   .catch(err=>{

@@ -134,7 +134,6 @@ getWebsite(venueID) {
       window.open(response.data.response.venue.url)
     }
     else {
-      console.log(response);
       window.open(response.data.response.venue.canonicalUrl)
     }
   });
@@ -154,43 +153,69 @@ redrawLine(map){
 
 addToTrip(lng, lat, name, map){
   const { tripId, line, waypoints } = this.props;
-  // let newStop = true;
-  // waypoints.forEach((point) => {
-  //   if (point.lat === lat && point.lng === lng) {
-  //     newStop = false;
-  //   }
-  //  })
-  
-   this.props.setWaypoint({
-       lng,
-       lat,
-       name,
-   })
+  let newWaypoint = {lng: parseFloat(lng).toFixed(6), lat: parseFloat(lat).toFixed(6), name}
+  let alreadyStopped = () => {
+    let filtered = waypoints.filter(point => `${point.lat},${point.lng}`!== `${newWaypoint.lat},${newWaypoint.lng}`)
+    return filtered.length < waypoints.length;
+  }
+  if (alreadyStopped()) {
+    console.log('already a stop!')
+    return;
+  }
 
-  Axios.post('/stop', {
-   stop: {lng, lat, name, tripId}
-  }).catch((err) => {
-    console.error(err);
-  })
-
-   let currentWaypointsString = `${lng},${lat};`
-   waypoints.map(waypoint=>{
+  let currentWaypointsString = `${lng},${lat};`
+  waypoints.map(waypoint=>{
      currentWaypointsString += `${waypoint.lng},${waypoint.lat};` 
-   })
-   let queryString = `${line[0][0]},${line[0][1]};${currentWaypointsString}${line[line.length-1][0]},${line[line.length-1][1]}`  
-   Axios.get('/redraw', {
+  })
+  let queryString = `${line[0][0]},${line[0][1]};${currentWaypointsString}${line[line.length-1][0]},${line[line.length-1][1]}`  
+  Axios.get('/redraw', {
      params: queryString
-   })
-   .then((response)=>{
-     let line = response.data.trips[0].geometry.coordinates
-     this.props.setLine({
+  }).then((response)=>{
+    let line = response.data.trips[0].geometry.coordinates
+    let count = 0;  
+
+    let wayLng = newWaypoint.lng.toString();
+    let wayLat = newWaypoint.lat.toString();
+    let checkLng =  wayLng.slice(0, wayLng.length - 4);
+    let checkLat =  wayLat.slice(0, wayLat.length - 4);
+
+    line.map(point=>{
+      const latFloat = parseFloat(point[1]).toFixed(6).toString();
+      const lngFloat =  parseFloat(point[0]).toFixed(6).toString();
+      const pLat = latFloat.slice(0, latFloat.length - 4);
+      const pLng = lngFloat.slice(0, lngFloat.length - 4);
+      
+      if (waypoints[count]) {
+        let wLa = waypoints[count].lat.toString();  
+        const wLn = waypoints[count].lng.toString();
+        const wLat = wLa.slice(0, wLa.length - 4);
+        const wLng = wLn.slice(0, wLn.length - 4);
+        console.log(pLat, wLat, pLng, wLng, 'point and waypoint')
+
+        if (pLat > wLat - .02 && pLat < wLat + .02 && pLng > wLng - .02 && pLng < wLng + .02) {
+          console.log('same!')
+          count++;
+        }
+      } if (pLat > checkLat - .02 && pLat < checkLat + .02 && pLng > checkLng - .02 && pLng < checkLng + .02) {
+        console.log('here');
+        let orderedWaypoints = waypoints.slice(0, count).concat([newWaypoint]).concat(waypoints.slice(count))
+        console.log(orderedWaypoints, 'ordered');
+        this.props.setWaypoints({ orderedWaypoints })
+      }
+    })
+    this.props.setLine({
        line
      });
-     this.redrawLine(map);
-    })
-   .catch(err=>{
+    this.redrawLine(map);
+  })
+  .then(() => {
+    Axios.post('/stop', {
+     stop: ({lng, lat, name, tripId})
+    }).then()
+  })
+  .catch(err=>{
      console.log(err)
-   })
+  })
 } 
 
 renderDrawer(type){
@@ -308,7 +333,7 @@ setPois(key){
 export default connect(
   null,
   dispatch => ({
-    setWaypoint: setWaypointsAction(dispatch),
+    setWaypoints: setWaypointsAction(dispatch),
     setLine: setLineAction(dispatch)
   })
 )(DynamicMap)

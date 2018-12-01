@@ -7,6 +7,8 @@ const initialState = {
   line: null,
   pois: [],
   tripId: null,
+  originName: null,
+  destinationName: null,
 };
 
 export default function tripReducer(state = initialState, action) {

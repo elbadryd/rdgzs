@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server/ssr-server.js",
+    "dev": "nodemon -w server/ssr-server.js",
     "build": "next build",
     "start": "next start"
   },
@@ -26,6 +26,7 @@
     "axios": "^0.18.0",
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
+    "cloudinary-react": "^1.0.6",
     "connect-session-sequelize": "^6.0.0",
     "dotenv": "^6.1.0",
     "dotenv-webpack": "^1.5.7",

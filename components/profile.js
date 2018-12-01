@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { setTripAction } from '../store/actions/tripactions.js';
-import { endianness } from 'os';
+
 class Profile extends React.Component {
   constructor(props) {
     super(props);

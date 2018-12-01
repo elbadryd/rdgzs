@@ -49,8 +49,8 @@ class Login extends React.Component {
         //add some not logged in action
         alert('nope');
     }).then(()=>{
-      if (this.props.originName){
-      this.saveTrip();
+      if (this.props.originName) {
+        this.saveTrip();
       }
     })
   }

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { setTripAction } from '../store/actions/tripactions.js';
+import { endianness } from 'os';
 class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -22,9 +23,21 @@ componentDidMount() {
     })
 }
 
-seeTrip(){
-  axios.get('/stop', { tripId })
-    .then()
+seeTrip(index){
+  const tripId = this.state.tripData[index].id
+  axios.get(`/stop/?tripid=${tripId}`, { 
+    params: tripId 
+  }).then((response) => {
+    const waypoints = response.data
+    let start = this.state.tripData[index].origin + ';'
+    let stop =  this.state.tripData[index].destination;
+    let queryString = [start];
+    waypoints.map((point) => {
+    queryString[0] += point.long_lat + ';'; 
+    })
+    queryString[0] += stop;
+    axios.et('/createRoute')
+  })
     .catch(err => {
       console.log(err)
     })
@@ -91,7 +104,7 @@ removeTrip(index) {
               <div className="card-body">
                 <h5 className="card-title">{trip.trip_name}</h5>
                 <p className="card-text"></p>
-                <a onClick={this.seeTrip} className="btn btn-primary">See Trip</a>
+                <a onClick={this.seeTrip.bind(this, i)} className="btn btn-primary">See Trip</a>
               <a onClick={this.removeTrip.bind(this, i)} className="btn btn-primary">Remove Trip</a>
               </div>
 </div>

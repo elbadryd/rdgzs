@@ -1,6 +1,4 @@
-import Axios from 'axios';
 import Router from 'next/router'
-import Head from 'next/head'
 const dotenv = require('dotenv').config();
 
 
@@ -13,9 +11,7 @@ class ItineraryList extends React.Component {
     this.getDirections = this.getDirections.bind(this);
     this.removeStop = this.removeStop.bind(this);
   }
-  componentDidMount(){
-    console.log(this.props);
-  }
+
 
   getDirections(){
     const { origin, dest } = this.props;
@@ -23,7 +19,7 @@ class ItineraryList extends React.Component {
     this.props.waypoints.forEach(point => {
       directionsString += `${point.lat},${point.lng}/`
     })
-    Router.push(`https://www.google.com/maps/dir/${origin}/${directionsString}/${dest}`);
+    Router.push(`https://www.google.com/maps/dir/${origin}/${directionsString}${dest}`);
   };
 
   removeStop(stop) {

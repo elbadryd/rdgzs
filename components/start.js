@@ -103,6 +103,7 @@ class Start extends React.Component {
     let splitDest = destinationName.split(',');
     let tripName = splitOrigin[0] + ' to ' + splitDest[0];
     if (this.state.userID) {
+      console.log(this.state.userID)
       axios.post('/trip', { originCoords, destinationCoords, tripName, originName, destinationName })
       .then((dbres) => {
        this.setState({tripId: dbres.data.id}, () => {

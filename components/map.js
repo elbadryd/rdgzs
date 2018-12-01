@@ -209,9 +209,11 @@ addToTrip(lng, lat, name, map){
     this.redrawLine(map);
   })
   .then(() => {
+    if (tripId){
     Axios.post('/stop', {
      stop: ({lng, lat, name, tripId})
-    }).then()
+    })
+  }
   })
   .catch(err=>{
      console.log(err)

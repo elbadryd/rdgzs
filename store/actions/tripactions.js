@@ -10,9 +10,9 @@ export const setDestinationAction = dispatch => destination => dispatch({
   destination,
 });
 
-export const setWaypointsAction = dispatch => waypoint => dispatch({
+export const setWaypointsAction = dispatch => waypoints => dispatch({
   type: TRIP_TYPES.SET_WAYPOINTS,
-  waypoint,
+  waypoints,
 });
 
 export const setLineAction = dispatch => line => dispatch({

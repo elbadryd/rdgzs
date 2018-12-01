@@ -13,9 +13,11 @@ export default connect(
     pois: state.pois,
     waypoints: state.waypoints,
     tripId: state.tripId,
+    origin: state.origin,
+    destination: state.destination
   }),
   null
-)(({ line, pois, waypoints, tripId }) => {
+)(({ line, pois, waypoints, tripId, origin, destination }) => {
   return (
     <div>
       <Head>
@@ -29,7 +31,7 @@ export default connect(
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossOrigin="anonymous"></script>
 
         </Head>
-      <DynamicMap pois={pois} line={line} tripId={tripId} waypoints={waypoints} />
+      <DynamicMap origin={origin} destination={destination} pois={pois} line={line} tripId={tripId} waypoints={waypoints} />
     </div>
   )
 })

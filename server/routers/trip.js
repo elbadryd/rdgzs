@@ -4,6 +4,7 @@ const db = require('../models');
 const trip = express.Router();
 
 trip.post('/', (req, res) => {
+  console.log(req.body, 'trip post');
   const start = `${req.body.originCoords.lng},${req.body.originCoords.lat}`;
   const end = `${req.body.destinationCoords.lng},${req.body.destinationCoords.lat}`;
   const tripName = req.body.tripName;
@@ -15,7 +16,7 @@ trip.post('/', (req, res) => {
     origin: start,
     destination: end,
     trip_name: tripName,
-    userId: req.body.userID,
+    userId: req.user.id,
     origin_name: originName,
     destination_name: destinationName,
   })
@@ -35,7 +36,6 @@ trip.get('/', (req, res) => {
   })
     .then((response) => {
       res.send(response);
-      console.log(response);
     })
     .catch((err) => {
       res.send(err);

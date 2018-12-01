@@ -77,8 +77,8 @@ class Start extends React.Component {
     } })
       .then(response => {
         this.props.setTrip({
-          originCoords,
-          destinationCoords,
+          origin: originCoords,
+          destination: destinationCoords,
           pois: response.data.pois,
           line: response.data.line.geometry.coordinates,
           originName,
@@ -103,7 +103,7 @@ class Start extends React.Component {
     let splitDest = destinationName.split(',');
     let tripName = splitOrigin[0] + ' to ' + splitDest[0];
     if (this.state.userID) {
-      axios.post('/trip', { userID, originCoords, destinationCoords, tripName, originName, destinationName })
+      axios.post('/trip', { originCoords, destinationCoords, tripName, originName, destinationName })
       .then((dbres) => {
        this.setState({tripId: dbres.data.id}, () => {
          this.createRoute();

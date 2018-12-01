@@ -10,9 +10,7 @@ class ItineraryList extends React.Component {
     }
     this.getDirections = this.getDirections.bind(this);
   }
-  componentDidMount(){
-    console.log(this.props);
-  }
+
 
   getDirections(){
     const { origin, dest } = this.props;
@@ -20,7 +18,6 @@ class ItineraryList extends React.Component {
     this.props.waypoints.forEach(point => {
       directionsString += `${point.lat},${point.lng}/`
     })
-    console.log(directionsString)
     Router.push(`https://www.google.com/maps/dir/${origin}/${directionsString}${dest}`);
   };
 

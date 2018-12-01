@@ -24,9 +24,7 @@ componentDidMount() {
 
 seeTrip(){
   axios.get('/stop', { tripId })
-    .then(response=>{
-      console.log(response)
-    })
+    .then()
     .catch(err => {
       console.log(err)
     })
@@ -66,8 +64,6 @@ removeTrip(index) {
           this.setState({
             tripData: this.state.tripData.filter(trip=> trip.id !== id)
           })
-        } else {
-          console.log(response);
         }
       })
       .catch(err=>{

@@ -31,8 +31,8 @@ stop.get('/', (req, res) => {
     });
 });
 
-stop.delete('/', (req, res) => {
-  // delete stop from table;
+stop.post('/itinerary', (req, res) => {
+  // db.sequelize.models.stops.
 });
 
 

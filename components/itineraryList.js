@@ -28,15 +28,28 @@ class ItineraryList extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="container_fluid">
 
-      <div>{this.props.origin}</div>
-   <div> {this.props.waypoints.map((stop, index)=>{
-      return <div className="item" key={stop.name}>{index + 1}<ItineraryItem name={stop.name}/></div>
-    })}
-      </div>
-        <div>{this.props.dest}</div>
-        <button onClick={this.getDirections}>Get Directions</button>
+        <div className="row">
+          <div className="col-md">
+            {this.props.origin}
+          </div>
+        </div>
+
+        <div className="row">
+           {this.props.waypoints.map((stop, index)=>{
+            return <div className="item col-md" key={stop.name}>{index + 1}
+               {stop.name}
+               <button type="button" className="col-md btn btn-danger btn-sm">x</button>
+            </div>
+            })}
+        </div>
+
+          <div>
+            {this.props.dest}
+          </div>
+
+          <button type="button" className="btn btn-success btn-block" onClick={this.getDirections} >Get Directions</button>
       </div>
     )
   }

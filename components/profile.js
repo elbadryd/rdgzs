@@ -36,36 +36,43 @@ seeTrip(index){
     queryString[0] += point.long_lat + ';'; 
     })
     queryString[0] += stop;
-    axios.et('/createRoute')
+    axios.get('/createRoute', { 
+      params: { 
+        qstring: queryString[0]
+    } }).then((route) => {
+      console.log('pois?', route.data)
+      console.log('tripData', this.state.tripData[index])
+      const line = route.data.line.geometry.coordinates
+      console.log(line, waypoints, "matchy")
+      let orderedWaypoints = [];
+      line.map((point) => {
+        let pLng = point[0];
+        let pLat = point[1];
+        waypoints.map((w) => {
+          let coords = w.long_lat.split(',')
+          let wLng = Number(coords[0]);
+          let wLat = Number(coords[1]);
+          if (pLat < wLat + .02 && pLat > wLat - .02 && pLng < wLng +.02 && pLng > wLng - .02) {
+            orderedWaypoints.push({ name: w.name, lat: wLat, lng: wLng })
+          }
+        });
+      });
+      console.log('oways', orderedWaypoints);
+      // this.props.setTrip({
+      //   origin: originCoords,
+      //   destination: destinationCoords,
+      //   pois: response.data.pois,
+      //   line, 
+      //   originName,
+      //   destinationName,
+      //   waypoints: orderedWaypoints, 
+      //   tripId,
+      // })
+    })
   })
     .catch(err => {
       console.log(err)
     })
-    // const { originName, destinationName, originCoords, destinationCoords, waypoints } = this.state;
-  
-    //   let points = {
-    //     originCoords: originCoords,
-    //     destCoords: destinationCoords
-    //   }
-    //   axios.get('/createRoute', { params: points })
-    //     .then(response => {
-    //       console.log(response)
-    //       this.props.setTrip({
-    //         originCoords,
-    //         destinationCoords,
-    //         pois: response.data.pois,
-    //         line: response.data.line.geometry.coordinates,
-    //         originName,
-    //         destinationName,
-    //         waypoints,
-    //         //waypoints should show up on map
-    //       })
-    //       // set trip ID 
-    //     })
-    //     .catch(err => {
-    //       console.log(err);
-    //       alert('there was an error processing your request')
-    //     })
   }
 
 removeTrip(index) {

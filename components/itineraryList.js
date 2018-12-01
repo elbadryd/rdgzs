@@ -1,5 +1,7 @@
 import Router from 'next/router'
+import Axios from 'axios'
 const dotenv = require('dotenv').config();
+
 
 
 class ItineraryList extends React.Component {

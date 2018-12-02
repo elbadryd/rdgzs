@@ -11,7 +11,7 @@ module.exports = {
       tripId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'stops',
+          model: 'trip',
           key: 'id',
           deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
         },

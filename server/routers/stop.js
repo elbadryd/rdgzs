@@ -21,7 +21,7 @@ stop.post('/', (req, res) => {
 
 stop.get('/', (req, res) => {
   db.sequelize.models.stop.findAll({
-    where: { tripId: req.body.tripId },
+    where: { tripId: req.query.tripid },
   })
     .then((response) => {
       res.send(response);

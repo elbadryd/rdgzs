@@ -26,20 +26,24 @@ login.get('/spotify', passport.authenticate('spotify', {
 }),
   (req, res) => {
     console.log('/spotify hit');
+    console.log(req.user);
+    res.end();
   });
 
-// login.get('/callback', passport.authenticate('spotify', {
-// }), (req, res) => {
-//     console.log('/callback hit');
-//   }
-// );
-
-login.get(
-  '/callback',
-  passport.authenticate('spotify', { failureRedirect: '/login' }),
-  function (req, res) {
-    res.redirect('/');
+login.get('/callback', passport.authenticate('spotify', {
+}), (req, res) => {
+    console.log('/callback hit');
+    console.log(req.user);
+    res.send(req.user);
   }
 );
+
+// login.get(
+//   '/callback',
+//   passport.authenticate('spotify', { failureRedirect: '/login' }),
+//   function (req, res) {
+//     res.redirect('/');
+//   }
+// );
 
 module.exports.loginRouter = login;

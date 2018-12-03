@@ -61,6 +61,11 @@ componentDidUpdate(prevProps){
     this.populateMap();
     this.setState({ isVisible: false })
   } 
+  if (this.props.line !== prevProps.line) {
+    if (map.getSource('route')) {
+      this.redrawLine(map);
+    }
+  }
 }
 
 populateMap(){
@@ -112,10 +117,6 @@ populateMap(){
     marker.addTo(map)
   })
   }
-
-    // let poiGeoSon = mapHelpers.poiHandler(poi, i);
-    // poiData.push(poiGeoSon)
-  // poiData add source and layers
 }
 getWebsite(venueID) {
   Axios.get(`https://api.foursquare.com/v2/venues/${venueID}`, {
@@ -201,10 +202,11 @@ addToTrip(lng, lat, name, map){
   })
 } 
 
-renderDrawer(type){
+renderDrawer(type, size = 0.50){
   this.setState({ 
     isVisible: !this.state.isVisible,
-    currentDrawer: type
+    currentDrawer: type,
+    size
   })
 }
 
@@ -246,19 +248,17 @@ spotifyLogin() {
     return (
     <div>
         <div id="map" className="absolute top right left bottom" />
-          <img id="profile" src="/static/user.png" onClick={this.renderDrawer.bind(this, 'user')}></img><br/>
-        <nav id="listing-group" className="listing-group">
-          <img src="/static/distance.png" onClick={()=> this.renderDrawer('pois')}></img><br/>
+          <img id="profile" src="/static/user.png" onClick={()=>this.renderDrawer('user')}></img><br/>
+          <nav id="listing-group" className="listing-group">
+          <img src="/static/distance.png" onClick={()=> this.renderDrawer('pois', 0.20)}></img><br/>
           <img src="/static/sports-car.png" onClick={() => this.renderDrawer('itnierary')} zindex={4}></img><br/>
           <img src="/static/spotify.png" onClick={this.spotifyLogin}></img><br/>
-          <img src="/static/camera.png" onClick={this.renderDrawer.bind(this, 'photos')}></img><br/>
+          <img src="/static/camera.png" onClick={()=>this.renderDrawer('photos')}></img><br/>
           <img src="/static/left-arrow.png" onClick={()=>this.renderDrawer('start')}></img>
 
           <Dock position="bottom"
             size={this.state.size}
             isVisible={this.state.isVisible}
-            onVisibleChange={this.handleVisibleChange}
-            onSizeChange={this.handleSizeChange}
             fluid={this.state.fluid}
             dimStyle={{ background: 'rgba(0, 0, 100, 0.2)' }}
             dockStyle={this.state.customAnimation ? { transition: transitions } : null}
@@ -266,7 +266,8 @@ spotifyLogin() {
             // duration={duration}
             >
             {({ position, isResizing }) =>
-              <div style={{
+              <div 
+                style={{
                 width: '100%',
                 height: '100%',
                 display: 'flex',
@@ -282,7 +283,7 @@ spotifyLogin() {
                   left: '10px',
                   top: '10px',
                 }}><img src="/static/down-arrow.png" size="20px"></img></div>
-                {this.state.currentDrawer === 'itnierary' ? <ItineraryView></ItineraryView> : null}
+                {this.state.currentDrawer === 'itnierary' ? <ItineraryView redrawLine={this.redrawLine.bind(this, map)}></ItineraryView> : null}
                 {this.state.currentDrawer === 'pois' ? <PoiView setPois={this.setPois}></PoiView>: null }
                 {this.state.currentDrawer === 'start' ? <Start closeDrawer={this.renderDrawer}/> : null}
                 {this.state.currentDrawer === 'user' ? <User/> : null}

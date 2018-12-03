@@ -1,8 +1,9 @@
 import Axios from 'axios';
 import Router from 'next/router'
-const dotenv = require('dotenv').config();
 import { connect } from 'react-redux'
-import { removeWaypointAction } from '../store/actions/tripactions.js'
+import { setLineAction, removeWaypointAction } from '../store/actions/tripactions.js'
+const dotenv = require('dotenv').config();
+
 
 
 class ItineraryList extends React.Component {
@@ -26,13 +27,30 @@ class ItineraryList extends React.Component {
   };
 
   removeStop(stop) {
+    const { originCoords, destinationCoords, redrawLine } = this.props;
+    console.log(stop);
+    let waypoints = this.props.waypoints.filter(point => point.name !== stop.name );
+    let queryString = [`${originCoords.lng},${originCoords.lat};`];
     Axios.post('/stop/itinerary', {
       tripId: this.props.tripId,
       stop,
     })
-    this.props.removeWaypoint({
+    waypoints.forEach(point => {
+      queryString[0] += `${point.lng},${point.lat};`
+    });
+    queryString[0] += `${destinationCoords.lng},${destinationCoords.lat}`;
+    Axios.get('/redraw', {
+      params: queryString[0]
+    }).then((resp) => {
+      let line = resp.data.trips[0].geometry.coordinates;
+      console.log(line);
+      this.props.setLine({
+        line
+      })
+      this.props.removeWaypoint({
       waypoint: stop.name
     })
+    }).catch(err => console.log(err));   
   }
 
   render() {
@@ -54,7 +72,9 @@ class ItineraryList extends React.Component {
           <div>
             {this.props.dest}
           </div>
+          <div style={{padding: '10px'}}>
           <button type="button" className="btn btn-success btn-block" onClick={this.getDirections} >Get Directions</button>
+          </div>
       </div>
     )
   }
@@ -64,5 +84,6 @@ export default connect(
   null,
   dispatch => ({
     removeWaypoint: removeWaypointAction(dispatch),
+    setLine: setLineAction(dispatch)
   })
 )(ItineraryList)

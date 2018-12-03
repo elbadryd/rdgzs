@@ -8,7 +8,7 @@ const content = [{
 },
   {
     type:"museums",
-      img:"/static/library.png"
+      img:"/static/greek-temple.png"
   },
   {
     type:"food",
@@ -16,7 +16,7 @@ const content = [{
   },
   {
     type:"parks",
-      img:"/static/mountain.png"
+      img:"/static/mountains.png"
   },
 ];
 class PoiView extends React.Component {
@@ -26,9 +26,10 @@ class PoiView extends React.Component {
     render() {
     return (
 
-        <table>
+      <table className="d-flex justify-content-center">
           {content.map((div, i) => {
-            return <td scope="col" className="columns" style={{padding: '15px'}}>
+            return <td scope="col" className="columns" style={{padding: '5px',
+            justifyContent: 'center'}}>
               <img key ={i} onClick={this.props.setPois.bind(this, div.type)} src={div.img} />
               <div key={div.type} >{div.type}</div>
               </td>

@@ -23,10 +23,10 @@ module.exports = (app) => {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  passport.serializeUser((user, done) => done(null, user));
-  passport.deserializeUser((user, done) => {
+  passport.serializeUser((user, done) => done(null, user.id));
+  passport.deserializeUser((id, done) => {
     // console.log('deserializeUser', id);
-    db.sequelize.models.user.findById(user.id, { raw: true })
+    db.sequelize.models.user.findById(id, { raw: true })
       .then(user => done(null, user))
       .catch(error => done(error));
   });
@@ -73,7 +73,7 @@ module.exports = (app) => {
       clientSecret: process.env.SPOTIFY_SECRET,
       callbackURL: 'http://localhost:3000/login/callback',
     },
-    ((req, accessToken, refreshToken, expires_in, profile, done) => {
+    ((accessToken, refreshToken, expires_in, profile, done) => {
       // asynchronous verification, for effect...
       console.log(accessToken, '!!!!!!!!!!!!!!!!!!!', refreshToken, expires_in, profile, 'SPOTIFY PROFILE');
       process.nextTick(() => {
@@ -81,8 +81,9 @@ module.exports = (app) => {
         // represent the logged-in user. In a typical application, you would want
         // to associate the spotify account with a user record in your database,
         // and return that user instead.
-        return done(null, req.user);
+        return done(null, profile);
       });
     }),
   ));
+  
 };

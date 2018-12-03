@@ -87,14 +87,23 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div>
-        <span>Email:</span>
-        <input name="email" onChange={this.handleChange}></input>
-        <span>Password:</span>
-        <input name="password" type="password" onChange={this.handleChange}></input>
-        <button type="button" className="btn btn-success btn-block" onClick={this.submitLogin}>Login</button>
-        <button type="button" className="btn btn-success btn-block" onClick={this.signUp}>SignUp</button>
+      <div className="container_fluid">
+        <div className="row">
+          <div className="col-md">
+            <span>Email:</span>
+            <input name="email" onChange={this.handleChange}></input>
+            </div>
+        </div>
+        <div className="row">
+            <div className="item col-md" >
+            <span>Password:</span>
+            <input name="password" type="password" onChange={this.handleChange}></input>
+        </div>
+        </div>
+          <button type="button" className="btn btn-success btn-block" onClick={this.submitLogin}>Login</button>
+          <button type="button" className="btn btn-success btn-block" onClick={this.signUp}>SignUp</button>
       </div>
+
     )
   }
 }

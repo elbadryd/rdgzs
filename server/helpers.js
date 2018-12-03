@@ -21,7 +21,7 @@ const makeTrip = (waypoints, context, callback) => {
           client_secret: process.env.FOURSQUARE_SECRET,
           ll: `${latitude},${longitude}`,
           categoryId: categoryID,
-          v: '20181120',
+          v: '20181202',
           limit: resultNum,
           radius: 100000,
         },

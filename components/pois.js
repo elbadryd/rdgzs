@@ -8,7 +8,7 @@ const content = [{
 },
   {
     type:"museums",
-      img:"/static/library.png"
+      img:"/static/greek-temple.png"
   },
   {
     type:"food",
@@ -16,7 +16,7 @@ const content = [{
   },
   {
     type:"parks",
-      img:"/static/mountain.png"
+      img:"/static/mountains.png"
   },
 ];
 class PoiView extends React.Component {

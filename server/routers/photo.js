@@ -6,9 +6,10 @@ const photo = express.Router();
 photo.post('/', (req, res) => {
   console.log(req.body.params);
   db.sequelize.models.photo.create({
-    tripId: 135,
+    tripId: req.body.params.tripId,
     geotag: req.body.params.geotag,
     link: req.body.params.url,
+    publicId: req.body.params.publicId,
   })
     .then((response) => {
       res.send(response);
@@ -19,7 +20,15 @@ photo.post('/', (req, res) => {
 });
 
 photo.get('/', (req, res) => {
-  res.send('got photos');
+  db.sequelize.models.photo.findAll({
+    where: { tripId: req.query.tripId },
+  })
+    .then((response) => {
+      res.send(response);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
 });
 
 module.exports.photoRouter = photo;

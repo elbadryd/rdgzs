@@ -11,7 +11,7 @@ module.exports = {
       tripId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'trip',
+          model: 'trips',
           key: 'id',
           deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
         },
@@ -20,6 +20,9 @@ module.exports = {
         type: Sequelize.JSON
       },
       link: {
+        type: Sequelize.STRING
+      },
+      publicId: {
         type: Sequelize.STRING
       },
       createdAt: {

@@ -36,7 +36,13 @@ const makeTrip = (waypoints, context, callback) => {
     let points = Array(Math.floor((data.trips[0].distance / 1000) / 200)).fill().map((_, i) => along.default(line, i * 200).geometry.coordinates);
 
     if (points.length > 10) {
-      points = points.filter((point, i) => i % 2);
+      while (points > 10) {
+        if (points > 15) {
+          points = points.filter((point, i) => i % 2);
+        } else {
+          points = points.filter((point, i) => i % 3);
+        }
+      }
     }
 
     const num = 2;

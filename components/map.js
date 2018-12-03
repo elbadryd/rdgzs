@@ -60,6 +60,11 @@ componentDidUpdate(prevProps){
     this.populateMap();
     this.setState({ isVisible: false })
   } 
+  if (this.props.line !== prevProps.line) {
+    if (map.getSource('route')) {
+      this.redrawLine(map);
+    }
+  }
 }
 
 populateMap(){
@@ -266,7 +271,7 @@ setPois(key){
                   left: '10px',
                   top: '10px',
                 }}><img src="/static/down-arrow.png" size="20px"></img></div>
-                {this.state.currentDrawer === 'itnierary' ? <ItineraryView></ItineraryView> : null}
+                {this.state.currentDrawer === 'itnierary' ? <ItineraryView redrawLine={this.redrawLine.bind(this, map)}></ItineraryView> : null}
                 {this.state.currentDrawer === 'pois' ? <PoiView setPois={this.setPois}></PoiView>: null }
                 {this.state.currentDrawer === 'start' ? <Start closeDrawer={this.renderDrawer}/> : null}
                 {this.state.currentDrawer === 'user' ? <User/> : null}

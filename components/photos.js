@@ -13,24 +13,19 @@ class Photos extends React.Component {
     this.takePhoto = this.takePhoto.bind(this)
   }
 
-  componentDidMount() {
+  takePhoto(){
     if (navigator.geolocation) {
       const self = this;
       navigator.geolocation.getCurrentPosition((position) => {
         self.position = position.coords;
-        let geotag = {
-          lat: self.position.latitude,
-          lng: self.position.longitude
-        }
         this.setState({
-          geotag,
+          geotag: {
+            lng: self.position.longitude,
+            lat: self.position.latitude,
+          }
         })
       });
     }
-    
-  }
-
-  takePhoto(){
     let myUploadWidget;
     document.getElementById("upload_widget_opener")
       myUploadWidget = window.cloudinary.openUploadWidget({
@@ -77,7 +72,7 @@ class Photos extends React.Component {
       <div>
         <div><img id="upload_widget_opener" src="/static/camera.png" onClick={this.takePhoto}></img>add photos</div>
         {photoData.map(photo=>{
-          return <a href={photo.link} target="_blank" rel="noopener noreferrer">
+          return <a key={photo.id} href={photo.link} target="_blank" rel="noopener noreferrer">
           <Image cloudName="rdgz" publicId={photo.publicId} width="200" crop="scale" radius="10"></Image>
         </a>
         })}

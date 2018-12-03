@@ -2,7 +2,6 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { Image } from 'cloudinary-react';
 import cloudinary from 'cloudinary-core';
-const cloudinaryCore = new cloudinary.Cloudinary({ cloud_name: 'rdgz' });
 
 class Photos extends React.Component {
   constructor(props){

@@ -72,7 +72,9 @@ class ItineraryList extends React.Component {
           <div>
             {this.props.dest}
           </div>
+          <div style={{padding: '10px'}}>
           <button type="button" className="btn btn-success btn-block" onClick={this.getDirections} >Get Directions</button>
+          </div>
       </div>
     )
   }

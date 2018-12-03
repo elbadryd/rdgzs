@@ -1,38 +1,89 @@
-import { Image, CloudinaryContext } from 'cloudinary-react';
-// import cloudinary from 'cloudinary-core';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { Image } from 'cloudinary-react';
+import cloudinary from 'cloudinary-core';
 
 class Photos extends React.Component {
   constructor(props){
     super(props)
-    this.state-={
-      photos: []
+    this.state={
+      geotag: null,
+      photoData: []
     }
+    this.takePhoto = this.takePhoto.bind(this)
+  }
+
+  takePhoto(){
+    let myUploadWidget;
+    document.getElementById("upload_widget_opener")
+      myUploadWidget = window.cloudinary.openUploadWidget({
+        cloudName: 'rdgz', uploadPreset: 'rdgzPreset', sources: ['camera']
+      }, (error, result) => {
+        console.log(result);
+        if (result.event === 'success') {
+          axios.post('/photo', {
+            params: {
+              tripId: this.props.tripId,
+              geotag: this.state.geotag,
+              url: result.info.url,
+              publicId: result.info.public_id
+            }
+          })
+            .then(response => {
+              console.log(response)
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        }
+      });
   }
 
   componentDidMount(){
-    //query db for user's photos to display, add to state
-    let myUploadWidget;
-    document.getElementById("upload_widget_opener").addEventListener("click", function () {
-      myUploadWidget = window.cloudinary.openUploadWidget({
-        cloudName: 'rdgz', uploadPreset: 'rdgzPreset', 
-      }, (error, result) => { 
-        console.log(result);
-        //url comes back on result.success obj
-        //take url from success obj, store in db with tripId
-        //need to figure out how to capture geotag info
+    if (navigator.geolocation) {
+      const self = this;
+      navigator.geolocation.getCurrentPosition((position) => {
+        self.position = position.coords;
+        this.setState({
+          geotag: {
+            lng: self.position.longitude,
+            lat: self.position.latitude,
+          }
+        })
       });
-    }, false);
+    }
+    axios.get('/photo', {params :{ tripId: this.props.tripId }})
+    .then(response=>{
+        this.setState({
+          photoData: response.data
+        }) 
+      })
+      .catch(err=>{
+        console.log(err)
+      })
   }
+  
+
 
   render(){
-    return(
+    let { photoData } = this.state
+    return ( 
       <div>
-        <div><img id="upload_widget_opener" src="/static/camera.png"></img>add photos</div>
-      {/* <a href="#" id="upload_widget_opener">Upload multiple images</a> */}
+        <div><img id="upload_widget_opener" src="/static/camera.png" onClick={this.takePhoto}></img><br/>add photos</div>
+        {photoData.map(photo=>{
+          return <a key={photo.id} href={photo.link} target="_blank" rel="noopener noreferrer">
+          <Image cloudName="rdgz" publicId={photo.publicId} width="200" crop="scale" radius="10"></Image>
+        </a>
+        })}
       </div>
-    )
-  }
+  )
 
 }
+}
 //connect to store to access tripID
-export default Photos
+export default connect(
+  state =>({
+    tripId: state.tripId
+  })
+)
+(Photos)

@@ -14,18 +14,6 @@ class Photos extends React.Component {
   }
 
   takePhoto(){
-    if (navigator.geolocation) {
-      const self = this;
-      navigator.geolocation.getCurrentPosition((position) => {
-        self.position = position.coords;
-        this.setState({
-          geotag: {
-            lng: self.position.longitude,
-            lat: self.position.latitude,
-          }
-        })
-      });
-    }
     let myUploadWidget;
     document.getElementById("upload_widget_opener")
       myUploadWidget = window.cloudinary.openUploadWidget({
@@ -52,7 +40,18 @@ class Photos extends React.Component {
   }
 
   componentDidMount(){
-    console.log(this.props.tripId, 'tripId photos')
+    if (navigator.geolocation) {
+      const self = this;
+      navigator.geolocation.getCurrentPosition((position) => {
+        self.position = position.coords;
+        this.setState({
+          geotag: {
+            lng: self.position.longitude,
+            lat: self.position.latitude,
+          }
+        })
+      });
+    }
     axios.get('/photo', {params :{ tripId: this.props.tripId }})
     .then(response=>{
         this.setState({
@@ -70,7 +69,7 @@ class Photos extends React.Component {
     let { photoData } = this.state
     return ( 
       <div>
-        <div><img id="upload_widget_opener" src="/static/camera.png" onClick={this.takePhoto}></img>add photos</div>
+        <div><img id="upload_widget_opener" src="/static/camera.png" onClick={this.takePhoto}></img><br/>add photos</div>
         {photoData.map(photo=>{
           return <a key={photo.id} href={photo.link} target="_blank" rel="noopener noreferrer">
           <Image cloudName="rdgz" publicId={photo.publicId} width="200" crop="scale" radius="10"></Image>

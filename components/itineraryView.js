@@ -7,13 +7,16 @@ export default connect(
     origin: state.originName,
     waypoints: state.waypoints,
     tripId: state.tripId,
+    originCoords: state.origin,
+    destinationCoords: state.destination,
   }),
   null
-)(({ dest, origin, waypoints, tripId }) => {
+)(({ dest, origin, waypoints, tripId, originCoords, destinationCoords }) => {
   return (
     <div>
       <div>Your Upcoming Trip</div>
-      <ItineraryList tripId={tripId} dest={dest} origin={origin} waypoints={waypoints} />
+      <ItineraryList tripId={tripId} dest={dest} origin={origin}
+      waypoints={waypoints} originCoords={originCoords} destinationCoords={destinationCoords}/>
 
     </div>
   )

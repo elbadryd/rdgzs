@@ -74,7 +74,7 @@ class Login extends React.Component {
       })
       axios.all(funcs)
       .then(response=>{
-        console.log(response)
+        // console.log(response)
       })
       .catch(err=>{
         console.log(err)

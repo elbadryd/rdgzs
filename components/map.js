@@ -40,6 +40,7 @@ class DynamicMap extends React.Component {
     this.renderDrawer = this.renderDrawer.bind(this);
     this.setPois = this.setPois.bind(this);
     this.getWebsite = this.getWebsite.bind(this);
+    this.spotifyLogin = this.spotifyLogin.bind(this);
   }
 
 componentDidMount(){
@@ -230,6 +231,17 @@ setPois(key){
     }
 }
 
+spotifyLogin() {
+  // Axios.get('/login/spotify')
+  // .then(res => {
+  //   console.log(res);
+  // })
+  // .catch(err => {
+  //   console.error(err);
+  // })
+  window.location.pathname = '/login/spotify';
+}
+
   render() {
     return (
     <div>
@@ -238,7 +250,7 @@ setPois(key){
         <nav id="listing-group" className="listing-group">
           <img src="/static/distance.png" onClick={()=> this.renderDrawer('pois')}></img><br/>
           <img src="/static/sports-car.png" onClick={() => this.renderDrawer('itnierary')} zindex={4}></img><br/>
-          <img src="/static/spotify.png"></img><br/>
+          <img src="/static/spotify.png" onClick={this.spotifyLogin}></img><br/>
           <img src="/static/camera.png" onClick={this.renderDrawer.bind(this, 'photos')}></img><br/>
           <img src="/static/left-arrow.png" onClick={()=>this.renderDrawer('start')}></img>
 

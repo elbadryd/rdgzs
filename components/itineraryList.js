@@ -1,6 +1,5 @@
 import Axios from 'axios';
 import Router from 'next/router'
-import Axios from 'axios'
 const dotenv = require('dotenv').config();
 import { connect } from 'react-redux'
 import { removeWaypointAction } from '../store/actions/tripactions.js'

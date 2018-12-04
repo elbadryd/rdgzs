@@ -238,7 +238,7 @@ setPois(key){
         <div id="map" className="absolute top right left bottom" />
           <img id="profile" src="/static/user.png" onClick={()=>this.renderDrawer('user')}></img><br/>
           <nav id="listing-group" className="listing-group">
-          <img src="/static/distance.png" onClick={()=> this.renderDrawer('pois', 0.20)}></img><br/>
+          <img src="/static/distance.png" onClick={()=> this.renderDrawer('pois', 0.30)}></img><br/>
           <img src="/static/sports-car.png" onClick={() => this.renderDrawer('itnierary')} zindex={4}></img><br/>
           <img src="/static/spotify.png"></img><br/>
           <img src="/static/camera.png" onClick={()=>this.renderDrawer('photos')}></img><br/>

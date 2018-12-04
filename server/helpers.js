@@ -21,7 +21,7 @@ const makeTrip = (waypoints, context, callback) => {
           client_secret: process.env.FOURSQUARE_SECRET,
           ll: `${latitude},${longitude}`,
           categoryId: categoryID,
-          v: '20181120',
+          v: '20181202',
           limit: resultNum,
           radius: 100000,
         },
@@ -33,7 +33,7 @@ const makeTrip = (waypoints, context, callback) => {
   }, (err, res, body) => {
     const data = JSON.parse(body);
     const line = turf.lineString(data.trips[0].geometry.coordinates);
-    let points = Array(Math.floor((data.trips[0].distance / 1000) / 200)).fill().map((_, i) => along.default(line, i * 200).geometry.coordinates);
+    let points = Array(Math.floor((data.trips[0].distance / 1000) / 100)).fill().map((_, i) => along.default(line, i * 200).geometry.coordinates);
 
     if (points.length > 10) {
       while (points > 10) {
@@ -108,5 +108,28 @@ const redrawRoute = (waypoints, callback) => {
   });
 };
 
+const getTopTracks = (id, callback) => {
+  axios.get(`https://api.spotify.com/v1/artists/${id}/top-tracks?market=us`, {
+    headers: {
+      client_id: process.env.SPOTIFY_ID,
+      Authorization: 'Bearer BQB9ppiAjAQS5Z2U84fGm-800xVbh_ibo5B5FuwfME-Ohsahsr3kWVffS7EqipfxeVhO-ltfmzt00W0sZno',
+    },
+  }).then((response) => {
+    callback(null, response);
+  }).catch(err => callback(err, null));
+};
+
+const artistId = (name, callback) => {
+  axios.get(`https://api.spotify.com/v1/search?q=${name}&type=artist`, {
+    headers: {
+      client_id: process.env.SPOTIFY_ID,
+      Authorization: 'Bearer BQDZF147HyGz_Sn7A6kb8Z1nMzwXgqxBAIxoOEwgLz74otbXNTmO8OZFReziGdLOR4LH-I_79w92vVGEb9c',
+    },
+  }).then(response => callback(null, response))
+    .catch(err => callback(err, null));
+};
+
 module.exports.makeTrip = makeTrip;
 module.exports.redrawRoute = redrawRoute;
+module.exports.getTopTracks = getTopTracks;
+module.exports.artistId = artistId;

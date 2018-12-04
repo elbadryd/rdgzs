@@ -6,7 +6,6 @@ const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
 const uuid = require('uuid/v4');
 const dotenv = require('dotenv');
-const SpotifyWebApi = require('spotify-web-api-node');
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const db = require('../models');
 

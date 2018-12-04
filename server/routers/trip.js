@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('../models');
+const spotify = require('../../lib/spotifyWebApi');
 
 const trip = express.Router();
 
@@ -56,6 +57,18 @@ trip.delete('/', (req, res) => {
     .catch((err) => {
       console.log(err);
       res.send(500);
+    });
+});
+
+trip.get('/pl', (req, res) => {
+  spotify.spotifyApi.setAccessToken(req.user.accessToken);
+
+  spotify.spotifyApi.createPlaylist(req.user.spotifyId, 'My Cool Playlist', { public: true })
+    .then((data) => {
+      console.log('Created playlist!');
+      res.send(data);
+    }, (err) => {
+      console.log('Something went wrong!', err);
     });
 });
 

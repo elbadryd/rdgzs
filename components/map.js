@@ -43,6 +43,7 @@ class DynamicMap extends React.Component {
     this.setPois = this.setPois.bind(this);
     this.getWebsite = this.getWebsite.bind(this);
     this.setPhotoMarker = this.setPhotoMarker.bind(this);
+    this.populateMap = this.populateMap.bind(this);
   }
 
 componentDidMount(){
@@ -220,6 +221,9 @@ addToTrip(lng, lat, name, map){
 } 
 
 renderDrawer(type, size = 0.50){
+    if (type === 'photos' && x){
+      x.remove()
+    }
     Axios.get('/login')
     .then(response=>{
       console.log(response)

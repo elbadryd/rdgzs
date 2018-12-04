@@ -66,10 +66,6 @@ class Photos extends React.Component {
         console.log(err)
       })
   }
-
-  componentDidUnmount(){
-    x ? x.remove() : null;
-  }
   
     render(){
       let { photoData, activeSlide } = this.state

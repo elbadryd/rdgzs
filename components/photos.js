@@ -11,9 +11,9 @@ class Photos extends React.Component {
     this.state={
       geotag: null,
       photoData: [],
-      activeSlide: null,
+      activeSlide: 0,
     }
-    this.takePhoto = this.takePhoto.bind(this)
+    this.takePhoto = this.takePhoto.bind(this);
   }
 
   takePhoto(){
@@ -67,27 +67,21 @@ class Photos extends React.Component {
       })
   }
   
-
-  // let { photoData } = this.state
-  // let photos = photoData.map(photo=>{
-    //   return <div><a key={photo.id} href={photo.link} target="_blank" rel="noopener noreferrer">
-    //       <Image cloudName="rdgz" publicId={photo.publicId} width="200" crop="scale" radius="10"></Image>
-    //   </a></div>
-    // })
-    // <div><img id="upload_widget_opener" src="/static/camera.png" onClick={this.takePhoto}></img><br/>add photos</div>
-    
     render(){
-      let { photoData } = this.state
+      let { photoData, activeSlide } = this.state
       let photos = photoData.map(photo=>{
-        return <div><img src={photo.link} />
-</div>
+        return <div><a key={photo.id} href={photo.link} target="_blank" rel="noopener noreferrer">
+          <Image cloudName="rdgz" publicId={photo.publicId} width="200" crop="scale" radius="10"></Image>
+     </a></div>
+
       })
       var settings = {
         dots: true,
         infinite: true,
         speed: 1000,
-        afterChange: current => this.setState({ activeSlide: this.state.photoData[current - 1] })
-      };
+        beforeChange: current => this.setState({ activeSlide: photoData[current] || 0 },
+          () => photoData[current] ? this.props.setPhotoMarker(photoData[current].geotag.lng, photoData[current].geotag.lat): null ),
+      }
       return photoData.length ? (
           <div className="container-fluid">
             <Slider {...settings}>
@@ -99,8 +93,6 @@ class Photos extends React.Component {
   padding: 40px;
   width: 80%;
   color: #333;
-  background: #C694D7;
-  radius: 10px
 
 }
 
@@ -134,7 +126,7 @@ h3 {
 .content {
   padding: 20px;
   margin: auto;
-  width: 90%;
+  width: 95%;
 }
 .slick-slide .image {
   padding: 10px;

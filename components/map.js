@@ -34,12 +34,14 @@ class DynamicMap extends React.Component {
       hotels: false,
       muesums: false,
       markers: null,
+      currentPhoto: null,
     };
     this.addToTrip = this.addToTrip.bind(this);
     this.redrawLine = this.redrawLine.bind(this);
     this.renderDrawer = this.renderDrawer.bind(this);
     this.setPois = this.setPois.bind(this);
     this.getWebsite = this.getWebsite.bind(this);
+    this.setPhotoMarker = this.setPhotoMarker.bind(this);
   }
 
 componentDidMount(){
@@ -148,6 +150,24 @@ redrawLine(map){
     })
 }
 
+setPhotoMarker(lng, lat){
+  console.log(lat, lng);
+  const { currentPhoto } = this.state
+  // if (currentPhoto){
+  // let x = new mapboxgl.Marker().setLngLat([currentPhoto.lng, currentPhoto.lat]);
+  // x.remove();
+  // }
+  this.setState({
+    currentPhoto: {
+      lng,
+      lat,
+    }
+  })
+  new mapboxgl.Marker({ color: 'rgb(0, 0, 0)' })
+    .setLngLat([lng, lat])
+    .addTo(map)
+}
+
 addToTrip(lng, lat, name, map){
   const { tripId, line, waypoints } = this.props;
   let newWaypoint = {lng, lat, name}
@@ -245,10 +265,10 @@ setPois(key){
         <div id="map" className="absolute top right left bottom" />
           <img id="profile" src="/static/user.png" onClick={()=>this.renderDrawer('user')}></img><br/>
           <nav id="listing-group" className="listing-group">
-          <img src="/static/distance.png" onClick={()=> this.renderDrawer('pois', 0.20)}></img><br/>
+          <img src="/static/distance.png" onClick={()=> this.renderDrawer('pois', 0.30)}></img><br/>
           <img src="/static/sports-car.png" onClick={() => this.renderDrawer('itnierary')} zindex={4}></img><br/>
           <img src="/static/spotify.png"></img><br/>
-          <img src="/static/camera.png" onClick={()=>this.renderDrawer('photos')}></img><br/>
+          <img src="/static/camera.png" onClick={()=>this.renderDrawer('photos', 0.40)}></img><br/>
           <img src="/static/left-arrow.png" onClick={()=>this.renderDrawer('start')}></img>
 
           <Dock position="bottom"
@@ -282,7 +302,7 @@ setPois(key){
                 {this.state.currentDrawer === 'pois' ? <PoiView setPois={this.setPois}></PoiView>: null }
                 {this.state.currentDrawer === 'start' ? <Start closeDrawer={this.renderDrawer}/> : null}
                 {this.state.currentDrawer === 'user' ? <User renderDrawer={this.renderDrawer}/> : null}
-                {this.state.currentDrawer === 'photos' ? <Photos/> : null}
+                {this.state.currentDrawer === 'photos' ? <Photos setPhotoMarker={this.setPhotoMarker} /> : null}
 
               </div>
             }

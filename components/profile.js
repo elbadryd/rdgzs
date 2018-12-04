@@ -101,7 +101,7 @@ seeTrip(index){
   }
 openPhotos(id){
   this.props.renderDrawer();
-  this.props.renderDrawer('photos');
+  this.props.renderDrawer('photos', 0.40);
   this.props.setTrip({
     tripId: id,
   })

@@ -6,8 +6,10 @@ const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
 const uuid = require('uuid/v4');
 const dotenv = require('dotenv');
+const SpotifyWebApi = require('spotify-web-api-node');
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const db = require('../models');
+
 
 dotenv.config();
 
@@ -72,18 +74,37 @@ module.exports = (app) => {
       clientID: process.env.SPOTIFY_ID,
       clientSecret: process.env.SPOTIFY_SECRET,
       callbackURL: 'http://localhost:3000/login/callback',
+      passReqToCallback: true,
     },
-    ((accessToken, refreshToken, expires_in, profile, done) => {
+    ((req, accessToken, refreshToken, expires_in, profile, done) => {
       // asynchronous verification, for effect...
-      console.log(accessToken, '!!!!!!!!!!!!!!!!!!!', refreshToken, expires_in, profile, 'SPOTIFY PROFILE');
       process.nextTick(() => {
-        // To keep the example simple, the user's spotify profile is returned to
-        // represent the logged-in user. In a typical application, you would want
-        // to associate the spotify account with a user record in your database,
-        // and return that user instead.
-        return done(null, profile);
+      //   if (req.user) {
+        const user = req.user;
+        user.spotifyId = profile.id;
+        user.accessToken = accessToken;
+        user.refreshToken = refreshToken;
+        user.expires_in = expires_in;
+
+
+        db.sequelize.models.user.update({
+          spotifyId: profile.id,
+          accessToken,
+          refreshToken,
+          expires_in,
+        }, {
+          where: {
+            id: user.id,
+          },
+        });
+        //   // To keep the example simple, the user's spotify profile is returned to
+        //   // represent the logged-in user. In a typical application, you would want
+        //   // to associate the spotify account with a user record in your database,
+        //   // and return that user instead.
+        // }
+
+        return done(null, user);
       });
     }),
   ));
-  
 };

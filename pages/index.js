@@ -2,9 +2,10 @@ import dynamic from 'next/dynamic'
 import { connect } from 'react-redux'
 import Head from 'next/head'
 
+
 const DynamicMap = dynamic(() => import('./../components/map.js'), {
   ssr: false,
-  loading: () => <p>Loading...</p>,
+  loading: () => <p><img src="/static/location+loader.gif"></img></p>,
 });
 
 export default connect(

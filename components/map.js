@@ -15,6 +15,7 @@ const dotenv = require('dotenv').config();
 mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
 
 let map;
+let x;
 
 class DynamicMap extends React.Component {
   constructor(props) {
@@ -151,21 +152,18 @@ redrawLine(map){
 }
 
 setPhotoMarker(lng, lat){
-  console.log(lat, lng);
   const { currentPhoto } = this.state
-  // if (currentPhoto){
-  // let x = new mapboxgl.Marker().setLngLat([currentPhoto.lng, currentPhoto.lat]);
-  // x.remove();
-  // }
+  console.log(lat, lng);
+   if (x) {
+   x.remove();
+}
+    x = new mapboxgl.Marker({ color: 'rgb(0, 0, 0)' }).setLngLat([lng, lat]).addTo(map);
   this.setState({
     currentPhoto: {
       lng,
       lat,
     }
   })
-  new mapboxgl.Marker({ color: 'rgb(0, 0, 0)' })
-    .setLngLat([lng, lat])
-    .addTo(map)
 }
 
 addToTrip(lng, lat, name, map){

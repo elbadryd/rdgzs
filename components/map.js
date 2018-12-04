@@ -202,16 +202,23 @@ addToTrip(lng, lat, name, map){
 } 
 
 renderDrawer(type, size = 0.50){
-  this.setState({ 
-    isVisible: !this.state.isVisible,
-    currentDrawer: type,
-    size
-  })
+    Axios.get('/login')
+    .then(response=>{
+      console.log(response)
+      if (response.data.user === null && type === 'photos'){
+        alert('Please login and create a trip to use photos')
+      }   else {
+    this.setState({ 
+      isVisible: !this.state.isVisible,
+      currentDrawer: type,
+      size
+    })
+  }
+})
 }
 
 setPois(key){
   this.setState({
-    //tggle state property of key
     [key]: !this.state[key]
   })
   let markersObj = {
@@ -274,7 +281,7 @@ setPois(key){
                 {this.state.currentDrawer === 'itnierary' ? <ItineraryView redrawLine={this.redrawLine.bind(this, map)}></ItineraryView> : null}
                 {this.state.currentDrawer === 'pois' ? <PoiView setPois={this.setPois}></PoiView>: null }
                 {this.state.currentDrawer === 'start' ? <Start closeDrawer={this.renderDrawer}/> : null}
-                {this.state.currentDrawer === 'user' ? <User/> : null}
+                {this.state.currentDrawer === 'user' ? <User renderDrawer={this.renderDrawer}/> : null}
                 {this.state.currentDrawer === 'photos' ? <Photos/> : null}
 
               </div>

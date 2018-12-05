@@ -1,6 +1,5 @@
 import { connect } from "react-redux";
 import axios from 'axios';
-import wdk from 'wikidata-sdk';
 const turf = require('@turf/helpers');
 const along = require('@turf/along');
 const distance = require('@turf/distance');
@@ -27,7 +26,7 @@ class Spotify extends React.Component {
       console.log(response);
       let top = [];
       response.forEach((result, i)=>{
-        let highest = result.data.records.slice(0, 3);
+        let highest = result.data.records.slice(0, 1);
         console.log(highest);
         highest.forEach(record=>{
           if (!top[i]){
@@ -42,12 +41,13 @@ class Spotify extends React.Component {
       let filtered = top.map(subarray =>
         subarray.filter(item => !known.hasOwnProperty(item) && (known[item] = true))
       )
-      console.log(filtered);
+      this.getEntities(filtered);
     })
     .catch(err=>{
       console.log(err)
     })
   }
+
   getQueryPoints(){
     const { line, origin, destination } = this.props
     var polyline = turf.lineString(line);
@@ -65,12 +65,29 @@ class Spotify extends React.Component {
     console.log(coords);
     this.getCities(coords);
   }
-  getEntities(){
-    let city = "Monroe, Louisiana"
-    let sparql = `SELECT DISTINCT ?item WHERE { ?item (wdt: P31/wdt:P279*) wd:Q515. ?item ?label "Lafayette, Louisiana"@en.}`
-    axios.get(`https://query.wikidata.org/sparql?query=${sparql}&format=JSON`)
-    .then(response=>{
-      console.log(response);
+
+  getEntities(results){
+    let queries = results.map(cities=>{
+      if (cities.length){
+      return axios.all(cities.map(city=>{
+        return axios.get(`https://query.wikidata.org/sparql?query=SELECT DISTINCT ?item WHERE { ?item (wdt:P31/wdt:P279*) wd:Q515. ?item ?label "${city}"@en.}&format=JSON`)
+      }));
+      }
+    })
+    console.log(queries)
+    axios.all(queries)
+    .then(responses=>{
+      console.log(responses);
+      let ids = responses.map(response=>{
+        if (response){
+        return response.map(obj=>{
+          if(obj.data.results.bindings){
+            return obj.data.results.bindings[0].item.value.slice(31);
+          }
+        })
+        }
+      });
+      console.log(ids);
     })
     .catch(err=>{
       console.log(err);

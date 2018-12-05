@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('../models');
+const spotify = require('../../lib/spotifyWebApi');
 
 const trip = express.Router();
 
@@ -56,6 +57,43 @@ trip.delete('/', (req, res) => {
     .catch((err) => {
       console.log(err);
       res.send(500);
+    });
+});
+
+// Test uris
+  // const uris = ["spotify:track:1jRzdY7oUBOhrylNtiMtBD",
+  //  "spotify:track:0dbTQYW3Ad1FTzIA9t90E8",
+  //  "spotify:track:5htB2gxndGHrLb09x1Q3Vp",
+  //  "spotify:track:5QwU7QaUPx0jUNwnd6h9Nb",
+  //  "spotify:track:4nefFqiukTvjgt8hkv73PP",
+  //  "spotify:track:0e42i89bY2NmPuVDtey8pg",
+  //  "spotify:track:3wScL5W8H40zzCKN0atfBk",
+  //  "spotify:track:66mbI5v6PcCH3VKGJqdFfr",
+  //  "spotify:track:0yWJGIMwBgrGdpQ4sG6zaj",
+  //  "spotify:track:7hCKt8Z6GLk4yWVrvnzytP",
+  //  "spotify:track:6uWliNGZEZKGMPwSwccdjG",
+  //  "spotify:track:5BQrp63SHCVf4bzCzJePne",
+  //  "spotify:track:0u4Eadez2FojayRgAQfMhT",
+  //  "spotify:track:3OVqNSAxYNHgmhFLzOZpK2",
+  //  "spotify:track:2OxZdTC2HdbAz9Gu956wzo",
+  //  "spotify:track:0Sizq91V0brNa9RBpMfeOB"];
+
+trip.get('/pl', (req, res) => {
+  // accessToken needed to use spotifyWebApi
+  spotify.spotifyApi.setAccessToken(req.user.accessToken);
+  // create playlist
+    // name param needs to be dynamic and take the current trip name
+  spotify.spotifyApi.createPlaylist(req.user.spotifyId, 'i hope this works', { public: true })
+    .then((data) => {
+      console.log('Created playlist!');
+      return spotify.spotifyApi.addTracksToPlaylist(data.body.id, uris);
+    })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      console.log('Something went wrong!', err);
+      res.send(err);
     });
 });
 

@@ -16,18 +16,14 @@ class Spotify extends React.Component {
   
   
   getCities(coords){
-    console.log(coords);
     let citySearch = coords.map(coord=>{
       return axios.get(`https://data.opendatasoft.com/api/records/1.0/search/?dataset=1000-largest-us-cities-by-population-with-geographic-coordinates%40public&sort=-rank&facet=city&facet=state&geofilter.distance=${coord.geometry.coordinates[1]}%2C${coord.geometry.coordinates[0]}%2C200000`)
     })
-    console.log(citySearch)
     axios.all(citySearch)
     .then(response=>{
-      console.log(response);
       let top = [];
       response.forEach((result, i)=>{
         let highest = result.data.records.slice(0, 1);
-        console.log(highest);
         highest.forEach(record=>{
           if (!top[i]){
             top[i] = [`${record.fields.city}, ${record.fields.state}`];
@@ -36,7 +32,6 @@ class Spotify extends React.Component {
           }
         })
       })
-      console.log(top);
       let known = {}
       let filtered = top.map(subarray =>
         subarray.filter(item => !known.hasOwnProperty(item) && (known[item] = true))
@@ -52,8 +47,6 @@ class Spotify extends React.Component {
     const { line, origin, destination } = this.props
     var polyline = turf.lineString(line);
     let dist = distance.default([origin.lng, origin.lat], [destination.lng, destination.lat]);
-    console.log(dist);
-    console.log(polyline);
     let points = line.map((coords, i) => {
       if (dist > (i * 150) + 1){
         return along.default(polyline, i * 150)
@@ -62,7 +55,6 @@ class Spotify extends React.Component {
     let coords = points.filter(coord =>{
       return coord !== undefined;
     })
-    console.log(coords);
     this.getCities(coords);
   }
 
@@ -74,10 +66,8 @@ class Spotify extends React.Component {
       }));
       }
     })
-    console.log(queries)
     axios.all(queries)
     .then(responses=>{
-      console.log(responses);
       let ids = responses.map(response=>{
         if (response){
         return response.map(obj=>{

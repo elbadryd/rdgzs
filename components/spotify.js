@@ -27,23 +27,19 @@ class Spotify extends React.Component {
       response.forEach((result, i)=>{
         let highest = result.data.records.slice(2);
         highest.forEach(record=>{
-          if (top[i]){
-            top[i].push(`${record.fields.city}, ${record.fields.state}`);
-          } else {
+          if (!top[i]){
             top[i] = [`${record.fields.city}, ${record.fields.state}`];
+          } else {
+            top[i].push(`${record.fields.city}, ${record.fields.state}`);
           }
         })
       })
       console.log(top);
-      let filtered = top.forEach((query)=>{
-        query.forEach((city, i)=>{
-          if (query.indexOf(city) !== -1){
-            query.splice(i, 1);
-          }
-        })
-      })
+      let known = {}
+      let filtered = top.map(subarray =>
+        subarray.filter(item => !known.hasOwnProperty(item) && (known[item] = true))
+      )
       console.log(filtered);
-      
     })
     .catch(err=>{
       console.log(err)

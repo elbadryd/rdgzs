@@ -1,6 +1,7 @@
 import Profile from './profile.js';
 import Login from './login.js';
 import axios from 'axios';
+import { timingSafeEqual } from 'crypto';
 
 class User extends React.Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class User extends React.Component {
 
   render(){
     return (
-      this.state.loggedIn ? <Profile></Profile> : <Login setLogin={this.setLogin}></Login>
+      this.state.loggedIn ? <Profile renderDrawer={this.props.renderDrawer}></Profile> : <Login setLogin={this.setLogin}></Login>
     )
   }
 

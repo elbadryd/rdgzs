@@ -15,6 +15,7 @@ const dotenv = require('dotenv').config();
 mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
 
 let map;
+let x;
 
 class DynamicMap extends React.Component {
   constructor(props) {
@@ -34,6 +35,7 @@ class DynamicMap extends React.Component {
       hotels: false,
       muesums: false,
       markers: null,
+      currentPhoto: null,
     };
     this.addToTrip = this.addToTrip.bind(this);
     this.redrawLine = this.redrawLine.bind(this);
@@ -41,6 +43,8 @@ class DynamicMap extends React.Component {
     this.setPois = this.setPois.bind(this);
     this.getWebsite = this.getWebsite.bind(this);
     this.spotifyLogin = this.spotifyLogin.bind(this);
+    this.setPhotoMarker = this.setPhotoMarker.bind(this);
+    this.populateMap = this.populateMap.bind(this);
   }
 
 componentDidMount(){
@@ -149,6 +153,21 @@ redrawLine(map){
     })
 }
 
+setPhotoMarker(lng, lat){
+  const { currentPhoto } = this.state
+  console.log(lat, lng);
+   if (x) {
+   x.remove();
+}
+    x = new mapboxgl.Marker({ color: 'rgb(0, 0, 0)' }).setLngLat([lng, lat]).addTo(map);
+  this.setState({
+    currentPhoto: {
+      lng,
+      lat,
+    }
+  })
+}
+
 addToTrip(lng, lat, name, map){
   const { tripId, line, waypoints } = this.props;
   let newWaypoint = {lng, lat, name}
@@ -203,16 +222,26 @@ addToTrip(lng, lat, name, map){
 } 
 
 renderDrawer(type, size = 0.50){
-  this.setState({ 
-    isVisible: !this.state.isVisible,
-    currentDrawer: type,
-    size
-  })
+    if (type === 'photos' && x){
+      x.remove()
+    }
+    Axios.get('/login')
+    .then(response=>{
+      console.log(response)
+      if (response.data.user === null && type === 'photos'){
+        alert('Please login and create a trip to use photos')
+      }   else {
+    this.setState({ 
+      isVisible: !this.state.isVisible,
+      currentDrawer: type,
+      size
+    })
+  }
+})
 }
 
 setPois(key){
   this.setState({
-    //tggle state property of key
     [key]: !this.state[key]
   })
   let markersObj = {
@@ -250,10 +279,10 @@ spotifyLogin() {
         <div id="map" className="absolute top right left bottom" />
           <img id="profile" src="/static/user.png" onClick={()=>this.renderDrawer('user')}></img><br/>
           <nav id="listing-group" className="listing-group">
-          <img src="/static/distance.png" onClick={()=> this.renderDrawer('pois', 0.20)}></img><br/>
+          <img src="/static/distance.png" onClick={()=> this.renderDrawer('pois', 0.30)}></img><br/>
           <img src="/static/sports-car.png" onClick={() => this.renderDrawer('itnierary')} zindex={4}></img><br/>
           <img src="/static/spotify.png" onClick={this.spotifyLogin}></img><br/>
-          <img src="/static/camera.png" onClick={()=>this.renderDrawer('photos')}></img><br/>
+          <img src="/static/camera.png" onClick={()=>this.renderDrawer('photos', 0.40)}></img><br/>
           <img src="/static/left-arrow.png" onClick={()=>this.renderDrawer('start')}></img>
 
           <Dock position="bottom"
@@ -286,8 +315,8 @@ spotifyLogin() {
                 {this.state.currentDrawer === 'itnierary' ? <ItineraryView redrawLine={this.redrawLine.bind(this, map)}></ItineraryView> : null}
                 {this.state.currentDrawer === 'pois' ? <PoiView setPois={this.setPois}></PoiView>: null }
                 {this.state.currentDrawer === 'start' ? <Start closeDrawer={this.renderDrawer}/> : null}
-                {this.state.currentDrawer === 'user' ? <User/> : null}
-                {this.state.currentDrawer === 'photos' ? <Photos/> : null}
+                {this.state.currentDrawer === 'user' ? <User renderDrawer={this.renderDrawer}/> : null}
+                {this.state.currentDrawer === 'photos' ? <Photos setPhotoMarker={this.setPhotoMarker} /> : null}
 
               </div>
             }

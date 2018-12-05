@@ -29,7 +29,9 @@ login.get('/spotify', passport.authorize('spotify', {
 (req, res) => {
   // console.log('/spotify hit');
   // console.log(req.user);
-  res.end();
+  res.send({
+    spotifyAuth: true,
+  });
 });
 
 login.get('/callback', passport.authorize('spotify', {

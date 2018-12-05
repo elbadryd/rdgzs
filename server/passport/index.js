@@ -101,7 +101,7 @@ module.exports = (app) => {
         //   // to associate the spotify account with a user record in your database,
         //   // and return that user instead.
         // }
-
+        console.log(user);
         return done(null, user);
       });
     }),

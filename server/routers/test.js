@@ -1,46 +1,65 @@
-/* eslint-disable no-restricted-syntax */
-// SELECT DISTINCT ?place ?placeLabel ?location WHERE {
+/* eslint-disable no-plusplus */
+/* eslint-disable no-loop-func */
+const axios = require('axios');
+const express = require('express');
+const helpers = require('../helpers.js');
 
-//   // Use the around service
-//   SERVICE wikibase:around {
-//     // Looking for items with coordinate locations(P625)
-//     ?place wdt:P625 ?location .
+const test = express.Router();
+const token = 'BQDY6O5qsmVk3F6tEmn7izZF1wJGY6W0o2w0GX1G6WT1xbtZYvjOEXSMzKHjPOrMVUTuPPn7lhpcAt2EHl4';
 
-//   // That are in a circle with a centre of with a point
-//     bd:serviceParam wikibase:center "Point(4.8,44.32)"^^geo:wktLiteral   .
-//   // Where the circle has a radius of 20km
-//     serviceParam wikibase:radius "20" .
-//     bd:serviceParam wikibase:distance ?distance .
-//   } .
-
-//   ?place wdt:P31/wdt:P279* ?city .
-
-//   // Use the label service to get the English label
-//   SERVICE wikibase:label {
-//   bd:serviceParam wikibase:language "en" .
-//   }
-// }
-// ORDER BY ?distance
-
-
-const endpointUrl = 'https://query.wikidata.org/sparql';
-const sparqlQuery = `SELECT ?musicianLabel
-WHERE {
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-  ?musician wdt:P106 wd:Q639669.
-  ?musician wdt:P19 wd:Q34404.
-}
-LIMIT 1007`;
-
-const fullUrl = `${endpointUrl}?query=${encodeURIComponent(sparqlQuery)}`;
-const headers = { Accept: 'application/sparql-results+json' };
-
-fetch(fullUrl, { headers }).then(body => body.json()).then((json) => {
-  const { head: { vars }, results } = json;
-  for (const result of results.bindings) {
-    for (const variable of vars) {
-      console.log('%s: %o', variable, result[variable]);
-    }
-    console.log('---');
-  }
+test.get('/', (req, res) => {
+  
 });
+
+
+// ACCEPTS A GET REQUEST FOR A CITY AND RETURNS WIKI Q-ID
+//   const city = req.query.city;
+//   axios.get(encodeURI(`https://query.wikidata.org/sparql?query=SELECT DISTINCT ?item WHERE { ?item (wdt:P31/wdt:P279*) wd:Q515. ?item ?label "${city}"@en.}&format=JSON`))
+//     .then((response) => {
+//       console.log(response.data.results.bindings[0].item.value.slice(31));
+//       res.send(response.data.results.bindings[0].item.value.slice(31));
+//     })
+//     .catch(err => console.log(err));
+
+
+//  ACCEPTS AN ARRAY CALLED ids (array of arrays of spotify ids)
+//   // array of promises, getTopTracks
+//   const promises = ids.map(id => helpers.getTopTracks(id, token));
+//   Promise.all(promises)
+//     .then((allTracks) => {
+//       // array of objects, each object a top tracklist
+//       return allTracks.map((list) => {
+//         // array of top tracks for a single id
+//         return list.data.tracks.map((track) => {
+//           // formatting obj for a single track
+//           return {
+//             uri: track.uri,
+//             // duration: track.duration_ms,
+//           };
+//         });
+//       });
+//     })
+//     .then((tracks) => {
+//       const playlistHour = [];
+//       let playLength = 0;
+//       let trackNum = 0;
+//       while (trackNum < 10 && playLength < 3600000) {
+//         tracks.map((tracklist) => {
+//         // if there is a track
+//           if (tracklist[trackNum]) {
+//           // if playlist is less than an hour
+//             if (playLength < 3600000) {
+//               playlistHour.push(tracklist[trackNum]);
+//             }
+//             playLength += tracklist[trackNum].duration;
+//           }
+//         });
+//         trackNum++;
+//       }
+//       res.send(playlistHour);
+//     })
+//     .catch(err => console.log(err));
+//
+
+
+module.exports.test = test;

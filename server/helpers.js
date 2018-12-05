@@ -108,25 +108,25 @@ const redrawRoute = (waypoints, callback) => {
   });
 };
 
-const getTopTracks = (id, callback) => {
-  axios.get(`https://api.spotify.com/v1/artists/${id}/top-tracks?market=us`, {
+const getTopTracks = (id, token) => {
+  return axios.get(`https://api.spotify.com/v1/artists/${id}/top-tracks?market=us`, {
     headers: {
       client_id: process.env.SPOTIFY_ID,
-      Authorization: 'Bearer BQB9ppiAjAQS5Z2U84fGm-800xVbh_ibo5B5FuwfME-Ohsahsr3kWVffS7EqipfxeVhO-ltfmzt00W0sZno',
+      Authorization: `Bearer ${token}`,
     },
-  }).then((response) => {
-    callback(null, response);
-  }).catch(err => callback(err, null));
+  });
+  // .then((response) => {
+  //   callback(null, response);
+  // }).catch(err => callback(err, null));
 };
 
-const artistId = (name, callback) => {
-  axios.get(`https://api.spotify.com/v1/search?q=${name}&type=artist`, {
+const artistId = (name, token, callback) => {
+  return axios.get(`https://api.spotify.com/v1/search?q=${name}&type=artist`, {
     headers: {
       client_id: process.env.SPOTIFY_ID,
-      Authorization: 'Bearer BQDZF147HyGz_Sn7A6kb8Z1nMzwXgqxBAIxoOEwgLz74otbXNTmO8OZFReziGdLOR4LH-I_79w92vVGEb9c',
+      Authorization: `Bearer ${token}`,
     },
-  }).then(response => callback(null, response))
-    .catch(err => callback(err, null));
+  });
 };
 
 module.exports.makeTrip = makeTrip;

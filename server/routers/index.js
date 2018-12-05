@@ -8,6 +8,7 @@ const { logoutRouter } = require('./logout');
 const { photoRouter } = require('./photo');
 const { getTracksRouter } = require('./getTracks');
 const { artistIdRouter } = require('./artistId');
+const { test } = require('./test');
 
 module.exports = (app) => {
   app.use('/login', loginRouter);
@@ -20,4 +21,5 @@ module.exports = (app) => {
   app.use('/photo', photoRouter);
   app.use('/getTracks', getTracksRouter);
   app.use('/artistId', artistIdRouter);
+  app.use('/test', test);
 };

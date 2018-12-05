@@ -3,6 +3,7 @@ const db = require('../models');
 
 const trip = express.Router();
 
+
 trip.post('/', (req, res) => {
   console.log(req.body, 'trip post');
   const start = `${req.body.originCoords.lng},${req.body.originCoords.lat}`;

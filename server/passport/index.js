@@ -5,13 +5,18 @@ const LocalStrategy = require('passport-local').Strategy;
 // require session
 const session = require('express-session');
 const uuid = require('uuid/v4');
+const dotenv = require('dotenv');
+const SpotifyWebApi = require('spotify-web-api-node');
+const SpotifyStrategy = require('passport-spotify').Strategy;
 const db = require('../models');
+
+
+dotenv.config();
+
 
 module.exports = (app) => {
   app.use(session({
-    genid: (req) => {
-      return uuid();
-    },
+    genid: req => uuid(),
     secret: process.env.SS,
     resave: false,
     saveUninitialized: true,
@@ -45,7 +50,7 @@ module.exports = (app) => {
           if (!user) {
             done(new Error('wrong creds, try again'));
           }
-          
+
           const hashed = bcrypt.hashSync(password, user.salt);
           if (user.password === hashed) {
             return done(null, user);
@@ -62,5 +67,44 @@ module.exports = (app) => {
           });
         });
     },
+  ));
+
+  passport.use(new SpotifyStrategy(
+    {
+      clientID: process.env.SPOTIFY_ID,
+      clientSecret: process.env.SPOTIFY_SECRET,
+      callbackURL: 'http://localhost:3000/login/callback',
+      passReqToCallback: true,
+    },
+    ((req, accessToken, refreshToken, expires_in, profile, done) => {
+      // asynchronous verification, for effect...
+      process.nextTick(() => {
+      //   if (req.user) {
+        const user = req.user;
+        user.spotifyId = profile.id;
+        user.accessToken = accessToken;
+        user.refreshToken = refreshToken;
+        user.expires_in = expires_in;
+
+
+        db.sequelize.models.user.update({
+          spotifyId: profile.id,
+          accessToken,
+          refreshToken,
+          expires_in,
+        }, {
+          where: {
+            id: user.id,
+          },
+        });
+        //   // To keep the example simple, the user's spotify profile is returned to
+        //   // represent the logged-in user. In a typical application, you would want
+        //   // to associate the spotify account with a user record in your database,
+        //   // and return that user instead.
+        // }
+
+        return done(null, user);
+      });
+    }),
   ));
 };

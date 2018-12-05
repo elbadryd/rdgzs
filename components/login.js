@@ -103,7 +103,6 @@ class Login extends React.Component {
           <button type="button" className="btn btn-success btn-block" onClick={this.submitLogin}>Login</button>
           <button type="button" className="btn btn-success btn-block" onClick={this.signUp}>SignUp</button>
       </div>
-
     )
   }
 }

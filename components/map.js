@@ -228,7 +228,6 @@ renderDrawer(type, size = 0.50){
     }
     Axios.get('/login')
     .then(response=>{
-      console.log(response)
       if (response.data.user === null && type === 'photos'){
         alert('Please login and create a trip to use photos')
       }   else {
@@ -264,15 +263,22 @@ setPois(key){
 }
 
 spotifyLogin() {
-  // Axios.get('/login/spotify')
-  // .then(res => {
-  //   console.log(res);
-  // })
-  // .catch(err => {
-  //   console.error(err);
-  // })
-  window.location.pathname = '/login/spotify';
-}
+  let popup = () => {
+    return window.open('/login/spotify', 'login-spotify', 'width=300,height=400');
+  }
+  Axios.get('/login')
+  .then(response=>{
+    console.log(response.data);
+    if (response.data.user === null){
+      this.renderDrawer('user')
+    }  else if (response.data.accessToken){
+        this.renderDrawer('spotify')
+      } else {
+        popup();
+      }
+    })
+  }
+
 
   render() {
     return (
@@ -282,8 +288,8 @@ spotifyLogin() {
           <nav id="listing-group" className="listing-group">
           <img src="/static/distance.png" onClick={()=> this.renderDrawer('pois', 0.30)}></img><br/>
           <img src="/static/sports-car.png" onClick={() => this.renderDrawer('itnierary')} zindex={4}></img><br/>
-          <img src="/static/spotify.png" onClick = {()=>{this.renderDrawer('spotify', 0.30)}}></img><br/>
-          {/* <img src="/static/spotify.png" onClick={this.spotifyLogin}></img><br/> */}
+          {/* <img src="/static/spotify.png" onClick = {()=>{this.renderDrawer('spotify', 0.30)}}></img><br/> */}
+          <img src="/static/spotify.png" onClick={this.spotifyLogin}></img><br/>
           <img src="/static/camera.png" onClick={()=>this.renderDrawer('photos', 0.40)}></img><br/>
           <img src="/static/left-arrow.png" onClick={()=>this.renderDrawer('start')}></img>
 

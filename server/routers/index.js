@@ -6,8 +6,7 @@ const { stopRouter } = require('./stop');
 const { tripRouter } = require('./trip');
 const { logoutRouter } = require('./logout');
 const { photoRouter } = require('./photo');
-const { getTracksRouter } = require('./getTracks');
-const { artistIdRouter } = require('./artistId');
+const { soundtrackRouter } = require('./soundtrack');
 const { test } = require('./test');
 
 module.exports = (app) => {
@@ -19,7 +18,6 @@ module.exports = (app) => {
   app.use('/stop', stopRouter);
   app.use('/trip', tripRouter);
   app.use('/photo', photoRouter);
-  app.use('/getTracks', getTracksRouter);
-  app.use('/artistId', artistIdRouter);
+  app.use('/soundtrack', soundtrackRouter);
   app.use('/test', test);
 };

@@ -120,7 +120,7 @@ const getTopTracks = (id, token) => {
   // }).catch(err => callback(err, null));
 };
 
-const artistId = (name, token, callback) => {
+const artistId = (name, token) => {
   return axios.get(`https://api.spotify.com/v1/search?q=${name}&type=artist`, {
     headers: {
       client_id: process.env.SPOTIFY_ID,

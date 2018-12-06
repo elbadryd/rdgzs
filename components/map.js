@@ -270,7 +270,7 @@ spotifyLogin() {
   // .catch(err => {
   //   console.error(err);
   // })
-  window.location.pathname = '/login/spotify';
+  let popup = window.open('/login/spotify');
 }
 
   render() {

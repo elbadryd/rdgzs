@@ -1,4 +1,5 @@
 import { connect } from "react-redux";
+import Axios from "axios";
 const turf = require('@turf/helpers');
 const along = require('@turf/along');
 
@@ -7,13 +8,50 @@ class Spotify extends React.Component {
     super(props);
       this.state={
       }
-  
+    }
+
+  // accept a line, returns array of points ()
+  getQueryPoints(){
+
+  }
+  // accepts array of points, returns array of arrays of city names
   getCities(){
   }
-  getQueryPoints(){
+  // accepts array of arrays of city names, returns array of arrays of artist names
+  getArtistNames(citiesArray) {
+
   }
-  
+  // accepts array of arrays of artist names, returns array of arrays of artist IDs
+  // with each array containing a single string of ids separated by commas
+  getArtistIds(namesArray){
+    return Axios.all(namesArray.map((names) => {
+      return Axios.all(names.map((name) => Axios.get(`/soundtrack/artistId/?name=${name}`)));
+    }));
   }
+  // accepts array of arrays of IDs, returns array of arrays of playlists
+  getPlaylists(idsArray){
+    let idStringArr = idsArray.map((ids) => {
+      let string = '' 
+      ids.map()
+    })
+    idsArray.map(ids => Axios.get(`/soundtrack/allTracks?ids=${ids}`))
+  }
+
+// ACCEPTS A GET REQUEST FOR A CITY AND RETURNS WIKI Q-ID
+//   const city = req.query.city;
+//   axios.get(encodeURI(`https://query.wikidata.org/sparql?query=SELECT DISTINCT ?item WHERE { ?item (wdt:P31/wdt:P279*) wd:Q515. ?item ?label "${city}"@en.}&format=JSON`))
+//     .then((response) => {
+//       console.log(response.data.results.bindings[0].item.value.slice(31));
+//       res.send(response.data.results.bindings[0].item.value.slice(31));
+//     })
+//     .catch(err => console.log(err));
+
+
+
+
+
+
+
 
 
 //   // 60 min = 3600000 ms

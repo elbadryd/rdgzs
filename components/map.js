@@ -9,6 +9,7 @@ import Start from './start.js'
 import PoiView from './pois.js'
 import User from './user.js'
 import Photos from './photos.js'
+import Spotify from './spotify.js'
 import mapCSS from '../styles/map.css'
 
 const dotenv = require('dotenv').config();
@@ -227,7 +228,6 @@ renderDrawer(type, size = 0.50){
     }
     Axios.get('/login')
     .then(response=>{
-      console.log(response)
       if (response.data.user === null && type === 'photos'){
         alert('Please login and create a trip to use photos')
       }   else {
@@ -263,15 +263,19 @@ setPois(key){
 }
 
 spotifyLogin() {
-  // Axios.get('/login/spotify')
-  // .then(res => {
-  //   console.log(res);
-  // })
-  // .catch(err => {
-  //   console.error(err);
-  // })
-  window.location.pathname = '/login/spotify';
-}
+  Axios.get('/login')
+  .then(response=>{
+    console.log(response.data);
+    if (response.data.user === null){
+      this.renderDrawer('user')
+    }  else if (!response.data.user.accessToken){
+        window.location.pathname = '/login/spotify'
+      } else {
+        this.renderDrawer('spotify');
+      }
+    })
+  }
+
 
   render() {
     return (
@@ -281,6 +285,7 @@ spotifyLogin() {
           <nav id="listing-group" className="listing-group">
           <img src="/static/distance.png" onClick={()=> this.renderDrawer('pois', 0.30)}></img><br/>
           <img src="/static/sports-car.png" onClick={() => this.renderDrawer('itnierary')} zindex={4}></img><br/>
+          {/* <img src="/static/spotify.png" onClick = {()=>{this.renderDrawer('spotify', 0.30)}}></img><br/> */}
           <img src="/static/spotify.png" onClick={this.spotifyLogin}></img><br/>
           <img src="/static/camera.png" onClick={()=>this.renderDrawer('photos', 0.40)}></img><br/>
           <img src="/static/left-arrow.png" onClick={()=>this.renderDrawer('start')}></img>
@@ -317,6 +322,8 @@ spotifyLogin() {
                 {this.state.currentDrawer === 'start' ? <Start closeDrawer={this.renderDrawer}/> : null}
                 {this.state.currentDrawer === 'user' ? <User renderDrawer={this.renderDrawer}/> : null}
                 {this.state.currentDrawer === 'photos' ? <Photos setPhotoMarker={this.setPhotoMarker} /> : null}
+                {this.state.currentDrawer === 'spotify' ? <Spotify /> : null}
+
 
               </div>
             }
@@ -335,3 +342,5 @@ export default connect(
     setLine: setLineAction(dispatch)
   })
 )(DynamicMap)
+
+

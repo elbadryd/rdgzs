@@ -263,18 +263,15 @@ setPois(key){
 }
 
 spotifyLogin() {
-  let popup = () => {
-    return window.open('/login/spotify', 'login-spotify', 'width=300,height=400');
-  }
   Axios.get('/login')
   .then(response=>{
     console.log(response.data);
     if (response.data.user === null){
       this.renderDrawer('user')
-    }  else if (response.data.accessToken){
-        this.renderDrawer('spotify')
+    }  else if (!response.data.user.accessToken){
+        window.location.pathname = '/login/spotify'
       } else {
-        popup();
+        this.renderDrawer('spotify');
       }
     })
   }

@@ -44,6 +44,7 @@ class Spotify extends React.Component {
   }
 
   getQueryPoints(){
+    //shoud only fire if these props exist
     const { line, origin, destination } = this.props
     var polyline = turf.lineString(line);
     let dist = distance.default([origin.lng, origin.lat], [destination.lng, destination.lat]);
@@ -86,8 +87,8 @@ class Spotify extends React.Component {
   render(){
     return(
       <div>
-      <div><img onClick={this.getQueryPoints} src="/static/spotify.png"></img></div>
-      <div onClick={this.getEntities}>getentities</div>
+      {/* <div><img onClick={this.getQueryPoints} src="/static/spotify.png"></img></div> */}
+      {/* <div onClick={this.getEntities}>getentities</div> */}
       </div>
     )
   }

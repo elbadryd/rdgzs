@@ -1,9 +1,5 @@
 import { connect } from "react-redux";
-<<<<<<< HEAD
-import Axios from "axios";
-=======
 import axios from 'axios';
->>>>>>> 3754d38611e10a8b50760466b6b2b94372928c93
 const turf = require('@turf/helpers');
 const along = require('@turf/along');
 const distance = require('@turf/distance');
@@ -13,39 +9,29 @@ class Spotify extends React.Component {
     super(props);
       this.state={
       }
-    }
-
-  // accept a line, returns array of points ()
-  getQueryPoints(){
-
-  }
-  // accepts array of points, returns array of arrays of city names
-  getCities(){
-  }
-  // accepts array of arrays of city names, returns array of arrays of artist names
-  getArtistNames(citiesArray) {
-
-  }
-  // accepts array of arrays of artist names, returns array of arrays of artist IDs
-  // with each array containing a single string of ids separated by commas
-  getArtistIds(namesArray){
-    return Axios.all(namesArray.map((names) => {
-      return Axios.all(names.map((name) => Axios.get(`/soundtrack/artistId/?name=${name}`)));
-    }));
-  }
-  // accepts array of arrays of IDs, returns array of arrays of playlists
-  getPlaylists(idsArray){
-    let idStringArr = idsArray.map((ids) => {
-      let string = '' 
-      ids.map()
-    })
-    idsArray.map(ids => Axios.get(`/soundtrack/allTracks?ids=${ids}`))
       this.getCities = this.getCities.bind(this);
       this.getQueryPoints = this.getQueryPoints.bind(this);
       this.getEntities = this.getEntities.bind(this);
-    }   
-  
-  
+    }
+
+  // makes an array of coords and calls getCities
+  getQueryPoints(){
+    //shoud only fire if these props exist
+    const { line, origin, destination } = this.props
+    var polyline = turf.lineString(line);
+    let dist = distance.default([origin.lng, origin.lat], [destination.lng, destination.lat]);
+    let points = line.map((coords, i) => {
+      if (dist > (i * 150) + 1){
+        return along.default(polyline, i * 150)
+      }
+    })
+    let coords = points.filter(coord =>{
+      return coord !== undefined;
+    })
+    this.getCities(coords);
+  }
+
+  // accepts array of coords, makes an array of arrays of city names, calls getEntities
   getCities(coords){
     let citySearch = coords.map(coord=>{
       return axios.get(`https://data.opendatasoft.com/api/records/1.0/search/?dataset=1000-largest-us-cities-by-population-with-geographic-coordinates%40public&sort=-rank&facet=city&facet=state&geofilter.distance=${coord.geometry.coordinates[1]}%2C${coord.geometry.coordinates[0]}%2C200000`)
@@ -74,22 +60,7 @@ class Spotify extends React.Component {
     })
   }
 
-  getQueryPoints(){
-    //shoud only fire if these props exist
-    const { line, origin, destination } = this.props
-    var polyline = turf.lineString(line);
-    let dist = distance.default([origin.lng, origin.lat], [destination.lng, destination.lat]);
-    let points = line.map((coords, i) => {
-      if (dist > (i * 150) + 1){
-        return along.default(polyline, i * 150)
-      }
-    })
-    let coords = points.filter(coord =>{
-      return coord !== undefined;
-    })
-    this.getCities(coords);
-  }
-
+  // accepts array of city name arrays, makes city wikidata ids, calls getArtistNames
   getEntities(results){
     let queries = results.map(cities=>{
       if (cities.length){
@@ -116,6 +87,39 @@ class Spotify extends React.Component {
     })
   }
 
+  // accepts array of city id arrays, makes array of artist name arrays, calls getArtistIds
+  getArtistNames(citiesArray) {
+
+  }
+  // accepts array artist name arrays, makes an array of artist ID arrays
+  // with each array containing a single string of ids separated by commas
+  // calls getPlaylists
+  getArtistIds(namesArray){
+    return axios.all(namesArray.map((names) => {
+      return axios.all(names.map((name) => Axios.get(`/soundtrack/artistId/?name=${name}`)));
+    }));
+  }
+  // accepts array of ID arrays, returns array of arrays of playlists
+  getPlaylists(idsArray){
+    let idStringArr = idsArray.map((ids) => {
+      let string = '' 
+      ids.map()
+    })
+    idsArray.map(ids => axios.get(`/soundtrack/allTracks?ids=${ids}`))
+  
+  }  
+  // accepts an array of playlist arrays, creates a playlist
+  createPlaylist(playlistArrays){
+
+  }
+  
+  
+  
+
+ 
+
+ 
+
 // ACCEPTS A GET REQUEST FOR A CITY AND RETURNS WIKI Q-ID
 //   const city = req.query.city;
 //   axios.get(encodeURI(`https://query.wikidata.org/sparql?query=SELECT DISTINCT ?item WHERE { ?item (wdt:P31/wdt:P279*) wd:Q515. ?item ?label "${city}"@en.}&format=JSON`))
@@ -124,13 +128,6 @@ class Spotify extends React.Component {
 //       res.send(response.data.results.bindings[0].item.value.slice(31));
 //     })
 //     .catch(err => console.log(err));
-
-
-
-
-
-
-
 
 
 //   // 60 min = 3600000 ms

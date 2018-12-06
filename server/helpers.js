@@ -115,9 +115,6 @@ const getTopTracks = (id, token) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  // .then((response) => {
-  //   callback(null, response);
-  // }).catch(err => callback(err, null));
 };
 
 const artistId = (name, token) => {

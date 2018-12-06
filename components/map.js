@@ -263,17 +263,6 @@ setPois(key){
 }
 
 spotifyLogin() {
-<<<<<<< HEAD
-  // Axios.get('/login/spotify')
-  // .then(res => {
-  //   console.log(res);
-  // })
-  // .catch(err => {
-  //   console.error(err);
-  // })
-  let popup = window.open('/login/spotify');
-}
-=======
   Axios.get('/login')
   .then(response=>{
     console.log(response.data);
@@ -287,7 +276,6 @@ spotifyLogin() {
     })
   }
 
->>>>>>> 3754d38611e10a8b50760466b6b2b94372928c93
 
   render() {
     return (

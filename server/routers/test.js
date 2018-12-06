@@ -69,44 +69,6 @@ test.get('/', (req, res) => {
 //     .catch(err => console.log(err));
 
 
-//  ACCEPTS AN ARRAY CALLED ids (array of arrays of spotify ids) returns a playlist
-//   // array of promises, getTopTracks
-//   const promises = ids.map(id => helpers.getTopTracks(id, token));
-//   Promise.all(promises)
-//     .then((allTracks) => {
-//       // array of objects, each object a top tracklist
-//       return allTracks.map((list) => {
-//         // array of top tracks for a single id
-//         return list.data.tracks.map((track) => {
-//           // formatting obj for a single track
-//           return {
-//             uri: track.uri,
-//             // duration: track.duration_ms,
-//           };
-//         });
-//       });
-//     })
-//     .then((tracks) => {
-//       const playlistHour = [];
-//       let playLength = 0;
-//       let trackNum = 0;
-//       while (trackNum < 10 && playLength < 3600000) {
-//         tracks.map((tracklist) => {
-//         // if there is a track
-//           if (tracklist[trackNum]) {
-//           // if playlist is less than an hour
-//             if (playLength < 3600000) {
-//               playlistHour.push(tracklist[trackNum]);
-//             }
-//             playLength += tracklist[trackNum].duration;
-//           }
-//         });
-//         trackNum++;
-//       }
-//       res.send(playlistHour);
-//     })
-//     .catch(err => console.log(err));
-//
 
 
 module.exports.test = test;

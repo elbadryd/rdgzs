@@ -12,6 +12,10 @@ class Spotify extends React.Component {
       this.getCities = this.getCities.bind(this);
       this.getQueryPoints = this.getQueryPoints.bind(this);
       this.getEntities = this.getEntities.bind(this);
+      this.getArtistNames = this.getArtistNames.bind(this);
+      this.getArtistIds = this.getArtistIds.bind(this);
+      this.getPlaylists = this.getPlaylists.bind(this);
+      this.createPlaylist = this.createPlaylist.bind(this);
     }
 
   // makes an array of coords and calls getCities

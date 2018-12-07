@@ -25,6 +25,11 @@ export const setLineAction = dispatch => line => dispatch({
   line,
 });
 
+export const setMinutesAction = dispatch => minutes => dispatch({
+  type: TRIP_TYPES.SET_MINUTES,
+  minutes,
+});
+
 export const setPoisAction = dispatch => pois => dispatch({
   type: TRIP_TYPES.SET_POIS,
   pois,

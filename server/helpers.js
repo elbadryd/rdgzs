@@ -104,29 +104,27 @@ const redrawRoute = (waypoints, callback) => {
     url: `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${waypoints}?geometries=geojson&roundtrip=false&source=first&destination=last&access_token=${process.env.MAPBOX_API_KEY}`,
   }, (err, res, body) => {
     const data = JSON.parse(body);
+    console.log(data);
     callback(data);
   });
 };
 
-const getTopTracks = (id, callback) => {
-  axios.get(`https://api.spotify.com/v1/artists/${id}/top-tracks?market=us`, {
+const getTopTracks = (id, token) => {
+  return axios.get(`https://api.spotify.com/v1/artists/${id}/top-tracks?market=us`, {
     headers: {
       client_id: process.env.SPOTIFY_ID,
-      Authorization: 'Bearer BQB9ppiAjAQS5Z2U84fGm-800xVbh_ibo5B5FuwfME-Ohsahsr3kWVffS7EqipfxeVhO-ltfmzt00W0sZno',
+      Authorization: `Bearer ${token}`,
     },
-  }).then((response) => {
-    callback(null, response);
-  }).catch(err => callback(err, null));
+  });
 };
 
-const artistId = (name, callback) => {
-  axios.get(`https://api.spotify.com/v1/search?q=${name}&type=artist`, {
+const artistId = (name, token) => {
+  return axios.get(`https://api.spotify.com/v1/search?q=${name}&type=artist`, {
     headers: {
       client_id: process.env.SPOTIFY_ID,
-      Authorization: 'Bearer BQDZF147HyGz_Sn7A6kb8Z1nMzwXgqxBAIxoOEwgLz74otbXNTmO8OZFReziGdLOR4LH-I_79w92vVGEb9c',
+      Authorization: `Bearer ${token}`,
     },
-  }).then(response => callback(null, response))
-    .catch(err => callback(err, null));
+  });
 };
 
 module.exports.makeTrip = makeTrip;

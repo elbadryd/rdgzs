@@ -155,6 +155,7 @@ class Spotify extends React.Component {
   }  
   // accepts an array of playlist arrays, creates a playlist
   createPlaylist(playlistArrays){
+    console.log(playlistArrays);
     // minutes to miliseconds
     const duration = this.state.distance * 60000; 
     const segment = duration / playlistArrays.length
@@ -180,7 +181,7 @@ class Spotify extends React.Component {
   render(){
     return(
       <div>
-      <div><img onClick={this.createPlaylist} src="/static/spotify.png"></img></div>
+      <div><img onClick={this.getQueryPoints} src="/static/spotify.png"></img></div>
       </div>
     )
   }

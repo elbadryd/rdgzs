@@ -3,7 +3,7 @@ const helpers = require('../helpers.js');
 
 const soundtrack = express.Router();
 
-const token = 'BQD9cuWm9pT2Rc2aXG2WzuUpuJTeGa9rue2Uos-A9pchwoYjzlCqhiUYz1GQLimtvxwvobXTpugmSHToZr0';
+const token = 'BQDeHIFGfpmcsbtIVkiUmKxdlN75a3LtRMrIWXGfkfheUI_YGwrJgGqXc9tbs2jU9oOYfKTFBDGTYXe67H4';
 
 // accepts a name (string) and returns an artist id (number)
 soundtrack.get('/artistId', (req, res) => {

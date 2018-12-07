@@ -1,6 +1,6 @@
  import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
-import { setWaypointsAction, setLineAction } from '../store/actions/tripactions.js'
+import { setWaypointsAction, setLineAction, setMinutesAction } from '../store/actions/tripactions.js'
 import Axios from 'axios';
 import Dock from 'react-dock'
 import ItineraryView from './itineraryView.js'
@@ -37,6 +37,7 @@ class DynamicMap extends React.Component {
       muesums: false,
       markers: null,
       currentPhoto: null,
+      minutes: null,
     };
     this.addToTrip = this.addToTrip.bind(this);
     this.redrawLine = this.redrawLine.bind(this);
@@ -124,6 +125,7 @@ populateMap(){
   })
   }
 }
+
 getWebsite(venueID) {
   Axios.get(`https://api.foursquare.com/v2/venues/${venueID}`, {
     params: {
@@ -190,6 +192,10 @@ addToTrip(lng, lat, name, map){
   Axios.get('/redraw', {
      params: queryString
   }).then((response)=>{
+    // console.log(response.data.trips[0].duration, 'minutes');
+    this.props.setMinutes({
+      minutes: response.data.trips[0].duration
+    });
     let line = response.data.trips[0].geometry.coordinates
     let count = 0;  
     line.map(point=>{
@@ -351,7 +357,8 @@ export default connect(
   null,
   dispatch => ({
     setWaypoints: setWaypointsAction(dispatch),
-    setLine: setLineAction(dispatch)
+    setLine: setLineAction(dispatch),
+    setMinutes: setMinutesAction(dispatch),
   })
 )(DynamicMap)
 

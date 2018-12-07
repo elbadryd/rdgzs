@@ -1,12 +1,13 @@
 const express = require('express');
+const axios = require('axios');
 const helpers = require('../helpers.js');
 
 const soundtrack = express.Router();
 
-const token = 'BQDeHIFGfpmcsbtIVkiUmKxdlN75a3LtRMrIWXGfkfheUI_YGwrJgGqXc9tbs2jU9oOYfKTFBDGTYXe67H4';
 
 // accepts a name (string) and returns an artist id (number)
 soundtrack.get('/artistId', (req, res) => {
+  const token = req.user.accessToken;
   helpers.artistId(req.query.name, token)
     .then((response) => {
       if (response) {
@@ -18,22 +19,23 @@ soundtrack.get('/artistId', (req, res) => {
 
 //  ACCEPTS a string of artist ids separated by comma, returns an 80 minute playlist
 soundtrack.get('/allTracks', (req, res) => {
+  console.log(req.user);
+  const token = req.user.accessToken;
   const ids = req.query.ids.split(',');
   const promises = ids.map(id => helpers.getTopTracks(id, token));
   Promise.all(promises)
-    .then((allTracks) => {
+    .then(allTracks =>
     // array of objects, each object a top tracklist
-      return allTracks.map((list) => {
+      allTracks.map((list) => 
         // array of top tracks for a single id
-        return list.data.tracks.map((track) => {
+         list.data.tracks.map((track) => {
           // formatting obj for a single track
           return {
             uri: track.uri,
             duration: track.duration_ms,
           };
-        });
-      });
-    })
+        })
+      ),)
     .then((tracks) => {
       const playlistHour = [];
       let playLength = 0;
@@ -41,7 +43,7 @@ soundtrack.get('/allTracks', (req, res) => {
       const limit = 10000000;
       while (trackNum < 10 && playLength < limit) {
         // eslint-disable-next-line no-loop-func
-        tracks.map((tracklist) => {       
+        tracks.map((tracklist) => {
         // if there is a track
           if (tracklist[trackNum]) {
             // if playlist is less than an hour
@@ -53,6 +55,7 @@ soundtrack.get('/allTracks', (req, res) => {
         });
         trackNum += 1;
       }
+      console.log(playlistHour, 'pl hour');
       res.send({ duration: playLength, tracks: playlistHour });
     })
     .catch(err => res.send(err));

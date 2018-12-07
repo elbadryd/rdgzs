@@ -104,6 +104,7 @@ const redrawRoute = (waypoints, callback) => {
     url: `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${waypoints}?geometries=geojson&roundtrip=false&source=first&destination=last&access_token=${process.env.MAPBOX_API_KEY}`,
   }, (err, res, body) => {
     const data = JSON.parse(body);
+    console.log(data);
     callback(data);
   });
 };

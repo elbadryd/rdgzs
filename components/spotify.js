@@ -8,6 +8,7 @@ class Spotify extends React.Component {
   constructor(props){
     super(props);
       this.state={
+        distance: null,
       }
       this.getCities = this.getCities.bind(this);
       this.getQueryPoints = this.getQueryPoints.bind(this);
@@ -22,8 +23,12 @@ class Spotify extends React.Component {
   getQueryPoints(){
     //shoud only fire if these props exist
     const { line, origin, destination } = this.props
+    console.log(line);
     var polyline = turf.lineString(line);
     let dist = distance.default([origin.lng, origin.lat], [destination.lng, destination.lat]);
+    this.setState({
+      distance: dist
+    });
     let points = line.map((coords, i) => {
       if (dist > (i * 150) + 1){
         return along.default(polyline, i * 150)
@@ -32,6 +37,9 @@ class Spotify extends React.Component {
     let coords = points.filter(coord =>{
       return coord !== undefined;
     })
+    // add final destination to end of coords
+    let obj = {geometry : { coordinates : [destination.lng, destination.lat]}};
+    coords.push(obj);
     this.getCities(coords);
   }
 
@@ -44,77 +52,126 @@ class Spotify extends React.Component {
     .then(response=>{
       let top = [];
       response.forEach((result, i)=>{
-        let highest = result.data.records.slice(0, 1);
-        highest.forEach(record=>{
-          if (!top[i]){
-            top[i] = [`${record.fields.city}, ${record.fields.state}`];
-          } else {
-            top[i].push(`${record.fields.city}, ${record.fields.state}`);
+        let add = true;
+        let x = 0;
+        while(add && result.data.records[x]) {
+          const city = result.data.records[x].fields.city + ', ' + result.data.records[x].fields.state;
+          if (top.indexOf(city) === -1) {
+            top.push(city);
+            add = false;
           }
-        })
-      })
-      let known = {}
-      let filtered = top.map(subarray =>
-        subarray.filter(item => !known.hasOwnProperty(item) && (known[item] = true))
-      )
-      this.getEntities(filtered);
+          x++
+        }
+      });
+      console.log(top);
+      this.getEntities(top);
     })
     .catch(err=>{
       console.log(err)
     })
   }
 
-  // accepts array of city name arrays, makes city wikidata ids, calls getArtistNames
+  // accepts array of city names, makes city wikidata ids, calls getArtistNames
   getEntities(results){
-    let queries = results.map(cities=>{
-      if (cities.length){
-      return axios.all(cities.map(city=>{
-        return axios.get(`https://query.wikidata.org/sparql?query=SELECT DISTINCT ?item WHERE { ?item (wdt:P31/wdt:P279*) wd:Q515. ?item ?label "${city}"@en.}&format=JSON`)
-      }));
+    let queries = results.map(city=>{
+      if (city === 'New York, New York') {
+        city = 'New York'
+      } else if (city === 'Gulfport, Mississippi') {
+        city = 'Gulfport'
       }
-    })
+        return axios.get(`https://query.wikidata.org/sparql?query=SELECT DISTINCT ?item WHERE { ?item (wdt:P31/wdt:P279*) wd:Q515. ?item ?label "${city}"@en.}&format=JSON`)
+      });
+     // }
     axios.all(queries)
     .then(responses=>{
-      let ids = responses.map(response=>{
-        if (response){
-        return response.map(obj=>{
-          if(obj.data.results.bindings){
+      let cityIds = responses.map(obj=>{
+          if(obj.data.results.bindings[0]){
             return obj.data.results.bindings[0].item.value.slice(31);
-          }
+          } 
         })
-        }
-      });
-      console.log(ids);
+      console.log(cityIds)
+      console.log(cityIds.filter(city => city));
+      this.getArtistNames(cityIds);
     })
     .catch(err=>{
       console.log(err);
     })
   }
 
-  // accepts array of city id arrays, makes array of artist name arrays, calls getArtistIds
+  // accepts array of city ids, makes array of artist name arrays, calls getArtistIds
   getArtistNames(citiesArray) {
-
+    const promises = citiesArray.map((city) => {
+      return axios.get(encodeURI(`https://query.wikidata.org/sparql?query=SELECT ?bandLabel WHERE {
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+        ?band (p:P31/ps:P31/wdt:P279*) wd:Q215380.
+        ?band wdt:P740 wd:${city}.
+        ?band wikibase:statements ?outcoming.
+      }
+      ORDER BY DESC(?outcoming)
+      LIMIT 20&format=json`)) 
+    });
+    axios.all(promises).then((res) => {
+      const artistNames = res.map((bandRes) => {
+        console.log(bandRes);
+        return bandRes.data.results.bindings.map(band => band.bandLabel.value);
+      });
+      this.getArtistIds(artistNames);
+    })
+    .catch(err => console.log(err));
   }
   // accepts array artist name arrays, makes an array of artist ID arrays
   // with each array containing a single string of ids separated by commas
   // calls getPlaylists
-  getArtistIds(namesArray){
-    return axios.all(namesArray.map((names) => {
-      return axios.all(names.map((name) => Axios.get(`/soundtrack/artistId/?name=${name}`)));
-    }));
+  getArtistIds(nameArrays){
+    const namesArray = nameArrays.filter((names => names.length));
+    const promises = namesArray.map((names) => {
+      return axios.all(names.map((name) => axios.get(`/soundtrack/artistId/?name=${name}`)));
+    });
+    axios.all(promises).then((ids) => this.getPlaylists(ids))
+    .catch(err => console.log(err));
   }
   // accepts array of ID arrays, returns array of arrays of playlists
   getPlaylists(idsArray){
-    let idStringArr = idsArray.map((ids) => {
-      let string = '' 
-      ids.map()
+    console.log(this.state.distance);
+    let idStrings = [];
+    idsArray.map((ids, x) => {
+      idStrings[x] = '',
+      ids.map((id, i) => {
+        if (id.data.length && i < ids.length - 1) {
+          idStrings[x] += id.data + ','
+        } else if (id.data.length) {
+          idStrings[x] += id.data;
+        }
+      });
+    });
+    const promises = idStrings.map((idString) => {
+      return axios.get(`/soundtrack/allTracks?ids=${idString}`);
     })
-    idsArray.map(ids => axios.get(`/soundtrack/allTracks?ids=${ids}`))
-  
+    axios.all(promises).then((res) => {
+      this.createPlaylist(res.map((list) => list.data));
+   });
   }  
   // accepts an array of playlist arrays, creates a playlist
   createPlaylist(playlistArrays){
-
+    // minutes to miliseconds
+    const duration = this.state.distance * 60000; 
+    const segment = duration / playlistArrays.length
+    const trackMinutes = []
+    let finalPlaylist = [];
+    playlistArrays.map((list) => {
+      let diff = list.duration  - segment;
+      trackMinutes.push(diff);
+    });
+    playlistArrays.map((list) => {
+      let tracker = 0;
+      list.tracks.map((song) => {
+        if (tracker < segment) {
+          finalPlaylist.push( song.uri );
+          tracker += song.duration;
+        }
+      }) 
+    });
+    console.log(finalPlaylist);
   }
   
   
@@ -222,8 +279,8 @@ class Spotify extends React.Component {
   render(){
     return(
       <div>
-      {/* <div><img onClick={this.getQueryPoints} src="/static/spotify.png"></img></div> */}
-      {/* <div onClick={this.getEntities}>getentities</div> */}
+       <div><img onClick={this.getQueryPoints} src="/static/spotify.png"></img></div> 
+       <div onClick={this.getEntities}>getentities</div> 
       </div>
     )
   }

@@ -24,29 +24,6 @@ login.post('/', (req, res, next) => {
   });
 });
 
-// login.post('/refresh', (req, res) => {
-//   console.log(req.body, req.query, res);
-//   const settings = {
-//     headers: {
-//       'Content-Type': 'application/x-www-form-urlencoded',
-//       Authorization: `Basic ${process.env.SPOTIFY_ID}:${process.env.SPOTIFY_SECRET}`,
-//     },
-//     params: {
-//       grant_type: 'refresh_token',
-//       refresh_token: req.user.refreshToken,
-//     },
-//   };
-//   axios.post('https://accounts.spotify.com/api/token', settings)
-//     .then((response) => {
-//       console.log(response);
-//       res.send('ok');
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       res.send(err);
-//     });
-// });
-
 
 login.get('/spotify', passport.authorize('spotify', {
   scope: ['user-read-email', 'user-read-private', 'playlist-modify-public'],

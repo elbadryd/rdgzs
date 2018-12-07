@@ -9,7 +9,7 @@ import Start from './start.js'
 import PoiView from './pois.js'
 import User from './user.js'
 import Photos from './photos.js'
-import Spotify from './spotify.js'
+import Spotify from '../pages/spotify.js'
 import mapCSS from '../styles/map.css'
 
 const dotenv = require('dotenv').config();
@@ -47,6 +47,7 @@ class DynamicMap extends React.Component {
     this.spotifyLogin = this.spotifyLogin.bind(this);
     this.setPhotoMarker = this.setPhotoMarker.bind(this);
     this.populateMap = this.populateMap.bind(this);
+    this.toggleVisibility = this.toggleVisibility.bind(this);
   }
 
 componentDidMount(){
@@ -267,6 +268,11 @@ setPois(key){
       });
     }
 }
+toggleVisibility(){
+  this.setState({
+    isVisible : !this.state.isVisible
+  })
+}
 
 spotifyLogin() {
   Axios.get('/login')
@@ -274,12 +280,10 @@ spotifyLogin() {
     console.log(response.data);
     if (response.data.user === null){
       this.renderDrawer('user')
-    }  else if (!response.data.user.accessToken){
-        window.location.pathname = '/login/spotify'
-      } else {
-        this.renderDrawer('spotify');
-      }
-    })
+    } else{
+      window.location.pathname = '/login/spotify';
+    }
+  })
   }
 
 
@@ -303,6 +307,8 @@ spotifyLogin() {
             dimStyle={{ background: 'rgba(0, 0, 100, 0.2)' }}
             dockStyle={this.state.customAnimation ? { transition: transitions } : null}
             zIndex={3}
+            onVisibleChange={this.toggleVisibility}
+            style={{borderRadius: '20px'}}
             // duration={duration}
             >
             {({ position, isResizing }) =>
@@ -314,15 +320,21 @@ spotifyLogin() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexDirection: 'column',
-                color: 'black'
-              }}>
-                <div onClick={()=>this.renderDrawer(null)}
+                color: 'black',
+                backgroundImage: 'url("/static/tire.jpg")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                paddingTop: '10%',
+                    }}>
+                {/* <div onClick={()=>this.renderDrawer(null)}
                   style={{
                   position: 'absolute',
                   zIndex: 1,
                   left: '10px',
                   top: '10px',
-                }}><img src="/static/down-arrow.png" size="20px"></img></div>
+                }}>
+                <img src="/static/down-arrow.png" size="20px"></img></div> */}
                 {this.state.currentDrawer === 'itnierary' ? <ItineraryView redrawLine={this.redrawLine.bind(this, map)}></ItineraryView> : null}
                 {this.state.currentDrawer === 'pois' ? <PoiView setPois={this.setPois}></PoiView>: null }
                 {this.state.currentDrawer === 'start' ? <Start closeDrawer={this.renderDrawer}/> : null}

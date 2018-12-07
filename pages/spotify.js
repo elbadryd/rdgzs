@@ -9,6 +9,8 @@ class Spotify extends React.Component {
     super(props);
       this.state={
         distance: null,
+        access: null,
+        refresh: null,
       }
       this.getCities = this.getCities.bind(this);
       this.getQueryPoints = this.getQueryPoints.bind(this);
@@ -178,8 +180,7 @@ class Spotify extends React.Component {
   render(){
     return(
       <div>
-       <div><img onClick={this.getQueryPoints} src="/static/spotify.png"></img></div> 
-       <div onClick={this.getEntities}>getentities</div> 
+      <div><img onClick={this.createPlaylist} src="/static/spotify.png"></img></div>
       </div>
     )
   }
@@ -190,5 +191,7 @@ export default connect(
     destination: state.destination,
     waypoints: state.waypoints,
     line: state.line,
+    originName: state.originName,
+    destinationName: state.destinationName,
   })
 )(Spotify)

@@ -1,5 +1,7 @@
 const express = require('express');
 const passport = require('passport');
+const axios = require('axios');
+const dotenv = require('dotenv').config();
 
 
 const login = express.Router();
@@ -22,9 +24,10 @@ login.post('/', (req, res, next) => {
   });
 });
 
+
 login.get('/spotify', passport.authorize('spotify', {
   scope: ['user-read-email', 'user-read-private', 'playlist-modify-public'],
-  showDialog: true,
+  showDialog: false,
 }),
 (req, res) => {
   // console.log('/spotify hit');
@@ -35,8 +38,10 @@ login.get('/spotify', passport.authorize('spotify', {
 });
 
 login.get('/callback', passport.authorize('spotify', {
+  // successReturnToOrRedirect: '/playlist', failureRedirect: '/',
 }), (req, res) => {
-  console.log('/callback hit');
+
+  // console.log('/callback hit');
   console.log(req.user);
   // const user = req.user;
   // const account = req.account;
@@ -45,7 +50,7 @@ login.get('/callback', passport.authorize('spotify', {
   //   if (err) { return self.error(err); }
   //   self.redirect('/');
   // });
-  res.redirect('/');
+  res.redirect('/spotify');
 });
 
 module.exports.loginRouter = login;

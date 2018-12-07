@@ -55,27 +55,29 @@ class ItineraryList extends React.Component {
 
   render() {
     return (
-      <div className="container_fluid">
-        <div className="row">
-          <div className="col-md">
-            {this.props.origin}
-          </div>
-        </div>
-        <div className="row">
+      <table className="table table-dark">
+            
+        <thead>
+          <tr>
+            <th scope="col">{this.props.origin}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
            {this.props.waypoints.map((stop, index)=>{
-            return <div className="item col-md" key={stop.name}> {index + 1}
-               {stop.name}
-               <button type="button" className="col-md btn btn-danger btn-sm" onClick={this.removeStop.bind(this, stop)}>x</button>
-            </div>
+              return <div><th scope="row">{index + 1}</th>
+                <td>{stop.name}</td>
+               <td><button type="button" className="col-md btn btn-danger btn-sm" onClick={this.removeStop.bind(this, stop)}>x</button>
+            </td></div>
             })}
-        </div>
-          <div>
+          </tr><div>
             {this.props.dest}
           </div>
           <div style={{padding: '10px'}}>
           <button type="button" className="btn btn-success btn-block" onClick={this.getDirections} >Get Directions</button>
           </div>
-      </div>
+          </tbody>
+      </table>
     )
   }
 }

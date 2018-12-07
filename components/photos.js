@@ -82,11 +82,11 @@ class Photos extends React.Component {
         beforeChange: current => this.setState({ activeSlide: photoData[current] || 0 },
           () => photoData[current] ? this.props.setPhotoMarker(photoData[current].geotag.lng, photoData[current].geotag.lat): null ),
       }
-      return photoData.length ? (
+      return  (
           <div className="container-fluid">
             <Slider {...settings}>
               <div><img id="upload_widget_opener" src="/static/camera.png" onClick={this.takePhoto}></img><br/>add photos</div>
-              {photos}
+               {photos || null}
             </Slider>
           <style jsx>{`.container-fluid {
   margin: 0 auto;
@@ -190,7 +190,7 @@ h3 {
           </style>
         </div>
 
-      ) : null;
+      )
     }
 }
 //connect to store to access tripID

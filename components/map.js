@@ -315,7 +315,7 @@ spotifyLogin() {
                 justifyContent: 'center',
                 flexDirection: 'column',
                 color: 'black',
-                backgroundImage: 'url("/static/tire.jpg")',
+                backgroundImage: 'url("/static/map.jpg")',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',

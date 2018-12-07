@@ -9,12 +9,16 @@ const initialState = {
   tripId: null,
   originName: null,
   destinationName: null,
+  minutes: null,
 };
 
 export default function tripReducer(state = initialState, action) {
   switch (action.type) {
     case TRIP_TYPES.SET_ORIGIN:
       return { ...state, origin: action.origin };
+
+    case TRIP_TYPES.SET_MINUTES:
+      return { ...state, minutes: action.minutes };
 
     case TRIP_TYPES.SET_DESTINATION:
       return { ...state, destination: action.destination };

@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import Router from 'next/router'
 import { connect } from 'react-redux'
-import 'bootstrap/dist/css/bootstrap.css';
+// import 'bootstrap/dist/css/bootstrap.css';
 import { Button } from 'reactstrap';
 import { setLineAction, removeWaypointAction } from '../store/actions/tripactions.js'
 const dotenv = require('dotenv').config();

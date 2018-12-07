@@ -40,6 +40,7 @@
     "next": "^7.0.2",
     "next-routes": "^1.4.2",
     "nodemon": "^1.18.7",
+    "npm-merge-driver": "^2.3.5",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "passport-spotify": "^1.0.1",

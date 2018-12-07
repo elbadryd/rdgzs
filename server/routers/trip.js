@@ -80,14 +80,16 @@ trip.delete('/', (req, res) => {
   //  "spotify:track:0Sizq91V0brNa9RBpMfeOB"];
 
 trip.get('/pl', (req, res) => {
+  console.log(req.body, req.query, req.params, req.data);
   // accessToken needed to use spotifyWebApi
   spotify.spotifyApi.setAccessToken(req.user.accessToken);
   // create playlist
     // name param needs to be dynamic and take the current trip name
-  spotify.spotifyApi.createPlaylist(req.user.spotifyId, 'i hope this works', { public: true })
+  spotify.spotifyApi.createPlaylist(req.user.spotifyId, req.query.name, { public: true })
     .then((data) => {
+      console.log(data.body);
       console.log('Created playlist!');
-      return spotify.spotifyApi.addTracksToPlaylist(data.body.id, uris);
+      return spotify.spotifyApi.addTracksToPlaylist(data.body.id, req.query.tracks);
     })
     .then((data) => {
       res.send(data);

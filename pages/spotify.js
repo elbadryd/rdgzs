@@ -24,8 +24,13 @@ class Spotify extends React.Component {
   // makes an array of coords and calls getCities
   getQueryPoints(){
     //shoud only fire if these props exist
-    const { line, origin, destination } = this.props
-    console.log(line);
+    let line = JSON.parse(window.sessionStorage.getItem('line'));
+    let origin = JSON.parse(window.sessionStorage.getItem('origin'));
+    let destination = JSON.parse(window.sessionStorage.getItem('destination'));
+    // let originName = JSON.parse(window.sessionStorage.getItem('originName'));
+    // let destinationName = JSON.parse(window.sessionStorage.getItem('destinationName'));
+
+    console.log(line, origin, destination);
     var polyline = turf.lineString(line);
     let dist = distance.default([origin.lng, origin.lat], [destination.lng, destination.lat]);
     this.setState({
@@ -147,11 +152,13 @@ class Spotify extends React.Component {
       });
     });
     const promises = idStrings.map((idString) => {
-      return axios.get(`/soundtrack/allTracks?ids=${idString}`);
+      return axios.get(`/soundtrack/allTracks?ids=${idString}`)
     })
     axios.all(promises).then((res) => {
       this.createPlaylist(res.map((list) => list.data));
-   });
+   }).catch(err=>{
+     console.log(err);
+   })
   }  
   // accepts an array of playlist arrays, creates a playlist
   createPlaylist(playlistArrays){
@@ -173,6 +180,16 @@ class Spotify extends React.Component {
           tracker += song.duration;
         }
       }) 
+    });
+    axios.get('/trip/pl', {
+      params: {
+        tracks: finalPlaylist,
+        name: 'my roadtrip playlist',
+      },
+    }).then((response) => {
+      console.log(response)
+    }).catch((err) => {
+      console.log(err);
     });
     console.log(finalPlaylist);
   }

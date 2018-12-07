@@ -275,7 +275,7 @@ toggleVisibility(){
 }
 
 spotifyLogin() {
-  const { origin, destination, line } = this.props;
+  const { origin, destination, line, originName, destinationName } = this.props;
   Axios.get('/login')
   .then(response=>{
     console.log(response.data);
@@ -285,6 +285,8 @@ spotifyLogin() {
       window.sessionStorage.setItem('origin', JSON.stringify(origin))
       window.sessionStorage.setItem('destination', JSON.stringify(destination))
       window.sessionStorage.setItem('line', JSON.stringify(line))
+      window.sessionStorage.setItem('originName', JSON.stringify(originName))
+      window.sessionStorage.setItem('destinationName', JSON.stringify(destinationName))
       window.location.pathname = '/login/spotify';
     }
   })

@@ -14,7 +14,7 @@ soundtrack.get('/artistId', (req, res) => {
         console.log(response.data.artists.items[0].id, 'response');
         res.send(response.data.artists.items[0].id);
       }
-    }).catch(err => res.send(err));
+    }).catch(err => res.send(''));
 });
 
 //  ACCEPTS a string of artist ids separated by comma, returns an 80 minute playlist

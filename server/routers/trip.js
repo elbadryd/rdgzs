@@ -66,12 +66,15 @@ trip.delete('/', (req, res) => {
 trip.get('/pl', (req, res) => {
   // accessToken needed to use spotifyWebApi
   spotify.spotifyApi.setAccessToken(req.user.accessToken);
+  console.log(req.user.accessToken, req.query.name, req.query.tracks);
+  
   // create playlist
     // name param needs to be dynamic and take the current trip name
   spotify.spotifyApi.createPlaylist(req.user.spotifyId, req.query.name, { public: true })
     .then((data) => {
       console.log('Created playlist!');
-      return spotify.spotifyApi.addTracksToPlaylist(data.body.id, req.query.tracks);
+      console.log('in trip js', data.body.id, req.query.tracks)
+      return spotify.spotifyApi.addTracksToPlaylist(data.body.id, req.query.tracks.slice(1));
     })
     .then((data) => {
       res.send(data);

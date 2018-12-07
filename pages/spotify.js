@@ -199,7 +199,7 @@ class Spotify extends React.Component {
   render(){
     return(
       <div>
-      <div><img onClick={this.getQueryPoints} src="/static/spotify.png"></img></div>
+        <div><img onClick={this.getQueryPoints} src="/static/spotify.png"></img></div>
       </div>
     )
   }

@@ -87,22 +87,42 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div className="container_fluid">
-        <div className="row">
-          <div className="col-md">
-            <span>Email:</span>
-            <input name="email" onChange={this.handleChange}></input>
-            </div>
-        </div>
-        <div className="row">
-            <div className="item col-md" >
-            <span>Password:</span>
-            <input name="password" type="password" onChange={this.handleChange}></input>
-        </div>
-        </div>
-          <button type="button" className="btn btn-success btn-block" onClick={this.submitLogin}>Login</button>
-          <button type="button" className="btn btn-success btn-block" onClick={this.signUp}>SignUp</button>
+      <div className="jumbotron">
+      <div className="container" >
+        <div className="input-group mb-3">
+          <input name="email" className="form-control" onChange={this.handleChange} aria-label="Username" aria-describedby="basic-addon2" />
+          <div className="input-group-prepend">
+            <span className="input-group-text" id="basic-addon1">Email</span>
+          </div>
       </div>
+
+          <div className="input-group mb-3">
+          <input name="password" type="password" className="form-control" onChange={this.handleChange} aria-label="Recipient's username" aria-describedby="basic-addon2" />
+              <div className="input-group-prepend">
+                <span className="input-group-text" id="basic-addon1">Password</span>
+              </div>
+          </div>
+          <button type="button" className="btn btn-primary btn-block" onClick={this.submitLogin}>Login</button>
+          <button type="button" className="btn btn-info btn-block" onClick={this.signUp}>SignUp</button>
+      </div>
+      </div>
+
+      // <div className="container_fluid">
+      //   <div className="row">
+      //     <div className="col-md">
+      //       <span>Email:</span>
+      //       <input name="email" onChange={this.handleChange}></input>
+      //     </div>
+      //   </div>
+      //   <div className="row">
+      //     <div className="item col-md" >
+      //       <span>Password:</span>
+      //       <input name="password" type="password" onChange={this.handleChange}></input>
+      //     </div>
+      //   </div>
+      //   <button type="button" className="btn btn-success btn-block" onClick={this.submitLogin}>Login</button>
+      //   <button type="button" className="btn btn-success btn-block" onClick={this.signUp}>SignUp</button>
+      // </div>
     )
   }
 }

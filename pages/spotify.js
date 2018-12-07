@@ -100,7 +100,11 @@ class Spotify extends React.Component {
   render(){
     return(
       <div>
-      <div><img onClick={this.createPlaylist} src="/static/spotify.png"></img></div>
+        <div class="h-100 row align-items-center">
+          <div class="col">
+            <img onClick={this.createPlaylist} src="/static/spotify.png"></img>
+          </div>
+        </div>
       </div>
     )
   }

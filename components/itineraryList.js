@@ -83,13 +83,13 @@ class ItineraryList extends React.Component {
       <div>
       <div className="jumbotron-fluid">
         <div className="list-group">
-          <li className="list-group-item-success">{this.props.origin}</li>
+          <li className="list-group-item-success m-1 ml-3 mr-3">{this.props.origin}</li>
           {this.props.waypoints.map((stop, index) => {
-            return <li className="list-group-item" >{stop.name}<button className="btn btn-sm btn-danger" onClick={this.removeStop.bind(this, stop)}><i className="fa fa-trash">x</i></button></li>
+              return <li className="list-group-item m-1 ml-3 mr-3 shadow bg-white" >{stop.name}<button className="btn btn-sm btn-danger ml-1" onClick={this.removeStop.bind(this, stop)}><i className="fa fa-trash">x</i></button></li>
             // <button className="btn btn-danger"><i className="fa fa-trash"></i></button>
           })}
-          <li className="list-group-item-danger">{this.props.dest}</li>
-          <button className="btn btn-success btn-block p-2"  onClick={this.getDirections}>Get Directions</button>
+            <li className="list-group-item-danger m-1 ml-3 mr-3">{this.props.dest}</li>
+          <button className="btn btn-success btn-block m-2 mx-auto"  onClick={this.getDirections}>Get Directions</button>
         </div>
       </div>
     </div>

@@ -87,7 +87,7 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div className="jumbotron jumbotron-fluid">
+      <div className="jumbotron">
       <div className="container" >
         <div className="input-group mb-3">
           <input name="email" className="form-control" onChange={this.handleChange} aria-label="Username" aria-describedby="basic-addon2" />

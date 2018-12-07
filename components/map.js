@@ -230,6 +230,7 @@ addToTrip(lng, lat, name, map){
 } 
 
 renderDrawer(type, size = 0.50){
+  const { origin, destination } = this.props;
     if (type === 'photos' && x){
       x.remove()
     }

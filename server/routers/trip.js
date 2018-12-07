@@ -61,33 +61,15 @@ trip.delete('/', (req, res) => {
     });
 });
 
-// Test uris
-  // const uris = ["spotify:track:1jRzdY7oUBOhrylNtiMtBD",
-  //  "spotify:track:0dbTQYW3Ad1FTzIA9t90E8",
-  //  "spotify:track:5htB2gxndGHrLb09x1Q3Vp",
-  //  "spotify:track:5QwU7QaUPx0jUNwnd6h9Nb",
-  //  "spotify:track:4nefFqiukTvjgt8hkv73PP",
-  //  "spotify:track:0e42i89bY2NmPuVDtey8pg",
-  //  "spotify:track:3wScL5W8H40zzCKN0atfBk",
-  //  "spotify:track:66mbI5v6PcCH3VKGJqdFfr",
-  //  "spotify:track:0yWJGIMwBgrGdpQ4sG6zaj",
-  //  "spotify:track:7hCKt8Z6GLk4yWVrvnzytP",
-  //  "spotify:track:6uWliNGZEZKGMPwSwccdjG",
-  //  "spotify:track:5BQrp63SHCVf4bzCzJePne",
-  //  "spotify:track:0u4Eadez2FojayRgAQfMhT",
-  //  "spotify:track:3OVqNSAxYNHgmhFLzOZpK2",
-  //  "spotify:track:2OxZdTC2HdbAz9Gu956wzo",
-  //  "spotify:track:0Sizq91V0brNa9RBpMfeOB"];
+
 
 trip.get('/pl', (req, res) => {
-  console.log(req.body, req.query, req.params, req.data);
   // accessToken needed to use spotifyWebApi
   spotify.spotifyApi.setAccessToken(req.user.accessToken);
   // create playlist
     // name param needs to be dynamic and take the current trip name
   spotify.spotifyApi.createPlaylist(req.user.spotifyId, req.query.name, { public: true })
     .then((data) => {
-      console.log(data.body);
       console.log('Created playlist!');
       return spotify.spotifyApi.addTracksToPlaylist(data.body.id, req.query.tracks);
     })

@@ -21,7 +21,7 @@ class Photos extends React.Component {
     document.getElementById("upload_widget_opener")
       myUploadWidget = window.cloudinary.openUploadWidget({
         cloudName: 'rdgz', uploadPreset: 'rdgzPreset',
-         sources: ['camera']
+        sources: ['camera'],
       }, (error, result) => {
         console.log(result);
         if (result.event === 'success') {

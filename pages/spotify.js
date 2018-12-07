@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import axios from 'axios';
+import Router from 'next/router';
 const turf = require('@turf/helpers');
 const along = require('@turf/along');
 const distance = require('@turf/distance');
@@ -187,7 +188,7 @@ class Spotify extends React.Component {
         name: 'my roadtrip playlist',
       },
     }).then((response) => {
-      console.log(response)
+      Router.push('/');
     }).catch((err) => {
       console.log(err);
     });

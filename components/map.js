@@ -315,12 +315,16 @@ spotifyLogin() {
                 justifyContent: 'center',
                 flexDirection: 'column',
                 color: 'black',
-                backgroundImage: 'url("/static/tire.jpg")',
+                // backgroundImage: 'url("/static/tire.jpg")',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
                 paddingTop: '10%',
-                    }}>
+                display: 'grid',
+                gridGap: '1rem',
+                // gridTemplateColumns: 'repeat(, 1fr)',
+            
+                }}>
                 {/* <div onClick={()=>this.renderDrawer(null)}
                   style={{
                   position: 'absolute',

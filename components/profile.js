@@ -136,25 +136,35 @@ removeTrip(index) {
   render() {
     const { photoData } = this.state
     return (
-      <div>
+    <div className="jumbotron-fluid">
+      <div className="container-fluid">
         {this.state.tripData.map((trip, i) =>{
-          return <div key={i} className="card" style={{width: '18rem'}}>
+          
+            return <div key={i} className="card" style={{ padding: 1 + 'em' }}>
             {/* <img className="card-img-top" src={`https://farm${photoData[i].data.photos.photo.farm}.staticflickr.com/${photoData[i].data.photos.photo.server}/${photoData[i].data.photos.photo.id}_${photoData[i].data.photos.photo.secret}.jpg`} alt="Card image cap" /> */}
-            <img src="/static/mountain.png"></img>
+            {/* <img src="/static/mountain.png" className="img-responsive"></img> */}
               <div className="card-body">
                 <h5 className="card-title">{trip.trip_name}</h5>
                 <p className="card-text"></p>
-                <a onClick={this.seeTrip.bind(this, i)} className="btn btn-primary">See Trip</a>
-              <a onClick={this.removeTrip.bind(this, i)} className="btn btn-primary">Remove Trip</a>
-              <a onClick={()=>this.openPhotos(trip.id)} className="btn btn-primary">See Photos</a>
-
-              </div>
+                <div className="row mx-auto">
+                  <div className="col-xs-4">
+                    <a onClick={this.seeTrip.bind(this, i)} className="btn btn-primary btn-sm">See Trip</a>
+                  </div>
+                  <div className="col-xs-4">
+                    <a onClick={()=>this.openPhotos(trip.id)} className="btn btn-primary  btn-sm">See Photos</a>
+                  </div>
+                  <div className="col-xs-4">
+                    <a onClick={this.removeTrip.bind(this, i)} className="btn btn-danger  btn-sm"><i className="fa fa-trash"></i>Delete</a>
+                  </div>
+               </div>
             </div>
+            </div>
+          
         })}
-
-        <a href="" className="btn btn-danger" onClick={this.submitLogout}>Logout</a>
-
-      </div>
+        </div>  
+        <button href="" className="btn btn-danger btn-block" onClick={this.submitLogout}>Logout</button>
+    </div>
+      
     ) 
   }
 }

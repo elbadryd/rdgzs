@@ -112,7 +112,7 @@ class Start extends React.Component {
 
   render() {
     return (
-      <div className="search">
+      <div className="search jumbotron">
         Origin
         <MapboxAutocomplete
           country='us'

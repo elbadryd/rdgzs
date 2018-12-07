@@ -230,6 +230,7 @@ addToTrip(lng, lat, name, map){
 } 
 
 renderDrawer(type, size = 0.50){
+  const { origin, destination } = this.props;
     if (type === 'photos' && x){
       x.remove()
     }
@@ -275,12 +276,18 @@ toggleVisibility(){
 }
 
 spotifyLogin() {
+  const { origin, destination, line, originName, destinationName } = this.props;
   Axios.get('/login')
   .then(response=>{
     console.log(response.data);
     if (response.data.user === null){
       this.renderDrawer('user')
     } else{
+      window.sessionStorage.setItem('origin', JSON.stringify(origin))
+      window.sessionStorage.setItem('destination', JSON.stringify(destination))
+      window.sessionStorage.setItem('line', JSON.stringify(line))
+      window.sessionStorage.setItem('originName', JSON.stringify(originName))
+      window.sessionStorage.setItem('destinationName', JSON.stringify(destinationName))
       window.location.pathname = '/login/spotify';
     }
   })
@@ -326,7 +333,6 @@ spotifyLogin() {
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat',
                 paddingTop: '10%',
-                display: 'grid',
                 gridGap: '1rem',
                 // gridTemplateColumns: 'repeat(, 1fr)',
             

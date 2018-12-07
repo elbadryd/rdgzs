@@ -8,12 +8,25 @@ class Spotify extends React.Component {
   constructor(props){
     super(props);
       this.state={
+        access: null,
+        refresh: null,
       }
       this.getCities = this.getCities.bind(this);
       this.getQueryPoints = this.getQueryPoints.bind(this);
       this.getEntities = this.getEntities.bind(this);
+      this.createPlaylist = this.createPlaylist.bind(this);
     }   
-  
+  createPlaylist(){
+    axios.get('/login')
+    .then(response=>{
+      this.setState({
+        access: response.data.user.accessToken,
+        refresh: response.data.user.refreshToken,
+      })
+    })
+    this.getQueryPoints();
+    //when functions are finised, open spotify, redirect to '/'
+  }
   
   getCities(coords){
     let citySearch = coords.map(coord=>{
@@ -87,8 +100,7 @@ class Spotify extends React.Component {
   render(){
     return(
       <div>
-      {/* <div><img onClick={this.getQueryPoints} src="/static/spotify.png"></img></div> */}
-      {/* <div onClick={this.getEntities}>getentities</div> */}
+      <div><img onClick={this.createPlaylist} src="/static/spotify.png"></img></div>
       </div>
     )
   }
@@ -99,5 +111,7 @@ export default connect(
     destination: state.destination,
     waypoints: state.waypoints,
     line: state.line,
+    originName: state.originName,
+    destinationName: state.destinationName,
   })
 )(Spotify)

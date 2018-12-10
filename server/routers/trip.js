@@ -67,18 +67,34 @@ trip.get('/pl', (req, res) => {
   // accessToken needed to use spotifyWebApi
   spotify.spotifyApi.setAccessToken(req.user.accessToken);
   // create playlist
+  console.log(req.user.spotifyId, req.query.name)
     // name param needs to be dynamic and take the current trip name
   spotify.spotifyApi.createPlaylist(req.user.spotifyId, req.query.name, { public: true })
     .then((data) => {
       console.log('Created playlist!');
-      return spotify.spotifyApi.addTracksToPlaylist(data.body.id, req.query.tracks);
+      const arr = req.query.tracks;
+      let tracksArr = [];
+      let count = [0];
+      if (arr.length > 90) {
+        arr.forEach((song, i) => {
+          tracksArr.push(song);
+          count[0] += 1;
+          if (tracksArr.length > 90) {
+            spotify.spotifyApi.addTracksToPlaylist(data.body.id, tracksArr);
+            tracksArr = [];
+            count[0] = 0;
+          } else if (i === arr.length - 1) {
+            spotify.spotifyApi.addTracksToPlaylist(data.body.id, tracksArr);
+          }
+        });
+      }
     })
-    .then((data) => {
-      res.send(data);
+    .then(() => {
+      res.send('playlist complete');
     })
     .catch((err) => {
       console.log('Something went wrong!', err);
-      res.send(err);
+      res.send('err in spotifyAPICreatePlaylist');
     });
 });
 

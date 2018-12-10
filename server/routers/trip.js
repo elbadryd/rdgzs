@@ -76,19 +76,18 @@ trip.get('/pl', (req, res) => {
       console.log('Created playlist!');
       const arr = req.query.tracks;
       let tracksArr = [];
-      let count = [0];
       if (arr.length > 90) {
         arr.forEach((song, i) => {
           tracksArr.push(song);
-          count[0] += 1;
           if (tracksArr.length > 90) {
             spotify.spotifyApi.addTracksToPlaylist(data.body.id, tracksArr);
             tracksArr = [];
-            count[0] = 0;
           } else if (i === arr.length - 1) {
             spotify.spotifyApi.addTracksToPlaylist(data.body.id, tracksArr);
           }
         });
+      } else if (arr.length < 91) {
+        spotify.spotifyApi.addTracksToPlaylist(data.body.id, arr);
       }
     })
     .then(() => {

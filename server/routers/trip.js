@@ -69,19 +69,33 @@ trip.get('/pl', (req, res) => {
   console.log(req.user.accessToken, req.query.name, req.query.tracks);
   
   // create playlist
+  console.log(req.user.spotifyId, req.query.name)
     // name param needs to be dynamic and take the current trip name
   spotify.spotifyApi.createPlaylist(req.user.spotifyId, req.query.name, { public: true })
     .then((data) => {
       console.log('Created playlist!');
-      console.log('in trip js', data.body.id, req.query.tracks)
-      return spotify.spotifyApi.addTracksToPlaylist(data.body.id, req.query.tracks.slice(1));
+      const arr = req.query.tracks;
+      let tracksArr = [];
+      if (arr.length > 90) {
+        arr.forEach((song, i) => {
+          tracksArr.push(song);
+          if (tracksArr.length > 90) {
+            spotify.spotifyApi.addTracksToPlaylist(data.body.id, tracksArr);
+            tracksArr = [];
+          } else if (i === arr.length - 1) {
+            spotify.spotifyApi.addTracksToPlaylist(data.body.id, tracksArr);
+          }
+        });
+      } else if (arr.length < 91) {
+        spotify.spotifyApi.addTracksToPlaylist(data.body.id, arr);
+      }
     })
-    .then((data) => {
-      res.send(data);
+    .then(() => {
+      res.send('playlist complete');
     })
     .catch((err) => {
       console.log('Something went wrong!', err);
-      res.send(err);
+      res.send('err in spotifyAPICreatePlaylist');
     });
 });
 

@@ -81,6 +81,9 @@ class Spotify extends React.Component {
 
   // accepts array of city names, makes city wikidata ids, calls getArtistNames
   getEntities(results){
+    if (results.length > 6) {
+      results = results.filter(r, i => i % 2 === 0);
+    }
     let queries = results.map(city=>{
       if (city === 'New York, New York') {
         city = 'New York'
@@ -188,7 +191,8 @@ class Spotify extends React.Component {
         name: 'my roadtrip playlist',
       },
     }).then((response) => {
-      Router.push('/');
+      console.log(response);
+      // Router.push('/');
     }).catch((err) => {
       console.log(err);
     });

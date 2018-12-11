@@ -58,7 +58,10 @@ soundtrack.get('/allTracks', (req, res) => {
       console.log(playlistHour, 'pl hour');
       res.send({ duration: playLength, tracks: playlistHour });
     })
-    .catch(err => res.send(err));
+    .catch((err) => {
+      console.log(err);
+      res.send({ duration: 0, tracks: [] });
+    });
 });
 
 module.exports.soundtrackRouter = soundtrack;

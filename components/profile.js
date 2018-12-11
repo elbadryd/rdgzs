@@ -137,10 +137,10 @@ removeTrip(index) {
     const { photoData } = this.state
     return (
     <div>
-        <div className="jumbotron-fluid">
+        <div id="trips" className="jumbotron-fluid">
         {this.state.tripData.map((trip, i) =>{
           
-            return <div key={i} className="card rounded m-2" style={{}}>
+            return <div key={i} className="card rounded m-2">
             {/* <img className="card-img-top" src={`https://farm${photoData[i].data.photos.photo.farm}.staticflickr.com/${photoData[i].data.photos.photo.server}/${photoData[i].data.photos.photo.id}_${photoData[i].data.photos.photo.secret}.jpg`} alt="Card image cap" /> */}
             {/* <img src="/static/mountain.png" className="img-responsive"></img> */}
               <div className="card-body rounded m-2">

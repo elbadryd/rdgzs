@@ -5,7 +5,7 @@ import Head from 'next/head'
 
 const DynamicMap = dynamic(() => import('./../components/map.js'), {
   ssr: false,
-  loading: () => <p><img src="/static/location+loader.gif"></img></p>,
+  loading: () => <p><img src="/static/globe.gif"></img></p>,
 });
 
 export default connect(

@@ -331,13 +331,10 @@ spotifyLogin() {
                 flexDirection: 'column',
                 color: 'black',
                 gridGap: '1rem',
-                  backgroundImage: 'url("/static/neworleans1869.jpg")',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                // gridTemplateColumns: 'repeat(, 1fr)',
-            
-                }}>
+                  backgroundColor: '#F1EAF5',
+            // gridTemplateColumns: 'repeat(, 1fr)',
+        
+            }}>
                 {/* <div onClick={()=>this.renderDrawer(null)}
                   style={{
                   position: 'absolute',

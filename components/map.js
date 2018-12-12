@@ -249,7 +249,7 @@ renderDrawer(type, size = 0.50){
 }
 
 setPois(key){
-  if (!this.props.tripId){
+  if (!this.props.tripId || !this.props.pois.length){
     return;
   }
   this.setState({
@@ -332,17 +332,9 @@ spotifyLogin() {
                 color: 'black',
                 gridGap: '1rem',
                   backgroundColor: '#F1EAF5',
-            // gridTemplateColumns: 'repeat(, 1fr)',
         
             }}>
-                {/* <div onClick={()=>this.renderDrawer(null)}
-                  style={{
-                  position: 'absolute',
-                  zIndex: 1,
-                  left: '10px',
-                  top: '10px',
-                }}>
-                <img src="/static/down-arrow.png" size="20px"></img></div> */}
+ 
                 {this.state.currentDrawer === 'itnierary' ? <ItineraryView redrawLine={this.redrawLine.bind(this, map)}></ItineraryView> : null}
                 {this.state.currentDrawer === 'pois' ? <PoiView setPois={this.setPois}></PoiView>: null }
                 {this.state.currentDrawer === 'start' ? <Start closeDrawer={this.renderDrawer}/> : null}

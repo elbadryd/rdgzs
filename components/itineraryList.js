@@ -55,36 +55,12 @@ class ItineraryList extends React.Component {
 
   render() {
     return (
-      // <table className="table table-dark">
-            
-      //   <thead>
-      //     <tr>
-      //       <th scope="col">{this.props.origin}</th>
-      //     </tr>
-      //   </thead>
-      //   <tbody>
-      //     <tr>
-      //      {this.props.waypoints.map((stop, index)=>{
-      //         return <div><th scope="row">{index + 1}</th>
-      //           <td>{stop.name}</td>
-      //          <td><Button type="button" className="col-md btn btn-danger btn-sm" onClick={this.removeStop.bind(this, stop)}>x</Button>
-      //       </td></div>
-      //       })}
-      //     </tr><div>
-      //       {this.props.dest}
-      //     </div>
-      //     <div style={{padding: '10px'}}>
-      //     <Button type="button" className="btn btn-success btn-block" onClick={this.getDirections} >Get Directions</utton>
-      //     </div>
-      //     </tbody>
-      // </table>
       <div>
       <div className="jumbotron-fluid">
         <div className="list-group">
           <li className="list-group-item m-1 ml-3 mr-3">{this.props.origin}</li>
           {this.props.waypoints.map((stop, index) => {
               return <li className="list-group-item m-1 ml-3 mr-3 shadow bg-white" >{stop.name}<button className="btn btn-sm btn-danger ml-1" onClick={this.removeStop.bind(this, stop)}><i className="fa fa-trash">x</i></button></li>
-            // <button className="btn btn-danger"><i className="fa fa-trash"></i></button>
           })}
             <li className="list-group-item m-1 ml-3 mr-3">{this.props.dest}</li>
           <button className="btn btn-success btn-block m-2 mx-auto"  onClick={this.getDirections}>Get Directions</button>

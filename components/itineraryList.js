@@ -1,6 +1,8 @@
 import Axios from 'axios';
 import Router from 'next/router'
 import { connect } from 'react-redux'
+import 'bootstrap/dist/css/bootstrap.css';
+import { Button } from 'reactstrap';
 import { setLineAction, removeWaypointAction } from '../store/actions/tripactions.js'
 const dotenv = require('dotenv').config();
 
@@ -28,7 +30,6 @@ class ItineraryList extends React.Component {
 
   removeStop(stop) {
     const { originCoords, destinationCoords, redrawLine } = this.props;
-    console.log(stop);
     let waypoints = this.props.waypoints.filter(point => point.name !== stop.name );
     let queryString = [`${originCoords.lng},${originCoords.lat};`];
     Axios.post('/stop/itinerary', {
@@ -43,7 +44,6 @@ class ItineraryList extends React.Component {
       params: queryString[0]
     }).then((resp) => {
       let line = resp.data.trips[0].geometry.coordinates;
-      console.log(line);
       this.props.setLine({
         line
       })
@@ -55,29 +55,18 @@ class ItineraryList extends React.Component {
 
   render() {
     return (
-      <table className="table table-dark">
-            
-        <thead>
-          <tr>
-            <th scope="col">{this.props.origin}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-           {this.props.waypoints.map((stop, index)=>{
-              return <div><th scope="row">{index + 1}</th>
-                <td>{stop.name}</td>
-               <td><button type="button" className="col-md btn btn-danger btn-sm" onClick={this.removeStop.bind(this, stop)}>x</button>
-            </td></div>
-            })}
-          </tr><div>
-            {this.props.dest}
-          </div>
-          <div style={{padding: '10px'}}>
-          <button type="button" className="btn btn-success btn-block" onClick={this.getDirections} >Get Directions</button>
-          </div>
-          </tbody>
-      </table>
+      <div>
+      <div className="jumbotron-fluid">
+        <div className="list-group">
+          <li className="list-group-item m-1 ml-3 mr-3">{this.props.origin}</li>
+          {this.props.waypoints.map((stop, index) => {
+              return <li className="list-group-item m-1 ml-3 mr-3 shadow bg-white" >{stop.name}<button className="btn btn-sm btn-danger ml-1" onClick={this.removeStop.bind(this, stop)}><i className="fa fa-trash">x</i></button></li>
+          })}
+            <li className="list-group-item m-1 ml-3 mr-3">{this.props.dest}</li>
+          <button className="btn btn-success btn-block m-2 mx-auto"  onClick={this.getDirections}>Get Directions</button>
+        </div>
+      </div>
+    </div>
     )
   }
 }

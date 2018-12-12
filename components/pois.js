@@ -1,3 +1,5 @@
+import { Nav, NavItem } from 'reactstrap';
+
 const content = [{
   type: "hotels",
   img: "/static/bed.png"
@@ -12,7 +14,7 @@ const content = [{
   },
   {
     type:"food",
-      img:"/static/restaurant.png"
+      img:"/static/food.png"
   },
   {
     type:"parks",
@@ -25,17 +27,16 @@ class PoiView extends React.Component {
 }
     render() {
     return (
-
-      <table className="d-flex justify-content-center">
-          {content.map((div, i) => {
-            return <td scope="col" className="columns" style={{padding: '5px',
-            justifyContent: 'center'}}>
-              <img key ={i} onClick={this.props.setPois.bind(this, div.type)} src={div.img} />
-              <div key={div.type} >{div.type}</div>
-              </td>
-          })}
-
-        </table> 
+      <div>
+        <Nav id="nav" className="m-1">
+        {content.map(item=>{
+          return <NavItem id="navItem" className="m-1 rounded">
+            <img onClick={this.props.setPois.bind(this, item.type)} src={item.img} />
+            <div>{item.type}</div>
+          </NavItem>
+        })}
+      </Nav>
+        </div>
     )
   }
 }

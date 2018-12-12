@@ -14,7 +14,7 @@ export default connect(
 )(({ dest, origin, waypoints, tripId, originCoords, destinationCoords }) => {
   return (
     <div>
-      <div>Your Upcoming Trip</div>
+      <div className="mx-auto">Your Upcoming Trip</div>
       <ItineraryList tripId={tripId} dest={dest} origin={origin}
       waypoints={waypoints} originCoords={originCoords} destinationCoords={destinationCoords}/>
 

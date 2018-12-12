@@ -26,23 +26,6 @@ componentDidMount() {
     })  
 }
 
-componentDidUpdate(){
-  //flickr request for stock photos, probably will move elsewhere
-  // const { tripData } = this.state;
-  // let calls = tripData.map((trip, i)=>{
-  //   return axios.get(`https://api.flickr.com/services/rest/?api_key=${process.env.FLICKR_KEY}&method=flickr.photos.search&lat=${trip.destination.split(',')[1]}&lon=${trip.destination.split(',')[0]}&format=json&nojsoncallback=1&per_page=1`)
-  // })
-  // axios.all(calls)
-  // .then(response=>{
-  //   this.setState({
-  //     photoData: response
-  //   })
-  // })
-  // .catch((err)=>{
-  //   console.log(err)
-  // })
-}
-
 seeTrip(index){
   const tripId = this.state.tripData[index].id
   axios.get(`/stop/?tripid=${tripId}`, { 
@@ -136,25 +119,33 @@ removeTrip(index) {
   render() {
     const { photoData } = this.state
     return (
-      <div>
+    <div>
+        <div id="trips" className="jumbotron-fluid">
         {this.state.tripData.map((trip, i) =>{
-          return <div key={i} className="card" style={{width: '18rem'}}>
-            {/* <img className="card-img-top" src={`https://farm${photoData[i].data.photos.photo.farm}.staticflickr.com/${photoData[i].data.photos.photo.server}/${photoData[i].data.photos.photo.id}_${photoData[i].data.photos.photo.secret}.jpg`} alt="Card image cap" /> */}
-            <img src="/static/mountain.png"></img>
-              <div className="card-body">
+          
+            return <div key={i} className="card rounded m-2">
+              <div className="card-body rounded m-2">
                 <h5 className="card-title">{trip.trip_name}</h5>
                 <p className="card-text"></p>
-                <a onClick={this.seeTrip.bind(this, i)} className="btn btn-primary">See Trip</a>
-              <a onClick={this.removeTrip.bind(this, i)} className="btn btn-primary">Remove Trip</a>
-              <a onClick={()=>this.openPhotos(trip.id)} className="btn btn-primary">See Photos</a>
-
-              </div>
+                <div className="row mx-auto">
+                  <div className="col-xs-4">
+                    <a onClick={this.seeTrip.bind(this, i)} className="btn btn-primary m-1 btn-sm p">See Trip</a>
+                  </div>
+                  <div className="col-xs-4">
+                    <a onClick={()=>this.openPhotos(trip.id)} className="btn btn-primary m-1 btn-sm">See Photos</a>
+                  </div>
+                  <div className="col-xs-4">
+                    <a onClick={this.removeTrip.bind(this, i)} className="btn btn-danger m-1 btn-sm"><i className="fa fa-trash"></i>Delete</a>
+                  </div>
+               </div>
             </div>
+            </div>
+          
         })}
-
-        <a href="" className="btn btn-danger" onClick={this.submitLogout}>Logout</a>
-
-      </div>
+        </div>  
+        <button href="" className="btn btn-danger btn-block" onClick={this.submitLogout}>Logout</button>
+    </div>
+      
     ) 
   }
 }

@@ -4,6 +4,9 @@ const dotenv = require('dotenv').config();
 import { connect } from 'react-redux';
 import '../styles/index.css'
 import { setTripAction } from '../store/actions/tripactions.js';
+import Alert from 'react-s-alert';
+import 'react-s-alert/dist/s-alert-default.css';
+
 class Start extends React.Component {
   constructor(props) {
     super(props);
@@ -90,8 +93,17 @@ class Start extends React.Component {
 
   handleSubmit() {
     const { userID, originName, destinationName, originCoords, destinationCoords } = this.state;
-    if (this.state.origin === null || this.state.destination === null) {
-      alert('please enter an origin and destination')
+    if (originCoords === null || destinationCoords === null) {
+      Alert.error('<strong>Please enter an origin and destination</strong>', {
+        position: 'bottom',
+        onShow: function () {
+          setTimeout(Alert.closeAll, 2000)
+        },
+        beep: false,
+        html: true,
+        timeout: 'none',
+        offset: 100
+      });
     } else {
     let splitOrigin = originName.split(',');
     let splitDest = destinationName.split(',');
@@ -132,6 +144,8 @@ class Start extends React.Component {
           resetSearch={false}
         />
         <button type="button" className="btn btn-success btn-block" onClick={this.handleSubmit} >Let's Go!</button>
+        <Alert stack={{ limit: 1 }} html={true} />
+
       </div>
       );
     }  

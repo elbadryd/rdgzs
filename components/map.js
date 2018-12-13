@@ -11,6 +11,8 @@ import User from './user.js'
 import Photos from './photos.js'
 import Spotify from '../pages/spotify.js'
 import mapCSS from '../styles/map.css'
+import Alert from 'react-s-alert'
+import 'react-s-alert/dist/s-alert-default.css';
 
 const dotenv = require('dotenv').config();
 mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
@@ -48,6 +50,7 @@ class DynamicMap extends React.Component {
     this.setPhotoMarker = this.setPhotoMarker.bind(this);
     this.populateMap = this.populateMap.bind(this);
     this.toggleVisibility = this.toggleVisibility.bind(this);
+    this.handleOnClose = this.handleOnClose.bind(this);
   }
 
 componentDidMount(){
@@ -237,7 +240,16 @@ renderDrawer(type, size = 0.50){
     Axios.get('/login')
     .then(response=>{
       if (response.data.user === null && type === 'photos'){
-        alert('Please login and create a trip to use photos')
+        Alert.error('<strong>Please login or create an account to access photos</strong>', {
+          position: 'top-left',
+          beep: false,
+          html: true,
+          onShow: function(){
+            setTimeout(Alert.closeAll, 2000)
+          },
+          timeout: 'none',
+          offset: 100
+        });
       }   else {
     this.setState({ 
       isVisible: !this.state.isVisible,
@@ -287,8 +299,20 @@ spotifyLogin() {
   .then(response=>{
     console.log(response.data);
     if (response.data.user === null){
-      this.renderDrawer('user')
-    } else{
+      return this.renderDrawer('user')
+    } if (response.data.user !== null && !line){
+      Alert.error('<strong>Create a trip to make a playlist</strong>', {
+        position: 'top-left',
+        beep: false,
+        html: true,
+        onShow: function () {
+          setTimeout(Alert.closeAll, 2000)
+        },
+        timeout: 'none',
+        offset: 100
+      });
+    }
+    else{
       window.sessionStorage.setItem('origin', JSON.stringify(origin))
       window.sessionStorage.setItem('destination', JSON.stringify(destination))
       window.sessionStorage.setItem('line', JSON.stringify(line))
@@ -297,6 +321,9 @@ spotifyLogin() {
       window.location.pathname = '/login/spotify';
     }
   })
+  }
+  handleOnClose(){
+    Alert.closeAll()
   }
 
 
@@ -350,6 +377,7 @@ spotifyLogin() {
             }
           </Dock>
         </nav>
+        <Alert stack={{ limit: 1 }} html={true} />
       <style jsx>{mapCSS}
       </style>
       </div>

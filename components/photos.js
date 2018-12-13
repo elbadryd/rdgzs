@@ -66,6 +66,7 @@ class Photos extends React.Component {
         console.log(err)
       })
   }
+
   
     render(){
       let { photoData, activeSlide } = this.state
@@ -79,8 +80,14 @@ class Photos extends React.Component {
         dots: true,
         infinite: true,
         speed: 1000,
-        beforeChange: current => this.setState({ activeSlide: photoData[current] || 0 },
-          () => photoData[current] ? this.props.setPhotoMarker(photoData[current].geotag.lng, photoData[current].geotag.lat): null ),
+        // beforeChange: (current) => this.setState({ activeSlide: photoData[current] || 0 },
+        //   () => photoData[current] ? this.props.setPhotoMarker(photoData[current].geotag.lng, photoData[current].geotag.lat): null ),
+        beforeChange: (next) =>{
+          if(photoData[next] && photoData[next].geotag){
+            this.props.setPhotoMarker(photoData[next].geotag.lng, photoData[next].geotag.lat)
+            this.setState({ activeSlide: photoData[next] || 0});
+          }
+        }
       }
       return  (
           <div className="container-fluid">

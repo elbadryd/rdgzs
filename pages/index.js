@@ -5,7 +5,21 @@ import Head from 'next/head'
 
 const DynamicMap = dynamic(() => import('./../components/map.js'), {
   ssr: false,
-  loading: () => <p><img src="/static/globe.gif"></img></p>,
+  loading: () => <p><img className="roadDoggy" src="/static/croppedDog.png"></img> <style jsx>{`
+  .roadDoggy {
+    height: 300px;
+    width: 300px;
+    position: fixed;
+    left: 50%;
+    top: 20%;
+    -ms-transform: translateY(50%);
+    transform: translateY(50%);
+    -ms-transform: translateX(50%);
+    transform: translateX(-50%);
+  }
+  
+`}
+</style></p>,
 });
 
 export default connect(

@@ -21,3 +21,27 @@
         border-radius: 0 0 3px 3px;
         padding: 20px;
     }
+    .icons {
+    max-width:80%;
+    object-fit: scale-down;
+    }
+    #nav{
+        text-align: center;
+        padding-bottom: 5vh;  
+        }
+         #navItem{
+        justify-content: 'center';
+        }
+        #pois{
+          max-width: 55px;
+        }
+        #navItem:active{
+        transform: translateY(5px);
+        }
+        .btn{
+          font: 20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        }
+       
+.jumbotron{
+  background: white;
+}

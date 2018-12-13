@@ -14,6 +14,7 @@ class Profile extends React.Component {
     };
     this.seeTrip = this.seeTrip.bind(this);
     this.openPhotos = this.openPhotos.bind(this);
+    this.submitLogout = this.submitLogout.bind(this);
   }
 
 componentDidMount() {
@@ -111,6 +112,7 @@ removeTrip(index) {
       console.log(res);
     })
       .then(() => {
+        this.props.setLogin();
         console.log('logged out');
       })
   }

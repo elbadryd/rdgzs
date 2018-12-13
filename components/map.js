@@ -32,11 +32,11 @@ class DynamicMap extends React.Component {
       size: 0.50,
       map: null,
       currentDrawer: null,
-      parks: false,
+      park: false,
       food: false,
       history: false,
-      hotels: false,
-      muesums: false,
+      hotel: false,
+      muesum: false,
       markers: null,
       currentPhoto: null,
       minutes: null,
@@ -268,11 +268,11 @@ setPois(key){
     [key]: !this.state[key]
   })
   let markersObj = {
-    parks: 0,
+    park: 0,
     food: 1,
-    hotels: 2,
+    hotel: 2,
     history: 3,
-    museums: 4,
+    museum: 4,
   }
     if (this.state[key]) {
       this.state.markers[markersObj[key]].map((marker) => {

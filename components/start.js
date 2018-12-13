@@ -86,7 +86,16 @@ class Start extends React.Component {
       })
       .catch(err => {
         console.log(err);
-        alert('there was an error processing your request')
+        Alert.error('<strong>There was an error creating your routes</strong>', {
+          position: 'bottom',
+          onShow: function () {
+            setTimeout(Alert.closeAll, 2000)
+          },
+          beep: false,
+          html: true,
+          timeout: 'none',
+          offset: 100
+        });
       })
     }
   
@@ -145,7 +154,6 @@ class Start extends React.Component {
         />
         <button type="button" className="btn btn-success btn-block" onClick={this.handleSubmit} >Let's Go!</button>
         <Alert stack={{ limit: 1 }} html={true} />
-
       </div>
       );
     }  

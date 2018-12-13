@@ -1,7 +1,7 @@
 import { Nav, NavItem } from 'reactstrap';
 
 const content = [{
-  type: "hotels",
+  type: "hotel",
   img: "/static/bed.png"
 },
 {
@@ -9,7 +9,7 @@ const content = [{
   img:"/static/history.png"
 },
   {
-    type:"museums",
+    type:"museum",
       img:"/static/greek-temple.png"
   },
   {
@@ -17,7 +17,7 @@ const content = [{
       img:"/static/food.png"
   },
   {
-    type:"parks",
+    type:"park",
       img:"/static/mountains.png"
   },
 ];
@@ -31,7 +31,7 @@ class PoiView extends React.Component {
         <Nav id="nav" className="m-1">
         {content.map(item=>{
           return <NavItem id="navItem" className="m-1 rounded">
-            <img onClick={this.props.setPois.bind(this, item.type)} src={item.img} />
+            <img id="pois" onClick={this.props.setPois.bind(this, item.type)} src={item.img} />
             <div>{item.type}</div>
           </NavItem>
         })}

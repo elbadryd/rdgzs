@@ -26,23 +26,6 @@ componentDidMount() {
     })  
 }
 
-componentDidUpdate(){
-  //flickr request for stock photos, probably will move elsewhere
-  // const { tripData } = this.state;
-  // let calls = tripData.map((trip, i)=>{
-  //   return axios.get(`https://api.flickr.com/services/rest/?api_key=${process.env.FLICKR_KEY}&method=flickr.photos.search&lat=${trip.destination.split(',')[1]}&lon=${trip.destination.split(',')[0]}&format=json&nojsoncallback=1&per_page=1`)
-  // })
-  // axios.all(calls)
-  // .then(response=>{
-  //   this.setState({
-  //     photoData: response
-  //   })
-  // })
-  // .catch((err)=>{
-  //   console.log(err)
-  // })
-}
-
 seeTrip(index){
   const tripId = this.state.tripData[index].id
   axios.get(`/stop/?tripid=${tripId}`, { 
@@ -137,12 +120,10 @@ removeTrip(index) {
     const { photoData } = this.state
     return (
     <div>
-        <div className="jumbotron-fluid">
+        <div id="trips" className="jumbotron-fluid">
         {this.state.tripData.map((trip, i) =>{
           
-            return <div key={i} className="card rounded m-2" style={{}}>
-            {/* <img className="card-img-top" src={`https://farm${photoData[i].data.photos.photo.farm}.staticflickr.com/${photoData[i].data.photos.photo.server}/${photoData[i].data.photos.photo.id}_${photoData[i].data.photos.photo.secret}.jpg`} alt="Card image cap" /> */}
-            {/* <img src="/static/mountain.png" className="img-responsive"></img> */}
+            return <div key={i} className="card rounded m-2">
               <div className="card-body rounded m-2">
                 <h5 className="card-title">{trip.trip_name}</h5>
                 <p className="card-text"></p>

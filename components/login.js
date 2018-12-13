@@ -103,26 +103,10 @@ class Login extends React.Component {
               </div>
           </div>
           <button type="button" className="btn btn-primary btn-block" onClick={this.submitLogin}>Login</button>
-          <button type="button" className="btn btn-info btn-block" onClick={this.signUp}>SignUp</button>
+          <button type="button" className="btn btn-primary btn-block" onClick={this.signUp}>SignUp</button>
       </div>
       </div>
 
-      // <div className="container_fluid">
-      //   <div className="row">
-      //     <div className="col-md">
-      //       <span>Email:</span>
-      //       <input name="email" onChange={this.handleChange}></input>
-      //     </div>
-      //   </div>
-      //   <div className="row">
-      //     <div className="item col-md" >
-      //       <span>Password:</span>
-      //       <input name="password" type="password" onChange={this.handleChange}></input>
-      //     </div>
-      //   </div>
-      //   <button type="button" className="btn btn-success btn-block" onClick={this.submitLogin}>Login</button>
-      //   <button type="button" className="btn btn-success btn-block" onClick={this.signUp}>SignUp</button>
-      // </div>
     )
   }
 }

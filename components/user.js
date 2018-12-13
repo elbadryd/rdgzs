@@ -28,7 +28,7 @@ class User extends React.Component {
 
   render(){
     return (
-      this.state.loggedIn ? <Profile renderDrawer={this.props.renderDrawer}></Profile> : <Login setLogin={this.setLogin}></Login>
+      this.state.loggedIn ? <Profile renderDrawer={this.props.renderDrawer} setLogin={this.setLogin}></Profile> : <Login setLogin={this.setLogin}></Login>
     )
   }
 

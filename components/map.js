@@ -159,10 +159,10 @@ redrawLine(map){
 
 setPhotoMarker(lng, lat){
   const { currentPhoto } = this.state
-  console.log(lat, lng);
    if (x) {
    x.remove();
 }
+
     x = new mapboxgl.Marker({ color: 'rgb(0, 0, 0)' }).setLngLat([lng, lat]).addTo(map);
   this.setState({
     currentPhoto: {
@@ -273,6 +273,9 @@ setPois(key){
     }
 }
 toggleVisibility(){
+  if (x){
+    x.remove();
+  }
   this.setState({
     isVisible : !this.state.isVisible
   })
@@ -331,7 +334,7 @@ spotifyLogin() {
                 flexDirection: 'column',
                 color: 'black',
                 gridGap: '1rem',
-                  backgroundColor: '#F1EAF5',
+                backgroundColor: '#F1EAF5',
         
             }}>
  

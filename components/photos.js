@@ -80,6 +80,7 @@ class Photos extends React.Component {
         dots: true,
         infinite: true,
         speed: 1000,
+        centerMode: false,
         // beforeChange: (current) => this.setState({ activeSlide: photoData[current] || 0 },
         //   () => photoData[current] ? this.props.setPhotoMarker(photoData[current].geotag.lng, photoData[current].geotag.lat): null ),
         beforeChange: (next) =>{
@@ -92,16 +93,17 @@ class Photos extends React.Component {
       return  (
           <div className="container-fluid">
             <Slider {...settings}>
-              <div><img id="upload_widget_opener" src="/static/camera.png" onClick={this.takePhoto}></img><br/>add photos</div>
+              <div ><img id="upload_widget_opener" src="/static/camera.png" onClick={this.takePhoto}></img><br/>add photos</div>
                {photos || null}
             </Slider>
           <style jsx>{`.container-fluid {
   margin: 0 auto;
-  padding: 40px;
+  padding: 10px;
   width: 80%;
   color: #333;
 
 }
+
 
 h3 {
   background: blue;

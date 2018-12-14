@@ -133,6 +133,8 @@ class Start extends React.Component {
 
   render() {
     return (
+      <div>
+      <img className="logo" src="/static/croppedDog.png"></img>
       <div className="search jumbotron">
         Origin
         <MapboxAutocomplete
@@ -154,6 +156,7 @@ class Start extends React.Component {
         />
         <button type="button" className="btn btn-success btn-block" onClick={this.handleSubmit} >Let's Go!</button>
         <Alert stack={{ limit: 1 }} html={true} />
+      </div>
       </div>
       );
     }  

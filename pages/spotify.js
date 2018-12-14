@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import axios from 'axios';
 import Router from 'next/router';
+import 'bootstrap/dist/css/bootstrap.css';
 const turf = require('@turf/helpers');
 const along = require('@turf/along');
 const distance = require('@turf/distance');
@@ -64,7 +65,7 @@ class Spotify extends React.Component {
         let x = 0;
         while(add && result.data.records[x]) {
           const city = result.data.records[x].fields.city + ', ' + result.data.records[x].fields.state;
-          if (top.indexOf(city) === -1) {
+          if (top.indexOf(city) === -1 && city !== undefined) {
             top.push(city);
             add = false;
           }
@@ -192,18 +193,76 @@ class Spotify extends React.Component {
       },
     }).then((response) => {
       console.log(response);
-      // Router.push('/');
+      Router.push('/');
     }).catch((err) => {
       console.log(err);
     });
     console.log(finalPlaylist);
   }
-
+goBack(){
+  console.log('yes')
+  Router.push('/');
+}
 
   render(){
     return(
-      <div>
-        <div><img onClick={this.getQueryPoints} src="/static/spotify.png"></img></div>
+      <div className="container h-100">
+        <div className="row h-100 justify-content-center align-items-center">
+        <div><img className="logo" src="/static/croppedDog.png"/></div>
+        <br/>
+        <button onClick={this.getQueryPoints} className="center-block btn btn-success bouton-image iconBtn">
+          <div className="fa-lg spotifyIcon"></div>
+            <div className="text">Send a Playlist to Your Account</div></button>
+        </div>
+        {/* <button onClick={this.goBack.bind(this)} className="btn btn-success bouton-image back">
+          <div className="fa-lg backIcon"></div>
+          Back to Map</button> */}
+        {/* <div><img className="icon" src="/static/left-arrow.png" onClick={this.goBack.bind(this)} /></div>
+        <div className="text">Back to Map</div> */}
+
+        <style jsx>{`
+        .logo{
+          max-height: 40%;
+          max-width: 40%;
+          margin-left: 25%;
+          margin-right: 25%;
+
+        }
+        .spotify {
+    font-weight: bold;
+}
+.btn{
+  background-color: #84bd00
+}
+.iconBtn > div {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.spotifyIcon {
+    line-height: 64px;
+    width: 64px;
+    height: 64px;
+    background: transparent url("/static/spotify.png") no-repeat;    
+}
+.backIcon {
+    line-height: 64px;
+    width: 64px;
+    height: 64px;
+    background: transparent url("/static/left-arrow.png") no-repeat;    
+}
+
+        .icon{
+          max-height: 100%;
+          max-width: 100%;
+        }
+        .text{
+          font: 35px arial, sans-serif;
+        }
+        .container{
+          border-top: 25px solid teal;
+        }
+        `}</style>
       </div>
     )
   }

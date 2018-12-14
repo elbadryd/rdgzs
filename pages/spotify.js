@@ -212,7 +212,7 @@ goBack(){
         <br/>
         <button onClick={this.getQueryPoints} className="center-block btn btn-success bouton-image iconBtn">
           <div className="fa-lg spotifyIcon"></div>
-            <div className="text">Send a Playlist to Your Account</div></button>
+            <div className="text">   Create your playlist</div></button>
         </div>
         {/* <button onClick={this.goBack.bind(this)} className="btn btn-success bouton-image back">
           <div className="fa-lg backIcon"></div>
@@ -222,17 +222,24 @@ goBack(){
 
         <style jsx>{`
         .logo{
-          max-height: 40%;
-          max-width: 40%;
-          margin-left: 25%;
-          margin-right: 25%;
-
+          height: 500px;
+          width: 500px;
+          position: fixed;
+          left: 50%;
+          top: 20%;
+          -ms-transform: translateY(50%);
+          transform: translateY(50%);
+          -ms-transform: translateX(50%);
+          transform: translateX(-50%);
         }
         .spotify {
     font-weight: bold;
 }
 .btn{
   background-color: #84bd00
+  position: relative;
+  margin-top: 900px;
+  margin-bottom: 200px;
 }
 .iconBtn > div {
     vertical-align: middle;
@@ -259,9 +266,7 @@ goBack(){
         .text{
           font: 35px arial, sans-serif;
         }
-        .container{
-          border-top: 25px solid teal;
-        }
+        
         `}</style>
       </div>
     )

@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { setTripAction } from '../store/actions/tripactions.js'
+import { setTripAction } from '../store/actions/tripactions.js';
+import Alert from 'react-s-alert';
+import 'react-s-alert/dist/s-alert-default.css';
+
 
 class Login extends React.Component {
   constructor(props) {
@@ -46,8 +49,17 @@ class Login extends React.Component {
       this.props.setLogin()
       })
       .catch((err) => {
-        //add some not logged in action
-        alert('nope');
+        console.log('catch')
+        Alert.error('<strong>Please check your login info</strong>', {
+          position: 'bottom',
+          onShow: function(){
+            setTimeout(Alert.closeAll, 2000)
+          },
+          beep: false,
+          html: true,
+          timeout: 'none',
+          offset: 100
+        });
     }).then(()=>{
       if (this.props.originName) {
         this.saveTrip();
@@ -105,6 +117,7 @@ class Login extends React.Component {
           <button type="button" className="btn btn-primary btn-block" onClick={this.submitLogin}>Login</button>
           <button type="button" className="btn btn-primary btn-block" onClick={this.signUp}>SignUp</button>
       </div>
+        <Alert stack={{ limit: 1 }}/>
       </div>
 
     )

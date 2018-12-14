@@ -80,6 +80,7 @@ class Photos extends React.Component {
         dots: true,
         infinite: true,
         speed: 1000,
+        centerMode: false,
         // beforeChange: (current) => this.setState({ activeSlide: photoData[current] || 0 },
         //   () => photoData[current] ? this.props.setPhotoMarker(photoData[current].geotag.lng, photoData[current].geotag.lat): null ),
         beforeChange: (next) =>{
@@ -97,11 +98,12 @@ class Photos extends React.Component {
             </Slider>
           <style jsx>{`.container-fluid {
   margin: 0 auto;
-  padding: 40px;
+  padding: 10px;
   width: 80%;
   color: #333;
 
 }
+
 
 h3 {
   background: blue;

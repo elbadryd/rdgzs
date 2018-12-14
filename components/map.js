@@ -65,6 +65,7 @@ componentDidMount(){
     center: [-98.5795, 39.8283],
     zoom: 3,
   });
+  this.renderDrawer('start');
 }
 componentDidUpdate(prevProps){
   if (this.props.pois !== prevProps.pois){
@@ -250,7 +251,21 @@ renderDrawer(type, size = 0.50){
           timeout: 'none',
           offset: 100
         });
-      }   else {
+        return;
+      }  if (response.data.user !== null && type === 'photos' && this.props.tripId === null){
+        Alert.error('<strong>Please select a trip from your profile to add photos</strong>', {
+          position: 'top-left',
+          beep: false,
+          html: true,
+          onShow: function () {
+            setTimeout(Alert.closeAll, 2000)
+          },
+          timeout: 'none',
+          offset: 100
+        });
+        return;
+      }
+       else {
     this.setState({ 
       isVisible: !this.state.isVisible,
       currentDrawer: type,

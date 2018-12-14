@@ -276,7 +276,7 @@ renderDrawer(type, size = 0.50){
 }
 
 setPois(key){
-  if (!this.props.tripId || !this.props.pois.length){
+  if (!this.props.pois.length){
     return;
   }
   this.setState({

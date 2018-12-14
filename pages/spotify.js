@@ -224,7 +224,7 @@ goBack(){
         .logo{
           height: 500px;
           width: 500px;
-          position: fixed;
+          position: absolute;
           left: 50%;
           top: 20%;
           -ms-transform: translateY(50%);

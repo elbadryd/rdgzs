@@ -2,6 +2,7 @@ const express = require('express');
 const { parse } = require('url');
 const next = require('next');
 const dotenv = require('dotenv');
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const routes = require('./routers');
 const setUpPassport = require('./passport');
@@ -15,6 +16,7 @@ const handler = app.getRequestHandler();
 
 app.prepare().then(() => {
   const server = express();
+  server.use(helmet());
   server.use(bodyParser.urlencoded({ extended: false }));
   server.use(bodyParser.json());
   setUpPassport(server);

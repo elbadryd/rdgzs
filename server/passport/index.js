@@ -72,7 +72,7 @@ module.exports = (app) => {
     {
       clientID: process.env.SPOTIFY_ID,
       clientSecret: process.env.SPOTIFY_SECRET,
-      callbackURL: 'http://localhost:3000/login/callback',
+      callbackURL: process.env.CALLBACK_URL,
       passReqToCallback: true,
     },
     ((req, accessToken, refreshToken, expires_in, profile, done) => {

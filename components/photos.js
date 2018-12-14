@@ -93,7 +93,7 @@ class Photos extends React.Component {
       return  (
           <div className="container-fluid">
             <Slider {...settings}>
-              <div ><img id="upload_widget_opener" src="/static/camera.png" onClick={this.takePhoto}></img><br/>add photos</div>
+              <div><img id="upload_widget_opener" src="/static/camera.png" onClick={this.takePhoto}></img><br/>add photos</div>
                {photos || null}
             </Slider>
           <style jsx>{`.container-fluid {

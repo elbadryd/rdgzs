@@ -46,6 +46,9 @@ trip.get('/', (req, res) => {
 
 trip.delete('/', (req, res) => {
   console.log(req.query[0]);
+  db.sequelize.models.photo.destroy({
+    where: { tripId: req.query[0] },
+  });
   db.sequelize.models.stop.destroy({
     where: { tripId: req.query[0] },
   });

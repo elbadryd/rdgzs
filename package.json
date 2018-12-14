@@ -54,6 +54,7 @@
     "react-mapbox-gl": "^4.0.2",
     "react-places-autocomplete": "^7.2.0",
     "react-redux": "^5.1.1",
+    "react-s-alert": "^1.4.1",
     "react-slick": "^0.23.2",
     "reactstrap": "^6.5.0",
     "redux": "^4.0.1",

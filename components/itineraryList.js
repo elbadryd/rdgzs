@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import 'bootstrap/dist/css/bootstrap.css';
 import { Button } from 'reactstrap';
 import { setLineAction, removeWaypointAction } from '../store/actions/tripactions.js'
+import Link from 'next/link'
 const dotenv = require('dotenv').config();
 
 
@@ -25,7 +26,8 @@ class ItineraryList extends React.Component {
     this.props.waypoints.forEach(point => {
       directionsString += `${point.lat},${point.lng}/`
     })
-    Router.push(`https://www.google.com/maps/dir/${origin}/${directionsString}${dest}`);
+    return `https://www.google.com/maps/dir/${origin}/${directionsString}${dest}`
+    // Router.push(`https://www.google.com/maps/dir/${origin}/${directionsString}${dest}`);
   };
 
   removeStop(stop) {
@@ -54,6 +56,11 @@ class ItineraryList extends React.Component {
   }
 
   render() {
+    const {origin, dest } = this.props;
+let directionsString = ''
+this.props.waypoints.forEach(point => {
+      directionsString += `${point.lat},${point.lng}/`
+    })
     return (
       <div>
       <div className="jumbotron-fluid">
@@ -63,7 +70,7 @@ class ItineraryList extends React.Component {
               return <li className="list-group-item m-1 ml-3 mr-3 shadow bg-white" >{stop.name}<button className="btn btn-sm btn-danger ml-1" onClick={this.removeStop.bind(this, stop)}><i className="fa fa-trash">x</i></button></li>
           })}
             <li className="list-group-item m-1 ml-3 mr-3">{this.props.dest}</li>
-          <button className="btn btn-success btn-block m-2 mx-auto"  onClick={this.getDirections}>Get Directions</button>
+            <a href={`https://www.google.com/maps/dir/${origin}/${directionsString}${dest}`} target ="_blank" className="btn btn-success btn-block m-2 mx-auto" role="button" aria-pressed="true">Get Directions</a>
         </div>
       </div>
     </div>

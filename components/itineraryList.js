@@ -15,20 +15,8 @@ class ItineraryList extends React.Component {
     this.state = {
       item: []
     }
-    this.getDirections = this.getDirections.bind(this);
     this.removeStop = this.removeStop.bind(this);
   }
-
-
-  getDirections(){
-    const { origin, dest } = this.props;
-    let directionsString = ''
-    this.props.waypoints.forEach(point => {
-      directionsString += `${point.lat},${point.lng}/`
-    })
-    return `https://www.google.com/maps/dir/${origin}/${directionsString}${dest}`
-    // Router.push(`https://www.google.com/maps/dir/${origin}/${directionsString}${dest}`);
-  };
 
   removeStop(stop) {
     const { originCoords, destinationCoords, redrawLine } = this.props;

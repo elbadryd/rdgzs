@@ -208,7 +208,7 @@ goBack(){
     return(
       <div className="container h-100">
         <div className="row h-100 justify-content-center align-items-center">
-        <div><img className="logo" src="/static/croppedDog.png"/></div>
+        <div><img className="doggy" src="/static/croppedDog.png"/></div>
         <br/>
         <button onClick={this.getQueryPoints} className="center-block btn btn-success bouton-image iconBtn">
           <div className="fa-lg spotifyIcon"></div>
@@ -221,23 +221,30 @@ goBack(){
         <div className="text">Back to Map</div> */}
 
         <style jsx>{`
-        .logo{
-          height: 500px;
-          width: 500px;
+        .doggy{
+          height: 400px;
+          width: 400px;
           position: absolute;
-          left: 50%;
           top: 20%;
-          -ms-transform: translateY(50%);
-          transform: translateY(50%);
-          -ms-transform: translateX(50%);
-          transform: translateX(-50%);
+          animation: bobble 1s infinite;
         }
+        @keyframes bobble {
+    0% {
+        transform: translateY(10px);
+    }
+    50% {
+        transform: translateY(40px);
+    }
+    100% {
+        transform: translateY(10px);
+    }
+}
         .spotify {
     font-weight: bold;
 }
-.btn{
+.center-block{
   background-color: #84bd00
-  position: relative;
+  position: absolute;
   margin-top: 900px;
   margin-bottom: 200px;
 }

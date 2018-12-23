@@ -7,6 +7,7 @@ const { tripRouter } = require('./trip');
 const { logoutRouter } = require('./logout');
 const { photoRouter } = require('./photo');
 const { soundtrackRouter } = require('./soundtrack');
+const { poiRouter } = require('./pois');
 const { test } = require('./test');
 
 module.exports = (app) => {
@@ -20,4 +21,5 @@ module.exports = (app) => {
   app.use('/photo', photoRouter);
   app.use('/soundtrack', soundtrackRouter);
   app.use('/test', test);
+  app.use('/pois', poiRouter);
 };

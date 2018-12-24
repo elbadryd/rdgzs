@@ -96,40 +96,49 @@ populateMap(){
   });
 
   mapHelpers.drawTheLine(map, line, bounds)
-
-  let markerColors = [
-    'rgb(157, 188, 60)',
-    'rgb(32, 0, 191)',
-    'rgb(57, 92, 112)',
-    'rgb(170, 110, 40)',
-    'rgb(242, 70, 101)'
-  ];
+}
+  createMarkers(key, venues){
+    console.log(key, venues);
+  
+  let markerColors = {
+    park: 'rgb(157, 188, 60)',
+    food: 'rgb(32, 0, 191)',
+    hotel: 'rgb(57, 92, 112)',
+    history: 'rgb(170, 110, 40)',
+    museum: 'rgb(242, 70, 101)'
+  };
   // const markers =  [[],[],[],[],[]]
-  // window.cainTest = [];
-  // window.patTest = []
-  // pois.forEach(({ venueID, lat, lng, name, img, category }, i)=>{ 
-  //   window.patTest.push(() => this.getWebsite(venueID))
-  //   window.cainTest.push(() => this.addToTrip(lng, lat, name, map));
-  //   if (category < 5) {
-  //   markers[category].push(new mapboxgl.Marker({color: markerColors[category]})
-  //   .setLngLat([lng, lat])
-  //   .setPopup(new mapboxgl.Popup({ offset: 25 })
-  //   .setHTML(`<img src=${img} height="150px" width="150px" onClick=window.patTest[${i}]()><br>
-  //   <strong>${name}</strong>
-  //   <br>
-  //   <button type="button" className="btn btn-primary btn-sm" onClick="window.cainTest[${i}]()">Add to Trip</button>`)))
-  // } else {
-  //   console.log(category, name)
-  // }
-  // });
+  window.cainTest = [];
+  window.patTest = []
+  console.log(venues.data);
+  venues.data.forEach((result, idx)=>{
+    result.forEach(({ venueID, lat, lng, name, photo }, i)=>{ 
+    console.log(lat, lng);
+    if (window.patTest[idx]){
+      window.patTest[idx].push(() => this.getWebsite(venueID))
+      window.cainTest[idx].push(() => this.addToTrip(lng, lat, name, map));
+    } else {
+    window.patTest[idx] = [this.getWebsite.bind(this, venueID)]
+    window.cainTest[idx] = [this.addToTrip.bind(this, lng, lat, name, map)];
+    }
+    new mapboxgl.Marker({color: markerColors[key]})
+    .setLngLat([lng, lat])
+    .setPopup(new mapboxgl.Popup({ offset: 25 })
+    .setHTML(`<img src=${photo} height="150px" width="150px" onClick=window.patTest[${idx}][${i}]()><br>
+    <strong>${name}</strong>
+    <br>
+    <button type="button" className="btn btn-primary btn-sm" onClick="window.cainTest[${idx}][${i}]()">Add to Trip</button>`))
+    .addTo(map);
   // this.setState({ markers })
     
   // for (let i = 0; i < 5; i++) {
   // markers[i].map((marker) => {
   //   marker.addTo(map)
   // })
-  // }
+  })
+  });
 }
+
 
 getWebsite(venueID) {
   Axios.get(`https://api.foursquare.com/v2/venues/${venueID}`, {
@@ -300,6 +309,7 @@ setPois(key){
           [key] : !this.state.key
         })
         console.log(response);
+        this.createMarkers(key, response)
       })
       .catch(err=>{
         console.log(err);

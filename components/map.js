@@ -19,6 +19,7 @@ mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
 
 let map;
 let x;
+const poiCache = {}
 
 class DynamicMap extends React.Component {
   constructor(props) {
@@ -32,11 +33,11 @@ class DynamicMap extends React.Component {
       size: 0.50,
       map: null,
       currentDrawer: null,
-      park: false,
-      food: false,
-      history: false,
-      hotel: false,
-      muesum: false,
+      park: null,
+      food: null,
+      history: null,
+      hotel: null,
+      muesum: null,
       markers: null,
       currentPhoto: null,
       minutes: null,
@@ -69,7 +70,6 @@ componentDidMount(){
 }
 componentDidUpdate(prevProps){
   if (this.props.pois !== prevProps.pois){
-    //maybe make set marker function instead?
     this.populateMap();
     this.setState({ isVisible: false })
   } 
@@ -107,7 +107,7 @@ populateMap(){
     history: 'rgb(170, 110, 40)',
     museum: 'rgb(242, 70, 101)'
   };
-  // const markers =  [[],[],[],[],[]]
+  const markers =  [];
   window.cainTest = [];
   window.patTest = []
   console.log(venues.data);
@@ -121,23 +121,20 @@ populateMap(){
     window.patTest[idx] = [this.getWebsite.bind(this, venueID)]
     window.cainTest[idx] = [this.addToTrip.bind(this, lng, lat, name, map)];
     }
-    new mapboxgl.Marker({color: markerColors[key]})
+    markers.push(new mapboxgl.Marker({color: markerColors[key]})
     .setLngLat([lng, lat])
     .setPopup(new mapboxgl.Popup({ offset: 25 })
     .setHTML(`<img src=${photo} height="150px" width="150px" onClick=window.patTest[${idx}][${i}]()><br>
     <strong>${name}</strong>
     <br>
-    <button type="button" className="btn btn-primary btn-sm" onClick="window.cainTest[${idx}][${i}]()">Add to Trip</button>`))
-    .addTo(map);
-  // this.setState({ markers })
-    
-  // for (let i = 0; i < 5; i++) {
-  // markers[i].map((marker) => {
-  //   marker.addTo(map)
-  // })
+    <button type="button" className="btn btn-primary btn-sm" onClick="window.cainTest[${idx}][${i}]()">Add to Trip</button>`)))
+    markers.forEach(marker=>{
+      marker.addTo(map);
+    })
+  poiCache[key] = markers;
   })
   });
-}
+} 
 
 
 getWebsite(venueID) {
@@ -287,22 +284,21 @@ renderDrawer(type, size = 0.50){
 
 setPois(key){
   const { line } = this.props;
-  // if (!this.props.pois || !this.props.pois.length){
-  //   return;
-  // }
-  this.setState({
-    [key]: !this.state[key]
-  })
-  let markersObj = {
-    park: 0,
-    food: 1,
-    hotel: 2,
-    history: 3,
-    museum: 4,
+  if (this.state[key]){
+    poiCache[key].forEach(point => {
+        point.remove();
+    })
+    this.setState({ [key]: !this.state[key] })
+    return;
   }
-    // if (this.state[key]) {
-      //send request to router
-      //update state or props? or store ? or all? with appropriate key and pois
+  if (!this.state[key] && poiCache[key]){
+    poiCache[key].forEach(point=>{
+        point.addTo(map);
+    })
+    this.setState({ [key]: !this.state[key] })
+    return;
+  }
+  
       Axios.get(`/pois/${key}`, {params : [line] })
       .then(response=>{
         this.setState({
@@ -314,15 +310,6 @@ setPois(key){
       .catch(err=>{
         console.log(err);
       })
-      // this.state.markers[markersObj[key]].map((marker) => {
-      //   marker.addTo(map)
-      // })
-    // } 
-    // else {
-    //   this.state.markers[markersObj[key]].map((marker) => {
-    //     marker.remove();
-    //   });
-    // }
 }
 toggleVisibility(){
   if (x){

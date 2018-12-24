@@ -24,7 +24,7 @@ pois.get('/:key', (req, res) => {
   const dist = distance.default(line[0], line[line.length - 1]);
   const poly = turf.lineString(line);
   const points = line.map((coords, i) => {
-    if (dist * 1.25 > (i * 200) + 1) {
+    if (dist > (i * 200) + 1) {
       return along.default(poly, i * 150).geometry.coordinates;
     }
   });

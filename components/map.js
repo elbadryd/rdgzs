@@ -19,7 +19,7 @@ mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
 
 let map;
 let x;
-const poiCache = {}
+let poiCache = {}
 
 class DynamicMap extends React.Component {
   constructor(props) {
@@ -33,11 +33,11 @@ class DynamicMap extends React.Component {
       size: 0.50,
       map: null,
       currentDrawer: null,
-      park: null,
-      food: null,
-      history: null,
-      hotel: null,
-      muesum: null,
+      park: false,
+      food: false,
+      history: false,
+      hotel: false,
+      muesum: false,
       markers: null,
       currentPhoto: null,
       minutes: null,
@@ -69,7 +69,16 @@ componentDidMount(){
   this.renderDrawer('start');
 }
 componentDidUpdate(prevProps){
-  if (this.props.pois !== prevProps.pois){
+  console.log(prevProps, this.props.origin)
+  if (this.props.origin !== prevProps.origin && this.props.destination !== prevProps.destination){
+    poiCache = {};
+    this.setState({
+      park: false,
+      history: false,
+      museum: false,
+      hotel: false,
+      food: false,
+    })
     this.populateMap();
     this.setState({ isVisible: false })
   } 
@@ -98,8 +107,8 @@ populateMap(){
   mapHelpers.drawTheLine(map, line, bounds)
 }
   createMarkers(key, venues){
+   
     console.log(key, venues);
-  
   let markerColors = {
     park: 'rgb(157, 188, 60)',
     food: 'rgb(32, 0, 191)',
@@ -131,9 +140,12 @@ populateMap(){
     markers.forEach(marker=>{
       marker.addTo(map);
     })
-  poiCache[key] = markers;
   })
-  });
+});
+poiCache[key] = markers;
+    this.setState({
+      [key]: !this.state.key
+    })
 } 
 
 
@@ -301,9 +313,6 @@ setPois(key){
   
       Axios.get(`/pois/${key}`, {params : [line] })
       .then(response=>{
-        this.setState({
-          [key] : !this.state.key
-        })
         console.log(response);
         this.createMarkers(key, response)
       })

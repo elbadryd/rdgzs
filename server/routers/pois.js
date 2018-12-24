@@ -49,8 +49,7 @@ pois.get('/:key', (req, res) => {
   const promises = coords.map(coord => getPoi(coord[1], coord[0], catObj[key], num));
   Promise.all(promises)
     .then((responses) => {
-      console.log(catObj[key]);
-      const result = responses.map((response) => response.group.results.map(place => {
+      let result = responses.map((response) => response.group.results.map(place => {
         const ven = {
           venueID: place.venue.id,
           name: place.venue.name,
@@ -61,6 +60,10 @@ pois.get('/:key', (req, res) => {
           ven.photo = `${place.photo.prefix}250x250${place.photo.suffix}`;
         }
         return ven;
+      }));
+      result = result.map(group => group.filter(loc => {
+        console.log(loc);
+        return loc.lng !== null && loc.lat !== null;
       }));
       res.send(result);
       // const venues = [];

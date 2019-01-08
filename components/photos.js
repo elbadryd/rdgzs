@@ -83,6 +83,7 @@ class Photos extends React.Component {
         centerMode: true,
         slidesToShow: 1,
         slidesToScroll: 1,
+        adaptiveHeight: true,
         // beforeChange: (current) => this.setState({ activeSlide: photoData[current] || 0 },
         //   () => photoData[current] ? this.props.setPhotoMarker(photoData[current].geotag.lng, photoData[current].geotag.lat): null ),
         beforeChange: (next) =>{
@@ -103,9 +104,7 @@ class Photos extends React.Component {
   padding: 10px;
   width: 80%;
   color: #333;
-
 }
-
 
 h3 {
   background: blue;

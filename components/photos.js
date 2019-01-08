@@ -72,15 +72,17 @@ class Photos extends React.Component {
       let { photoData, activeSlide } = this.state
       let photos = photoData.map(photo=>{
         return <div><a key={photo.id} href={photo.link} target="_blank" rel="noopener noreferrer">
-          <Image cloudName="rdgz" publicId={photo.publicId} width="200" crop="scale" radius="10"></Image>
+          <Image cloudName="rdgz" publicId={photo.publicId} width="200" crop="scale"></Image>
      </a></div>
 
       })
       var settings = {
+        className: "center",
         dots: true,
         infinite: true,
-        speed: 1000,
-        centerMode: false,
+        centerMode: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
         // beforeChange: (current) => this.setState({ activeSlide: photoData[current] || 0 },
         //   () => photoData[current] ? this.props.setPhotoMarker(photoData[current].geotag.lng, photoData[current].geotag.lat): null ),
         beforeChange: (next) =>{
@@ -91,12 +93,12 @@ class Photos extends React.Component {
         }
       }
       return  (
-          <div className="container-fluid">
+          <div className="photo-box">
             <Slider {...settings}>
               <div><img id="upload_widget_opener" src="/static/camera.png" onClick={this.takePhoto}></img><br/>add photos</div>
                {photos || null}
             </Slider>
-          <style jsx>{`.container-fluid {
+          <style jsx>{`.photo-box {
   margin: 0 auto;
   padding: 10px;
   width: 80%;
@@ -122,6 +124,7 @@ h3 {
   margin: 5px;
   line-height: 100px;
   text-align: center;
+  padding: 20px;
 }
 .center .slick-center h3 {
   color: #e67e22;
@@ -138,7 +141,7 @@ h3 {
   width: 95%;
 }
 .slick-slide .image {
-  padding: 10px;
+  padding: 60px;
 }
 .slick-slide img {
   border: 5px solid #fff;
@@ -149,7 +152,7 @@ h3 {
   border: 0;
 }
 .slick-slider {
-  margin: 30px auto 50px;
+  margin: 10px auto 10px;
 }
 .slick-dots {
   margin-left: 0;
@@ -170,10 +173,6 @@ h3 {
 @media (max-width: 768px) {
   h3 {
     font-size: 24px;
-  }
-  .center {
-    margin-left: -40px;
-    margin-right: -40px;
   }
   .center .slick-center h3 {
     color: #e67e22;

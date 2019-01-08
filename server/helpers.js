@@ -93,7 +93,8 @@ const makeTrip = (waypoints, context, callback) => {
     //     poi.category = Math.floor((poi.category / venues.length) * 10);
     //     return poi;
     //   }).filter(poi => poi.lat !== null);
-    callback(null, { line }, { 'Content-Type': 'application/json' });
+      const distance = data.trips[0].distance; 
+    callback(null, { line, distance }, { 'Content-Type': 'application/json' });
   });
   // .catch((err) => {
   //   console.log(err);

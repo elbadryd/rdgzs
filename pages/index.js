@@ -29,10 +29,11 @@ export default connect(
     waypoints: state.waypoints,
     tripId: state.tripId,
     origin: state.origin,
-    destination: state.destination
+    destination: state.destination,
+    distance: state.distance,
   }),
   null
-)(({ line, pois, waypoints, tripId, origin, destination }) => {
+)(({ line, pois, waypoints, tripId, origin, destination, distance }) => {
   return (
     <div>
       <Head>
@@ -45,7 +46,7 @@ export default connect(
         <link rel="stylesheet" type="text/css" charSet="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
         </Head>
-      <DynamicMap origin={origin} destination={destination} pois={pois} line={line} tripId={tripId} waypoints={waypoints} />
+      <DynamicMap origin={origin} destination={destination} pois={pois} line={line} tripId={tripId} waypoints={waypoints} distance={distance} />
 
 
     </div>

@@ -10,7 +10,7 @@ const dotenv = require('dotenv').config();
 const pois = express.Router();
 
 pois.get('/:key', (req, res) => {
-  console.log(req.params);
+  console.log(req.query, 'params');
   const key = req.params.key;
   const catObj = {
     park: '52e81612bcbc57f1066b7a21',
@@ -20,11 +20,13 @@ pois.get('/:key', (req, res) => {
     museum: '4bf58dd8d48988d181941735',
   };
   console.log(catObj[key]);
-  const line = req.query['0'].map(el => JSON.parse(el));
-  const dist = distance.default(line[0], line[line.length - 1]);
+  const line = req.query.line.map(el => JSON.parse(el));
+  // const line = JSON.parse(req.query.line);
+  // const dist = distance.default(line[0], line[line.length - 1]);
+  const dist = Number(req.query.distance) / 1000;
   const poly = turf.lineString(line);
   const points = line.map((coords, i) => {
-    if (dist > (i * 200) + 1) {
+    if (dist > (i * 150) + 1) {
       return along.default(poly, i * 150).geometry.coordinates;
     }
   });

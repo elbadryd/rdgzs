@@ -82,6 +82,7 @@ class Start extends React.Component {
           destinationName,
           waypoints: [], 
           tripId,
+          distance: response.data.distance,
         })
       })
       .catch(err => {

@@ -242,7 +242,7 @@ goBack(){
         .spotify {
     font-weight: bold;
 }
-.center-block{
+.center-block  {
   background-color: #84bd00
   position: absolute;
   margin-top: 900px;

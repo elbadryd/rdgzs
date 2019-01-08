@@ -119,8 +119,8 @@ populateMap(){
   const markers =  [];
   window.cainTest = [];
   window.patTest = []
-  console.log(venues.data);
   venues.data.forEach((result, idx)=>{
+    if (result.length){
     result.forEach(({ venueID, lat, lng, name, photo }, i)=>{ 
     console.log(lat, lng);
     if (window.patTest[idx]){
@@ -141,6 +141,7 @@ populateMap(){
       marker.addTo(map);
     })
   })
+}
 });
 poiCache[key] = markers;
     this.setState({
@@ -311,7 +312,11 @@ setPois(key){
     return;
   }
   
-      Axios.get(`/pois/${key}`, {params : [line] })
+      Axios.get(`/pois/${key}`, {params : {
+        line,
+        distance: this.props.distance
+      }
+    })
       .then(response=>{
         console.log(response);
         this.createMarkers(key, response)

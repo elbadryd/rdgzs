@@ -12,6 +12,7 @@ const tripState = {
   originName: null,
   destinationName: null,
   tripId: null,
+  distance: null,
 };
 // const store = createStore(
 //   reducers,

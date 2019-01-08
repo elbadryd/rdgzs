@@ -10,6 +10,7 @@ const initialState = {
   originName: null,
   destinationName: null,
   minutes: null,
+  distance: null,
 };
 
 export default function tripReducer(state = initialState, action) {
